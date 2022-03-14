@@ -9,6 +9,7 @@
     "pretty-checkbox": "^3.0.3",
     "pretty-checkbox-react": "^3.2.0",
     "react": "^17.0.2",
+    "react-custom-checkbox": "^2.0.1",
     "react-dom": "^17.0.2",
     "react-scripts": "5.0.0",
     "styled-components": "^5.3.3",

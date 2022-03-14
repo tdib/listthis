@@ -1,27 +1,24 @@
 import React from 'react'
-import { AllItemsContainer, ListItemContainer, ItemName, ItemNote, TextContainer } from './listItemStyle.js'
+import {
+  AllItemsContainer,
+  ListItemContainer,
+  ItemName,
+  ItemNote,
+  TextContainer,
+} from './listItemStyle.js'
 
 import { database } from './items'
 // import database from './items.json'
 
-import { Checkbox } from 'pretty-checkbox-react'
+import Checkbox from 'react-custom-checkbox'
 
 const ListItem = ({ item }) => {
   let { name, note, isSelected } = item
 
-  const handleClick = () => {
-    console.log('PRESSED')
-    isSelected = !isSelected
-    console.log(isSelected)
-  }
-
   return (
     <ListItemContainer>
       {/* <CheckBox isSelected={isSelected} onClick={handleClick}></CheckBox> */}
-      <Checkbox variant='fill' shape='round'>
-        {' '}
-        adskfljsda
-      </Checkbox>
+      <Checkbox checked={isSelected} borderRadius={20} />
       <TextContainer>
         <ItemName>{name}</ItemName>
         <ItemNote>{note}</ItemNote>
