@@ -5,7 +5,7 @@ const styles = {
     tertiary: '#4A4A4A',
     quaternary: '#898989',
 
-    mainText: '#F2F2F2',
+    textPrimary: '#F2F2F2',
     red: '#914C47',
 
     accentPrimary: '#6C59B7',

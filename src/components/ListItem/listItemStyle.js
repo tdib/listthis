@@ -6,7 +6,7 @@ export const AllItemsContainer = styled.div`
   display: flex;
   flex-direction: column;
   // background-color: blue;
-  gap: 2rem;
+  gap: 0.5rem;
 `
 
 export const blah = styled.div`
@@ -16,8 +16,28 @@ export const blah = styled.div`
 export const ListItemContainer = styled.div`
   display: flex;
   // align-content: center;
-  width: 60%;
-  background-color: ${p => p.theme.tertiary};
+  // width: 60%;
+  // background-color: red;
+  // background-color: ${p => p.theme.tertiary};
+  user-select: none;
+
+  &:hover {
+    background-color: ${p => p.theme.secondary};
+    border-radius: 0.5rem;
+
+    > button {
+      transform: scale(1.1);
+    }
+  }
+
+  > button {
+    transform: scale(1);
+    transition: transform 0.1s;
+  }
+
+  &:active > button {
+    transform: scale(0.9);
+  }
 `
 
 export const TextContainer = styled.div`
@@ -27,7 +47,7 @@ export const TextContainer = styled.div`
 `
 
 export const ItemName = styled.span`
-  color: ${p => p.theme.mainText};
+  color: ${p => p.theme.textPrimary};
   // color: red;
   display: inline-block;
 `
@@ -35,15 +55,22 @@ export const ItemName = styled.span`
 export const ItemNote = styled.span`
   display: inline-block;
   color: ${p => p.theme.quaternary};
+  font-size: 0.85rem;
 `
 
 export const CheckBox = styled(Checkbox)`
-  display: block;
-  border-color: red;
-  background-color: red;
-  // display: inline-block;
-  // background-color: ${p => (p.isSelected ? 'green' : 'pink')};
-  // width: 2rem;
-  // height: 2rem;
-  // border-radius: 1rem;
+  margin: 1rem 0.75rem;
+`
+
+export const CB = styled.button`
+  align-self: center;
+  border-style: solid;
+  // border-color: ${p => p.theme.quaternary};
+  border-color: ${p => (p.selected ? p.theme.textPrimary : p.theme.quaternary)};
+  border-width: 0.1rem;
+  background: ${p => (p.selected ? p.theme.accentPrimary : 'none')};
+  border-radius: 1rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  margin: 0.6rem;
 `

@@ -1,24 +1,21 @@
-import React from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import {
+  CB,
   AllItemsContainer,
   ListItemContainer,
   ItemName,
   ItemNote,
   TextContainer,
+  CheckBox,
 } from './listItemStyle.js'
+import { getItems } from '../../services/items.js'
 
-import { database } from './items'
-// import database from './items.json'
-
-import Checkbox from 'react-custom-checkbox'
-
-const ListItem = ({ item }) => {
-  let { name, note, isSelected } = item
-
+const ListItem = ({ name, note, isSelected, onClick }) => {
   return (
-    <ListItemContainer>
+    <ListItemContainer onClick={onClick}>
       {/* <CheckBox isSelected={isSelected} onClick={handleClick}></CheckBox> */}
-      <Checkbox checked={isSelected} borderRadius={20} />
+      <CB selected={isSelected} />
+      {/* <CheckBox checked={isSelected} borderRadius={20} /> */}
       <TextContainer>
         <ItemName>{name}</ItemName>
         <ItemNote>{note}</ItemNote>
@@ -28,10 +25,23 @@ const ListItem = ({ item }) => {
 }
 
 const ListItems = () => {
+  const [items, setItems] = useState([])
+
+  useEffect(() => {
+    getItems().then(items => setItems(items))
+  }, [])
+
+  const handleClick = useCallback(
+    clickedItem => {
+      setItems(items.map(item => (item.id === clickedItem.id ? { ...item, isSelected: !item.isSelected } : item)))
+    },
+    [items]
+  )
+
   return (
     <AllItemsContainer>
-      {database.allItems.map(item => (
-        <ListItem key={item.name} item={item} />
+      {items.map(item => (
+        <ListItem key={item.id} onClick={() => handleClick(item)} {...item} />
       ))}
     </AllItemsContainer>
   )
