@@ -4,6 +4,7 @@ import styles from './styles'
 
 import Header from './components/Header/Header'
 import ListItems from './components/ListItem/ListItem.js'
+import TabBar from './components/TabBar/TabBar'
 
 const Main = styled.main`
   // background: ${p => p.theme.primary};
@@ -27,6 +28,7 @@ const App = () => {
         <Header />
         <ListItems />
       </Main>
+      <TabBar />
     </ThemeProvider>
   )
 }

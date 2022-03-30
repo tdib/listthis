@@ -1,13 +1,12 @@
 import styled from 'styled-components'
 import Checkbox from 'react-custom-checkbox'
-import { useRadioState } from 'pretty-checkbox-react'
 
 export const AllItemsContainer = styled.div`
   background-color: ${p => p.theme.primary};
   display: flex;
   flex-direction: column;
-  // background-color: blue;
   gap: 0.5rem;
+  margin-bottom: 2rem;
 `
 
 export const blah = styled.div`
@@ -16,10 +15,6 @@ export const blah = styled.div`
 
 export const ListItemContainer = styled.div`
   display: flex;
-  // align-content: center;
-  // width: 60%;
-  // background-color: red;
-  // background-color: ${p => p.theme.tertiary};
   user-select: none;
 
   &:hover {
@@ -49,7 +44,6 @@ export const TextContainer = styled.div`
 
 export const ItemName = styled.span`
   color: ${p => p.theme.textPrimary};
-  // color: red;
   display: inline-block;
 `
 
@@ -66,7 +60,6 @@ export const CheckBox = styled(Checkbox)`
 export const CB = styled.button`
   align-self: center;
   border-style: solid;
-  // border-color: ${p => p.theme.quaternary};
   border-color: ${p => (p.selected ? p.theme.textPrimary : p.theme.quaternary)};
   border-width: 0.1rem;
   background: ${p => (p.selected ? p.theme.accentPrimary : 'none')};
