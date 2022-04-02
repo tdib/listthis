@@ -6,7 +6,7 @@ export const HeaderContainer = styled.div`
 
 export const Title = styled.h1`
   color: ${p => p.theme.textPrimary};
-  margin-bottom: 0;
+  margin: 0;
 `
 
 export const Subtitle = styled.span`
