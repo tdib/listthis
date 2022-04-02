@@ -30,10 +30,9 @@ export const Panel = styled.div`
 export const AddItemForm = styled.form`
   height: 30rem;
   width: 100%;
-  margin: 1.5rem;
+  margin: 1.5rem 0 0 1.5rem;
 `
 
-// export const TitleField = styled.input.attrs({ type: 'text', placeholder: 'Type an item name', required: true })`
 export const TitleField = styled.input`
   width: 100%;
   height: 2.5rem;
@@ -55,12 +54,10 @@ export const TitleField = styled.input`
 
 export const NoteHeading = styled.label`
   user-select: none;
-  /* margin: 1.5rem 0 0.25rem 0; */
   font-size: 1rem;
   color: ${p => p.theme.textPrimary};
 `
 
-// export const NoteSection = styled.input`
 export const NoteSection = styled.textarea`
   background: none;
   border: none;
@@ -75,7 +72,6 @@ export const NoteSection = styled.textarea`
   }
 `
 
-/* export const SaveButton = styled.input.attrs({ type: 'submit' })` */
 export const SaveButton = styled.input`
   width: 10rem;
   height: 3rem;

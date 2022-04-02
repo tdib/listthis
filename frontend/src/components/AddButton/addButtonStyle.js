@@ -10,7 +10,6 @@ export const AddButtonContainer = styled.button`
   width: 3rem;
   bottom: 1rem;
   position: absolute;
-  /* position: flex; */
   display: flex;
   justify-content: center;
   align-items: center;
