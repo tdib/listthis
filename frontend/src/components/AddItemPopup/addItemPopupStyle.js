@@ -72,6 +72,30 @@ export const NoteSection = styled.textarea.attrs({ placeholder: 'Type a note' })
   }
 `
 
+export const SaveButton = styled.button`
+  width: 10rem;
+  height: 3rem;
+  border-radius: 1.5rem;
+  background-color: ${p => p.theme.accentPrimary};
+  border: none;
+  box-shadow: 0.25rem 0.25rem 0.5rem 0 #00000070;
+  color: ${p => p.theme.textPrimary};
+  font-size: 1.1rem;
+  font-weight: bold;
+
+  :hover {
+    filter: brightness(85%);
+    cursor: pointer;
+    transform: scale(1.025);
+  }
+
+  :active {
+    transform: scale(0.95);
+  }
+
+  transition: transform 0.1s;
+`
+
 export const XIcon = styled(X)`
   color: ${p => p.theme.textPrimary};
 `

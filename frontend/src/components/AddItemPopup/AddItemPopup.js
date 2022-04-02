@@ -9,6 +9,7 @@ import {
   TitleField,
   NoteHeading,
   NoteSection,
+  SaveButton,
 } from './addItemPopupStyle'
 
 const AddItemPopup = ({ isOpen, onClose }) => {
@@ -19,6 +20,7 @@ const AddItemPopup = ({ isOpen, onClose }) => {
           <TitleField />
           <NoteHeading>Note</NoteHeading>
           <NoteSection />
+          <SaveButton>Save</SaveButton>
         </PanelContent>
         <CloseButton onClick={onClose} doDisplay={isOpen}>
           <XIcon />
