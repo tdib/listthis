@@ -1,10 +1,11 @@
 import React from 'react'
-import { AddButton, TabBarContainer } from './tabBarStyle'
+import AddButton from '../AddButton/AddButton'
+import { TabBarContainer } from './tabBarStyle'
 
 const TabBar = () => {
   return (
     <TabBarContainer>
-      <AddButton></AddButton>
+      <AddButton />
     </TabBarContainer>
   )
 }
