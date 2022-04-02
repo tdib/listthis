@@ -5,9 +5,10 @@ import styles from './styles'
 import Header from './components/Header/Header'
 import ListItems from './components/ListItem/ListItem.js'
 import TabBar from './components/TabBar/TabBar'
+import AddItemPopup from './components/AddItemPopup/AddItemPopup'
+import { useState } from 'react'
 
 const Main = styled.main`
-  // background: ${p => p.theme.primary};
   color: ${p => p.theme.secondary};
   padding: 2rem;
 `
@@ -20,6 +21,7 @@ const GlobalStyle = createGlobalStyle`
 
 const App = () => {
   const isDarkTheme = useIsDarkScheme()
+  const [addItemMenuOpen, setAddItemMenuOpen] = useState(false)
 
   return (
     <ThemeProvider theme={{ ...styles, ...styles[isDarkTheme ? 'dark' : 'light'] }}>
@@ -27,8 +29,9 @@ const App = () => {
       <Main>
         <Header />
         <ListItems />
+        <AddItemPopup isOpen={addItemMenuOpen} onClose={() => setAddItemMenuOpen(false)} />
       </Main>
-      <TabBar />
+      <TabBar onOpenAddItemMenu={() => setAddItemMenuOpen(true)} />
     </ThemeProvider>
   )
 }

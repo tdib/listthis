@@ -1,13 +1,11 @@
 import React from 'react'
-
-// import { Plus } from 'lucide-react'
+import AddItemPopup from '../AddItemPopup/AddItemPopup'
 
 import { AddButtonContainer, PlusIcon } from './addButtonStyle'
 
-const AddButton = () => {
+const AddButton = ({ onClick }) => {
   return (
-    <AddButtonContainer>
-      {/* <Plus style={{ backgroundColor: 'red' }} /> */}
+    <AddButtonContainer onClick={onClick}>
       <PlusIcon />
     </AddButtonContainer>
   )

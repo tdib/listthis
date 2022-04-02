@@ -1,0 +1,90 @@
+import styled from 'styled-components'
+import { X } from 'lucide-react'
+
+export const PanelWrapper = styled.div`
+  pointer-events: ${p => (p.dimBackground ? 'initial' : 'none')};
+  top: 0;
+  left: 0;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background-color: ${p => (p.dimBackground ? '#00000055' : 'none')};
+  transition: background-color 0.5s;
+`
+
+export const Panel = styled.div`
+  height: ${p => (p.isOpen ? '60%' : '0')};
+  display: flex;
+  overflow-y: hidden;
+  left: 0;
+  bottom: 0;
+  justify-content: right;
+  position: fixed;
+  width: 100%;
+  background-color: ${p => p.theme.secondary};
+  z-index: 1;
+  border-radius: 1rem;
+  transition: height 0.4s ease;
+`
+
+export const PanelContent = styled.div`
+  height: 30rem;
+  width: 100%;
+  margin: 1.5rem;
+`
+
+export const TitleField = styled.input.attrs({ type: 'text', placeholder: 'Type an item name' })`
+  width: 100%;
+  height: 2.5rem;
+  background: none;
+  border: none;
+  color: ${p => p.theme.textPrimary};
+  font-size: 2rem;
+  font-weight: bold;
+
+  ::placeholder {
+    color: ${p => p.theme.tertiary};
+  }
+
+  :focus {
+    outline-width: 0;
+  }
+`
+
+export const NoteHeading = styled.h2`
+  user-select: none;
+  margin: 1.5rem 0 0.25rem 0;
+  font-size: 1rem;
+  color: ${p => p.theme.textPrimary};
+`
+
+export const NoteSection = styled.textarea.attrs({ placeholder: 'Type a note' })`
+  background: none;
+  border: none;
+  resize: none;
+  width: 100%;
+  height: 20rem;
+  color: ${p => p.theme.textPrimary};
+  font-family: 'Franklin Gothic Light', 'Arial Narrow', Arial, sans-serif;
+
+  :focus {
+    outline-width: 0;
+  }
+`
+
+export const XIcon = styled(X)`
+  color: ${p => p.theme.textPrimary};
+`
+
+export const CloseButton = styled.button`
+  background: none;
+  border: none;
+  opacity: ${p => (p.doDisplay ? '100%' : '0%')};
+  margin: 0.5rem;
+  height: fit-content;
+
+  :hover {
+    cursor: pointer;
+    filter: brightness(85%);
+  }
+`
