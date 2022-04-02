@@ -1,5 +1,4 @@
 import React from 'react'
-import AddItemPopup from '../AddItemPopup/AddItemPopup'
 
 import { AddButtonContainer, PlusIcon } from './addButtonStyle'
 

@@ -27,13 +27,14 @@ export const Panel = styled.div`
   transition: height 0.4s ease;
 `
 
-export const PanelContent = styled.div`
+export const AddItemForm = styled.form`
   height: 30rem;
   width: 100%;
   margin: 1.5rem;
 `
 
-export const TitleField = styled.input.attrs({ type: 'text', placeholder: 'Type an item name' })`
+// export const TitleField = styled.input.attrs({ type: 'text', placeholder: 'Type an item name', required: true })`
+export const TitleField = styled.input`
   width: 100%;
   height: 2.5rem;
   background: none;
@@ -41,6 +42,7 @@ export const TitleField = styled.input.attrs({ type: 'text', placeholder: 'Type 
   color: ${p => p.theme.textPrimary};
   font-size: 2rem;
   font-weight: bold;
+  margin-bottom: 1rem;
 
   ::placeholder {
     color: ${p => p.theme.tertiary};
@@ -51,14 +53,15 @@ export const TitleField = styled.input.attrs({ type: 'text', placeholder: 'Type 
   }
 `
 
-export const NoteHeading = styled.h2`
+export const NoteHeading = styled.label`
   user-select: none;
-  margin: 1.5rem 0 0.25rem 0;
+  /* margin: 1.5rem 0 0.25rem 0; */
   font-size: 1rem;
   color: ${p => p.theme.textPrimary};
 `
 
-export const NoteSection = styled.textarea.attrs({ placeholder: 'Type a note' })`
+// export const NoteSection = styled.input`
+export const NoteSection = styled.textarea`
   background: none;
   border: none;
   resize: none;
@@ -72,7 +75,8 @@ export const NoteSection = styled.textarea.attrs({ placeholder: 'Type a note' })
   }
 `
 
-export const SaveButton = styled.button`
+/* export const SaveButton = styled.input.attrs({ type: 'submit' })` */
+export const SaveButton = styled.input`
   width: 10rem;
   height: 3rem;
   border-radius: 1.5rem;
@@ -82,9 +86,14 @@ export const SaveButton = styled.button`
   color: ${p => p.theme.textPrimary};
   font-size: 1.1rem;
   font-weight: bold;
+  transition: transform 0.1s;
+
+  :disabled {
+    filter: brightness(0.85);
+  }
 
   :hover {
-    filter: brightness(85%);
+    filter: brightness(0.85);
     cursor: pointer;
     transform: scale(1.025);
   }
@@ -92,8 +101,6 @@ export const SaveButton = styled.button`
   :active {
     transform: scale(0.95);
   }
-
-  transition: transform 0.1s;
 `
 
 export const XIcon = styled(X)`
