@@ -1,12 +1,17 @@
-import React from 'react'
+import React, { useState } from 'react'
 import AddButton from '../AddButton/AddButton'
 import { TabBarContainer } from './tabBarStyle'
+import AddItemPopup from '../ItemPopup/AddItemPopup.js'
 
-const TabBar = ({ onOpenAddItemMenu }) => {
+const TabBar = () => {
+  const [addItemMenuOpen, setAddItemMenuOpen] = useState(false)
   return (
-    <TabBarContainer>
-      <AddButton onClick={onOpenAddItemMenu} />
-    </TabBarContainer>
+    <>
+      <TabBarContainer>
+        <AddButton onClick={() => setAddItemMenuOpen(true)} />
+      </TabBarContainer>
+      <AddItemPopup isOpen={addItemMenuOpen} onClose={() => setAddItemMenuOpen(false)} />
+    </>
   )
 }
 

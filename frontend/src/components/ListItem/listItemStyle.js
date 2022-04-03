@@ -36,6 +36,10 @@ export const TextContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  width: 85%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `
 
 export const ItemName = styled.span`
@@ -65,7 +69,6 @@ export const MoreButton = styled(MoreVertical)`
   margin-left: auto;
   margin-right: 0.5rem;
   align-self: center;
-  z-index: 4;
   color: ${p => p.theme.tertiary};
 
   :hover {

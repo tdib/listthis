@@ -18,7 +18,7 @@ export const Panel = styled.div`
   overflow-y: hidden;
   left: 0;
   bottom: 0;
-  justify-content: right;
+  justify-content: left;
   position: fixed;
   width: 100%;
   background-color: ${p => p.theme.secondary};

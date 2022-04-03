@@ -11,7 +11,7 @@ import {
   NoteHeading,
   NoteSection,
   SaveButton,
-} from './addItemPopupStyle'
+} from './itemPopupStyle'
 
 import { createItem } from '../../services/items'
 
