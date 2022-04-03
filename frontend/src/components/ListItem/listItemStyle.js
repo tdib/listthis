@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import Checkbox from 'react-custom-checkbox'
+import { MoreVertical } from 'lucide-react'
 
 export const AllItemsContainer = styled.div`
   background-color: ${p => p.theme.primary};
@@ -7,10 +7,6 @@ export const AllItemsContainer = styled.div`
   flex-direction: column;
   gap: 0.5rem;
   margin-bottom: 2rem;
-`
-
-export const blah = styled.div`
-  background-color: red;
 `
 
 export const ListItemContainer = styled.div`
@@ -53,11 +49,7 @@ export const ItemNote = styled.span`
   font-size: 0.85rem;
 `
 
-export const CheckBox = styled(Checkbox)`
-  margin: 1rem 0.75rem;
-`
-
-export const CB = styled.button`
+export const CheckBox = styled.button`
   align-self: center;
   border-style: solid;
   border-color: ${p => (p.selected ? p.theme.textPrimary : p.theme.quaternary)};
@@ -67,4 +59,20 @@ export const CB = styled.button`
   width: 1.5rem;
   height: 1.5rem;
   margin: 0.6rem;
+`
+
+export const MoreButton = styled(MoreVertical)`
+  margin-left: auto;
+  margin-right: 0.5rem;
+  align-self: center;
+  z-index: 4;
+  color: ${p => p.theme.tertiary};
+
+  :hover {
+    color: ${p => p.theme.quaternary};
+  }
+
+  :active {
+    transform: scale(0.95);
+  }
 `

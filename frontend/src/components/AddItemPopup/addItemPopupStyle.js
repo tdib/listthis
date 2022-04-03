@@ -86,6 +86,10 @@ export const SaveButton = styled.input`
 
   :disabled {
     filter: brightness(0.85);
+    :hover {
+      cursor: not-allowed;
+      transform: scale(1);
+    }
   }
 
   :hover {

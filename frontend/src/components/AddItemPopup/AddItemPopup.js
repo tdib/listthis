@@ -18,10 +18,6 @@ import { createItem } from '../../services/items'
 const AddItemPopup = ({ isOpen, onClose }) => {
   const { register, handleSubmit, watch } = useForm()
   let watchName = watch('name')
-  // console.log(watch('name'))
-  // useEffect(() => {
-  //   console.log(watchName)
-  // }, watchName)
 
   const onSubmit = data => {
     createItem({
