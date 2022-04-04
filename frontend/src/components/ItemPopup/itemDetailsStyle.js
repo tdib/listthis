@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 
 export const DetailsContainer = styled.div`
+  width: 100%;
   height: 30rem;
   padding: 1.5rem;
   display: flex;

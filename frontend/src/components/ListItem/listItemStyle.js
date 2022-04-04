@@ -56,9 +56,9 @@ export const ItemNote = styled.span`
 export const CheckBox = styled.button`
   align-self: center;
   border-style: solid;
-  border-color: ${p => (p.selected ? p.theme.textPrimary : p.theme.quaternary)};
+  border-color: ${p => (p.checked ? p.theme.textPrimary : p.theme.quaternary)};
   border-width: 0.1rem;
-  background: ${p => (p.selected ? p.theme.accentPrimary : 'none')};
+  background: ${p => (p.checked ? p.theme.accentPrimary : 'none')};
   border-radius: 1rem;
   width: 1.5rem;
   height: 1.5rem;

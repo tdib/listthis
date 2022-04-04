@@ -13,14 +13,14 @@ import {
   SaveButton,
 } from './itemPopupStyle'
 
-import { createItem } from '../../services/items'
+import { createOrUpdateItem } from '../../services/items'
 
 const AddItemPopup = ({ isOpen, onClose }) => {
   const { register, handleSubmit, watch } = useForm()
   let watchName = watch('name')
 
   const onSubmit = data => {
-    createItem({
+    createOrUpdateItem({
       id: crypto.randomUUID(),
       name: data.name,
       note: data.note,

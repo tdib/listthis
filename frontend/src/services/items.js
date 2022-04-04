@@ -5,8 +5,14 @@ export const getItems = async () => {
   return data.Items
 }
 
-export const createItem = async itemFields => {
+export const createOrUpdateItem = async itemFields => {
   const { data } = await api.post('/list', itemFields)
+  return data
+}
+
+export const deleteItem = async id => {
+  const { data } = await api.delete(`/list/${id}`)
+  console.log(data)
   return data
 }
 

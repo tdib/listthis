@@ -7,19 +7,19 @@ import {
   TextContainer,
   CheckBox,
   MoreButton,
-  Blah,
 } from './listItemStyle.js'
 import { getItems } from '../../services/items.js'
 import ItemDetailsPopup from '../ItemPopup/ItemDetailsPopup.js'
-import AddItemPopup from '../ItemPopup/AddItemPopup.js'
+import debounce from 'lodash.debounce'
+import { createOrUpdateItem } from '../../services/items'
 
 const ListItem = ({ item, onClick }) => {
-  const { name, note, isSelected } = item
+  const { name, note, isChecked } = item
   const [itemDetailsOpen, setItemDetailsOpen] = useState(false)
   return (
     <>
       <ListItemContainer onClick={onClick}>
-        <CheckBox selected={isSelected} />
+        <CheckBox checked={isChecked} />
         <TextContainer>
           <ItemName>{name}</ItemName>
           <ItemNote>{note}</ItemNote>
@@ -45,9 +45,10 @@ const ListItems = () => {
   }, [])
 
   const handleClick = useCallback(
-    clickedItem => {
-      setItems(items.map(item => (item.id === clickedItem.id ? { ...item, isSelected: !item.isSelected } : item)))
-    },
+    debounce(clickedItem => {
+      setItems(items.map(item => (item.id === clickedItem.id ? { ...item, isChecked: !item.isChecked } : item)))
+      createOrUpdateItem({ ...clickedItem, isChecked: !clickedItem.isChecked })
+    }, 250),
     [items]
   )
 
