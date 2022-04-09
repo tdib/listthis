@@ -17,6 +17,36 @@ AWS.config.update({
 const dynamoClient = new AWS.DynamoDB.DocumentClient()
 const TABLE_NAME = 'BuyThis4Me'
 
+const createNewList = async ({ id, name }) => {
+  const params = {
+    TableName: TABLE_NAME,
+    Item: {
+      id: id,
+      name: name,
+      items: [],
+    },
+    // name: 'hello',
+    // note: 'world',
+    // authorId: 'me',
+    // isChecked: false,
+    // dateAdded: 'xfdf',
+    // imageURL: 'fdasf',
+  }
+
+  return await dynamoClient.put(params).promise()
+}
+
+const getListByID = async id => {
+  const params = {
+    TableName: TABLE_NAME,
+    Key: {
+      id: id,
+    },
+  }
+
+  return await dynamoClient.get(params).promise()
+}
+
 const getAllItems = async () => {
   const params = {
     TableName: TABLE_NAME,
@@ -36,6 +66,14 @@ const addOrUpdateItem = async item => {
   return await dynamoClient.put(params).promise()
 }
 
+const updateList = async list => {
+  const params = {
+    TableName: TABLE_NAME,
+    List: list,
+  }
+  return await dynamoClient.put(params).promise()
+}
+
 const deleteItem = async id => {
   const params = {
     TableName: TABLE_NAME,
@@ -48,7 +86,10 @@ const deleteItem = async id => {
 
 module.exports = {
   dynamoClient,
+  createNewList,
   getAllItems,
+  getListByID,
   addOrUpdateItem,
+  updateList,
   deleteItem,
 }

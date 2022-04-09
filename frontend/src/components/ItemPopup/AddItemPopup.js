@@ -12,15 +12,18 @@ import {
   NoteSection,
   SaveButton,
 } from './itemPopupStyle'
+import useListStore from '../../stores/useListStore'
 
 import { createOrUpdateItem } from '../../services/items'
+import debounce from 'lodash.debounce'
 
 const AddItemPopup = ({ isOpen, onClose }) => {
   const { register, handleSubmit, watch } = useForm()
   let watchName = watch('name')
+  const addItem = useListStore(s => s.addItem)
 
   const onSubmit = data => {
-    createOrUpdateItem({
+    addItem({
       id: crypto.randomUUID(),
       name: data.name,
       note: data.note,
@@ -29,6 +32,15 @@ const AddItemPopup = ({ isOpen, onClose }) => {
       dateAdded: new Date().toISOString(),
       authorID: 'dib',
     })
+    // createOrUpdateItem({
+    //   id: crypto.randomUUID(),
+    //   name: data.name,
+    //   note: data.note,
+    //   imageURL: null,
+    //   isChecked: false,
+    //   dateAdded: new Date().toISOString(),
+    //   authorID: 'dib',
+    // })
   }
 
   return (

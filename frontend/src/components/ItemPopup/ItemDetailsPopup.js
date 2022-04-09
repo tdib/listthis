@@ -3,15 +3,18 @@ import React from 'react'
 import { DetailsContainer, Heading, SubText, NoteHeading, NoteSection, DeleteButton } from './itemDetailsStyle'
 import { CloseButton, Panel, PanelWrapper, XIcon } from './itemPopupStyle'
 import dayjs from 'dayjs'
-import { deleteItem } from '../../services/items'
+// import { deleteItem } from '../../services/items'
+import useListStore from '../../stores/useListStore'
 
-const handleDelete = id => {
-  if (window.confirm('Are you sure you would like to delete this item?')) {
-    deleteItem(id)
-  }
-}
+// const handleDelete = id => {
+//   if (window.confirm('Are you sure you would like to delete this item?')) {
+//     deleteItem(id)
+//     // deleteItem(id)
+//   }
+// }
 
 const ItemDetailsPopup = ({ item, isOpen, onClose }) => {
+  const deleteItem = useListStore(s => s.deleteItem)
   const { id, name, authorID, dateAdded, note, imageURL } = item
   // console.log(item)
   return (
@@ -26,8 +29,11 @@ const ItemDetailsPopup = ({ item, isOpen, onClose }) => {
           <NoteSection>{note || 'There is no note for this item.'}</NoteSection>
           <DeleteButton
             onClick={() => {
-              handleDelete(id)
-              onClose()
+              if (window.confirm('Are you sure you would like to delete this item?')) {
+                deleteItem(id)
+                onClose()
+              }
+              // handleDelete(id)
             }}
           >
             Delete
