@@ -105,6 +105,7 @@ const getListsByListIDs = async listIDs => {
   const { Items: allLists } = await dynamoClient.scan(params).promise()
 
   // Filter lists by id
+  // TODO: investigate doing this directly through dynamo
   const listsByID = allLists.filter(list => listIDs.includes(list.id))
   console.log(listsByID)
   return listsByID

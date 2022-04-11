@@ -57,9 +57,14 @@ const App = () => {
     <ThemeProvider theme={{ ...styles, ...styles[isDarkTheme ? 'dark' : 'light'] }}>
       <GlobalStyle />
       <Main>
-        <ListSelection />
-        {/* <Header /> */}
-        {/* <ListItems /> */}
+        {!items ? (
+          <ListSelection />
+        ) : (
+          <>
+            <Header />
+            <ListItems />
+          </>
+        )}
       </Main>
       <TabBar />
     </ThemeProvider>

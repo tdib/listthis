@@ -5,14 +5,17 @@ import useListStore from '../../stores/useListStore'
 import { CardContainer, ListName } from './listCardStyle'
 
 const ListCard = ({ id, name }) => {
-  const list = useListStore(s => s.list)
+  const items = useListStore(s => s.items)
   const loadList = useListStore(s => s.loadList)
+
   return (
     <>
       <CardContainer
         onClick={() => {
-          console.log('ID:', id)
-          loadList(getListByID(id))
+          // loadList(getListByID(id))
+          getListByID(id).then(list => loadList(list))
+          // console.log(getListByID(id))
+          console.log('Items:', items)
         }}
       >
         <ListName>{name || 'List Name'}</ListName>

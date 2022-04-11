@@ -10,6 +10,13 @@ const useListStore = create(set => ({
 
   loadList: list => set({ ...list }),
 
+  unloadList: list =>
+    set({
+      id: null,
+      name: null,
+      items: null,
+    }),
+
   addItem: item =>
     set(state => ({
       items: [...state.items, item],
