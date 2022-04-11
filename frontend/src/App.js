@@ -8,7 +8,7 @@ import TabBar from './components/TabBar/TabBar'
 import { useCallback, useEffect, useMemo } from 'react'
 import useListStore from './stores/useListStore'
 import debounce from 'lodash.debounce'
-import { createNewList, createOrUpdateItem, getListByID, updateList } from './services/items'
+import { createNewList, createOrUpdateItem, getListByID, getListsByUserID, updateList } from './services/items'
 import ListSelection from './components/ListSelection/ListSelection'
 
 const Main = styled.main`

@@ -7,6 +7,11 @@ export const createNewList = async ({ id, name }) => {
   return data
 }
 
+export const getListsByUserID = async userID => {
+  const { data } = await api.get(`lists/${userID}`)
+  return data
+}
+
 export const getListByID = async id => {
   const { data } = await api.get(`list/${id}`)
   return data

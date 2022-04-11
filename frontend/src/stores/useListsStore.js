@@ -3,12 +3,20 @@ import { useEffect } from 'react'
 import create from 'zustand'
 
 // current list (id, name, list items)
-const useListStore = create(set => ({
-  id: null,
-  name: null,
-  items: null,
+const useListsStore = create(set => ({
+  lists: null,
+  // [
+  //   {
+  //     id: null,
+  //     name: null,
+  //     items: null,
+  //   },
+  // ],
 
-  loadList: list => set({ ...list }),
+  loadLists: lists => set({ lists: lists }),
+
+  // addList
+  // leaveList
 
   addItem: item =>
     set(state => ({
@@ -26,7 +34,7 @@ const useListStore = create(set => ({
     })),
 }))
 
-export default useListStore
+export default useListsStore
 
 // const items = useListStore(s => s.items)
 // useEffect(() => {

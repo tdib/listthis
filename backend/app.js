@@ -1,7 +1,15 @@
 const express = require('express')
 const fetch = require('node-fetch')
 const cors = require('cors')
-const { getAllItems, addOrUpdateItem, deleteItem, updateList, createNewList, getListByID } = require('./dynamo')
+const {
+  getAllItems,
+  addOrUpdateItem,
+  deleteItem,
+  updateList,
+  createNewList,
+  getListByID,
+  getListsByUserID,
+} = require('./dynamo')
 
 const PORT = process.env.PORT || 5000
 const app = express()
@@ -14,10 +22,22 @@ app.use(cors(corsOptions))
 
 app.get('/', (req, res) => res.send('Hello World!'))
 
-app.get('/list', async (req, res) => {
+// app.get('/list', async (req, res) => {
+//   try {
+//     const list = await getAllItems()
+//     res.json(list)
+//   } catch (err) {
+//     console.error(err)
+//     res.status(500).json({ err: 'Something went wrong' })
+//   }
+// })
+
+// Get lists associated with a given user ID
+app.get('/lists/:userID', async (req, res) => {
+  const userID = req.params.userID
   try {
-    const list = await getAllItems()
-    res.json(list)
+    const listsByUserID = await getListsByUserID(userID)
+    res.json(listsByUserID)
   } catch (err) {
     console.error(err)
     res.status(500).json({ err: 'Something went wrong' })
