@@ -44,7 +44,6 @@ const ListItems = () => {
   const id = 'test-id-list'
 
   useEffect(() => {
-    // TODO: get full list instead of items (getlistbyid)
     getListByID(id).then(items => loadList(items))
   }, [])
 

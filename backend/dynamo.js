@@ -58,10 +58,15 @@ const getAllItems = async () => {
 
 // Adds item to list (if id is new)
 // Updates item in list (if id exists)
-const addOrUpdateItem = async item => {
+// TODO: work with id nesting
+const addOrUpdateItem = async ({ id, item }) => {
   const params = {
     TableName: TABLE_NAME,
-    Item: item,
+    // Item: item,
+    Item: {
+      id: id,
+      items: {},
+    },
   }
   return await dynamoClient.put(params).promise()
 }

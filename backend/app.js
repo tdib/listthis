@@ -36,16 +36,16 @@ app.get('/list/:id', async (req, res) => {
   }
 })
 
-// app.post('/list/:id', async (req, res) => {
-//   const item = req.body
-//   try {
-//     const newItem = await addOrUpdateItem(item)
-//     res.json(newItem)
-//   } catch (err) {
-//     console.error(err)
-//     res.status(500).json({ err: 'Something went wrong' })
-//   }
-// })
+app.post('/list/:id', async (req, res) => {
+  const item = req.body
+  try {
+    const newItem = await addOrUpdateItem(item)
+    res.json(newItem)
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ err: 'Something went wrong' })
+  }
+})
 
 app.post('/list', async (req, res) => {
   const { id, name } = req.body

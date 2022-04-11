@@ -9,6 +9,7 @@ import { useCallback, useEffect, useMemo } from 'react'
 import useListStore from './stores/useListStore'
 import debounce from 'lodash.debounce'
 import { createNewList, createOrUpdateItem, getListByID, updateList } from './services/items'
+import ListSelection from './components/ListSelection/ListSelection'
 
 const Main = styled.main`
   color: ${p => p.theme.secondary};
@@ -38,7 +39,7 @@ const App = () => {
 
   // TODO: investigate why this is happening 4 times
   // createNewList({ id, name })
-  // createOrUpdateItem({ listID: id, itemFields: testItem })
+  // createOrUpdateItem({ listID: id, itemFields: testItem }) // HEREEEEEE
   // const blah = getListByID(id)
   // console.log('BLAH', blah)
 
@@ -56,8 +57,9 @@ const App = () => {
     <ThemeProvider theme={{ ...styles, ...styles[isDarkTheme ? 'dark' : 'light'] }}>
       <GlobalStyle />
       <Main>
-        <Header />
-        <ListItems />
+        <ListSelection />
+        {/* <Header /> */}
+        {/* <ListItems /> */}
       </Main>
       <TabBar />
     </ThemeProvider>
