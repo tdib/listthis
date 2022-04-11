@@ -84,7 +84,8 @@ const getListsByUserID = async userID => {
   } = await dynamoClient.get(params).promise()
 
   // Return list of lists extracted from associated ids
-  const { Items: associatedLists } = await getListsByListIDs(associatedListIDs)
+  // const { Items: associatedLists } = await getListsByListIDs(associatedListIDs)
+  const associatedLists = await getListsByListIDs(associatedListIDs)
 
   console.log('(dynamo) associated lists:', associatedLists)
 
@@ -95,12 +96,18 @@ const getListsByListIDs = async listIDs => {
   console.log(listIDs)
   const params = {
     TableName: LISTS_TABLE,
-    KeyConditionExpression: 'id = :listid',
-    ExpressionAttributeValues: {
-      ':listid': 'list1id',
-    },
+    // KeyConditionExpression: 'id = :listid',
+    // ExpressionAttributeValues: {
+    //   ':listid': 'list1id',
+    // },
   }
-  return await dynamoClient.query(params).promise()
+  // Get all lists from database
+  const { Items: allLists } = await dynamoClient.scan(params).promise()
+
+  // Filter lists by id
+  const listsByID = allLists.filter(list => listIDs.includes(list.id))
+  console.log(listsByID)
+  return listsByID
 }
 
 const updateList = async list => {
