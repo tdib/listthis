@@ -14,7 +14,7 @@ import {
 } from './itemPopupStyle'
 import useListStore from '../../stores/useListStore'
 
-import { createOrUpdateItem } from '../../services/items'
+import { createItem } from '../../services/items'
 import debounce from 'lodash.debounce'
 
 const AddItemPopup = ({ isOpen, onClose }) => {
@@ -36,7 +36,7 @@ const AddItemPopup = ({ isOpen, onClose }) => {
 
     // Add new item to zustand list store
     addItem(newItem)
-    createOrUpdateItem({ listID, item: newItem })
+    createItem({ listID, item: newItem })
 
     // createOrUpdateItem({
     //   id: crypto.randomUUID(),

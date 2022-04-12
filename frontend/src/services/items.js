@@ -6,13 +6,14 @@ export const getItems = async () => {
 }
 
 // upsert
-export const createOrUpdateItem = async ({ listID, item }) => {
+export const createItem = async ({ listID, item }) => {
   const { data } = await api.post(`/list/${listID}`, { listID, item })
   return data
 }
 
-export const deleteItem = async id => {
-  const { data } = await api.delete(`/list/${id}`)
+export const deleteItemFromDB = async ({ listID, itemID }) => {
+  console.log('item', itemID)
+  const { data } = await api.delete(`/list/${listID}/${itemID}`)
   console.log(data)
   return data
 }

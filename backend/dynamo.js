@@ -81,7 +81,7 @@ const addItemToList = async ({ listID, item }) => {
   return await dynamoClient.update(params).promise()
 }
 
-//
+// Gets all lists that the given user is associated with
 const getListsByUserID = async userID => {
   const params = {
     TableName: USERS_TABLE,
@@ -105,10 +105,6 @@ const getListsByUserID = async userID => {
 const getListsByListIDs = async listIDs => {
   const params = {
     TableName: LISTS_TABLE,
-    // KeyConditionExpression: 'id = :listid',
-    // ExpressionAttributeValues: {
-    //   ':listid': 'list1id',
-    // },
   }
   // Get all lists from database
   const { Items: allLists } = await dynamoClient.scan(params).promise()
@@ -126,14 +122,30 @@ const updateList = async list => {
   return await dynamoClient.put(params).promise()
 }
 
-const deleteItem = async id => {
+const deleteItem = async ({ listID, itemID }) => {
+  const {
+    Item: { items: list },
+  } = await getListByID(listID)
+
+  // Create new list without deleted item
+  const updatedList = list.filter(item => (item.id != itemID ? item : null))
+
+  // Set the items of the current list to the updated items
   const params = {
     TableName: LISTS_TABLE,
     Key: {
-      id,
+      id: listID,
+    },
+    UpdateExpression: 'SET #attrName = :updatedList',
+    ExpressionAttributeNames: {
+      '#attrName': 'items',
+    },
+    ExpressionAttributeValues: {
+      ':updatedList': updatedList,
     },
   }
-  return await dynamoClient.delete(params).promise()
+
+  return await dynamoClient.update(params).promise()
 }
 
 module.exports = {

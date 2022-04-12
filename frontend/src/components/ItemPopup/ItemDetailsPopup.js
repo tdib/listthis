@@ -5,6 +5,7 @@ import { CloseButton, Panel, PanelWrapper, XIcon } from './itemPopupStyle'
 import dayjs from 'dayjs'
 // import { deleteItem } from '../../services/items'
 import useListStore from '../../stores/useListStore'
+import { deleteItemFromDB } from '../../services/items'
 
 // const handleDelete = id => {
 //   if (window.confirm('Are you sure you would like to delete this item?')) {
@@ -16,6 +17,7 @@ import useListStore from '../../stores/useListStore'
 const ItemDetailsPopup = ({ item, isOpen, onClose }) => {
   const deleteItem = useListStore(s => s.deleteItem)
   const { id, name, authorID, dateAdded, note, imageURL } = item
+  const listID = useListStore(s => s.id)
   // console.log(item)
   return (
     <PanelWrapper dimBackground={isOpen}>
@@ -31,6 +33,7 @@ const ItemDetailsPopup = ({ item, isOpen, onClose }) => {
             onClick={() => {
               if (window.confirm('Are you sure you would like to delete this item?')) {
                 deleteItem(id)
+                deleteItemFromDB({ listID, itemID: id })
                 onClose()
               }
               // handleDelete(id)

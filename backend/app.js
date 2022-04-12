@@ -90,11 +90,11 @@ app.post('/list', async (req, res) => {
 // })
 
 // Delete item from list
-app.delete('/list/:id', async (req, res) => {
-  const id = req.params.id
+app.delete('/list/:listID/:itemID', async (req, res) => {
+  const { listID, itemID } = req.params
 
   try {
-    res.json(await deleteItem(id))
+    res.json(await deleteItem({ listID, itemID }))
   } catch (err) {
     console.error(err)
     res.status(500).json({ err: 'Something went wrong' })
@@ -103,7 +103,7 @@ app.delete('/list/:id', async (req, res) => {
 
 // Leave a list
 app.delete('/lists/:id', async (req, res) => {
-  const id = req.params.id
+  const { listID, itemID } = req.params.id
 
   try {
     // TODO: set up leave function

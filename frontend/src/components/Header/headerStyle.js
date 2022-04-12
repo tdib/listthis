@@ -11,6 +11,7 @@ export const BackButton = styled(ChevronLeft)`
   :hover {
     color: ${p => p.theme.quaternary};
     transform: scale(1.15);
+    cursor: pointer;
   }
 
   :active {
