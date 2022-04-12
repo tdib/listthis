@@ -10,6 +10,7 @@ import useListStore from './stores/useListStore'
 import debounce from 'lodash.debounce'
 import { createNewList, createOrUpdateItem, getListByID, getListsByUserID, updateList } from './services/items'
 import ListSelection from './components/ListSelection/ListSelection'
+import useUserStore from './stores/useUserStore'
 
 const Main = styled.main`
   color: ${p => p.theme.secondary};
@@ -25,17 +26,16 @@ const GlobalStyle = createGlobalStyle`
 const App = () => {
   const isDarkTheme = useIsDarkScheme()
   const items = useListStore(s => s.items)
-  const id = 'test-id-list'
-  const name = 'first list'
-  const testItem = {
-    id: crypto.randomUUID(),
-    name: 'random name',
-    note: 'random note',
-    imageURL: null,
-    isChecked: false,
-    dateAdded: new Date().toISOString(),
-    authorID: 'dibbey',
-  }
+
+  // TODO: implement logging in
+  const loadUser = useUserStore(s => s.loadUser)
+  loadUser({
+    userID: 'thisisauserid',
+    username: 'Dib',
+    associatedListIDs: ['list1id', 'list2id', 'list3id'],
+    firstName: 'Thomas',
+    lastName: 'Dib',
+  })
 
   // TODO: investigate why this is happening 4 times
   // createNewList({ id, name })

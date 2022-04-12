@@ -21,9 +21,10 @@ const AddItemPopup = ({ isOpen, onClose }) => {
   const { register, handleSubmit, watch } = useForm()
   let watchName = watch('name')
   const addItem = useListStore(s => s.addItem)
+  const listID = useListStore(s => s.id)
 
   const onSubmit = data => {
-    addItem({
+    const newItem = {
       id: crypto.randomUUID(),
       name: data.name,
       note: data.note,
@@ -31,7 +32,12 @@ const AddItemPopup = ({ isOpen, onClose }) => {
       isChecked: false,
       dateAdded: new Date().toISOString(),
       authorID: 'dib',
-    })
+    }
+
+    // Add new item to zustand list store
+    addItem(newItem)
+    createOrUpdateItem({ listID, item: newItem })
+
     // createOrUpdateItem({
     //   id: crypto.randomUUID(),
     //   name: data.name,

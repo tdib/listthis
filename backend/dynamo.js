@@ -16,21 +16,39 @@ AWS.config.update({
 
 const dynamoClient = new AWS.DynamoDB.DocumentClient()
 const LISTS_TABLE = 'lists'
-const USER_TABLE = 'users'
+const USERS_TABLE = 'users'
 
 // Create empty list
-const createNewList = async ({ id, name }) => {
-  // TODO: link list to user who created it
+const createNewList = async ({ listID, listName, userID }) => {
   const params = {
     TableName: LISTS_TABLE,
     Item: {
-      id: id,
-      name: name,
+      id: listID,
+      name: listName,
       items: [],
     },
   }
 
+  // Link current user to list
+  await associateListIDwithUser({ listID, userID })
+
   return await dynamoClient.put(params).promise()
+}
+
+// Link a list ID with a user ID
+const associateListIDwithUser = async ({ listID, userID }) => {
+  const params = {
+    TableName: USERS_TABLE,
+    Key: {
+      userID: userID,
+    },
+    UpdateExpression: 'SET associatedListIDs = list_append(associatedListIDs, :newListID)',
+    ExpressionAttributeValues: {
+      ':newListID': [listID],
+    },
+  }
+
+  return await dynamoClient.update(params).promise()
 }
 
 const getListByID = async id => {
@@ -44,35 +62,29 @@ const getListByID = async id => {
   return await dynamoClient.get(params).promise()
 }
 
-// const getAllItems = async () => {
-//   const params = {
-//     TableName: LISTS_TABLE,
-//   }
-
-//   const items = await dynamoClient.scan(params).promise()
-//   return items
-// }
-
-// Adds item to list (if id is new)
-// Updates item in list (if id exists)
-// TODO: work with id nesting
-const addOrUpdateItem = async ({ id, item }) => {
-  // TODO: work with multiple lists
+// Adds item to list
+const addItemToList = async ({ listID, item }) => {
   const params = {
     TableName: LISTS_TABLE,
-    // Item: item,
-    Item: {
-      id: id,
-      items: {},
+    Key: {
+      id: listID,
+    },
+    UpdateExpression: 'SET #attrName = list_append(#attrName, :newItem)',
+    ExpressionAttributeNames: {
+      '#attrName': 'items',
+    },
+    ExpressionAttributeValues: {
+      ':newItem': [item],
     },
   }
-  return await dynamoClient.put(params).promise()
+
+  return await dynamoClient.update(params).promise()
 }
 
 //
 const getListsByUserID = async userID => {
   const params = {
-    TableName: USER_TABLE,
+    TableName: USERS_TABLE,
     Key: {
       userID: userID,
     },
@@ -87,13 +99,10 @@ const getListsByUserID = async userID => {
   // const { Items: associatedLists } = await getListsByListIDs(associatedListIDs)
   const associatedLists = await getListsByListIDs(associatedListIDs)
 
-  console.log('(dynamo) associated lists:', associatedLists)
-
   return associatedLists
 }
 
 const getListsByListIDs = async listIDs => {
-  console.log(listIDs)
   const params = {
     TableName: LISTS_TABLE,
     // KeyConditionExpression: 'id = :listid',
@@ -107,7 +116,6 @@ const getListsByListIDs = async listIDs => {
   // Filter lists by id
   // TODO: investigate doing this directly through dynamo
   const listsByID = allLists.filter(list => listIDs.includes(list.id))
-  console.log(listsByID)
   return listsByID
 }
 
@@ -133,7 +141,7 @@ module.exports = {
   createNewList,
   getListsByUserID,
   getListByID,
-  addOrUpdateItem,
+  addItemToList,
   updateList,
   deleteItem,
 }

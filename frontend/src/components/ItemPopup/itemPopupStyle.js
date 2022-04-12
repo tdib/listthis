@@ -15,7 +15,15 @@ export const PanelWrapper = styled.div`
 export const Panel = styled.div`
   height: ${p => (p.isOpen ? '60%' : '0')};
   display: flex;
-  overflow-y: hidden;
+
+  // Allow scrolling but disable scroll bar
+  overflow-y: scroll;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  ::-webkit-scrollbar {
+    display: none;
+  }
+
   left: 0;
   bottom: 0;
   justify-content: left;

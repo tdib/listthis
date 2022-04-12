@@ -1,15 +1,7 @@
 const express = require('express')
 const fetch = require('node-fetch')
 const cors = require('cors')
-const {
-  getAllItems,
-  addOrUpdateItem,
-  deleteItem,
-  updateList,
-  createNewList,
-  getListByID,
-  getListsByUserID,
-} = require('./dynamo')
+const { addItemToList, deleteItem, createNewList, getListByID, getListsByUserID } = require('./dynamo')
 
 const PORT = process.env.PORT || 5000
 const app = express()
@@ -21,16 +13,6 @@ const corsOptions = {
 app.use(cors(corsOptions))
 
 app.get('/', (req, res) => res.send('Hello World!'))
-
-// app.get('/list', async (req, res) => {
-//   try {
-//     const list = await getAllItems()
-//     res.json(list)
-//   } catch (err) {
-//     console.error(err)
-//     res.status(500).json({ err: 'Something went wrong' })
-//   }
-// })
 
 // Get lists associated with a given user ID
 app.get('/lists/:userID', async (req, res) => {
@@ -44,6 +26,7 @@ app.get('/lists/:userID', async (req, res) => {
   }
 })
 
+// Get specific list (unused?)
 app.get('/list/:id', async (req, res) => {
   const id = req.params.id
   try {
@@ -56,10 +39,11 @@ app.get('/list/:id', async (req, res) => {
   }
 })
 
+// Create item in a list (not working)
 app.post('/list/:id', async (req, res) => {
-  const item = req.body
+  const { listID, item } = req.body
   try {
-    const newItem = await addOrUpdateItem(item)
+    const newItem = await addItemToList({ listID, item })
     res.json(newItem)
   } catch (err) {
     console.error(err)
@@ -67,10 +51,11 @@ app.post('/list/:id', async (req, res) => {
   }
 })
 
+// Create new list
 app.post('/list', async (req, res) => {
-  const { id, name } = req.body
+  const { listID, listName, userID } = req.body
   try {
-    const newList = await createNewList({ id, name })
+    const newList = await createNewList({ listID, listName, userID })
     res.json(newList)
   } catch (err) {
     console.error(err)
@@ -78,18 +63,18 @@ app.post('/list', async (req, res) => {
   }
 })
 
-app.post('/list/:id', async (req, res) => {
-  console.log('WE ARE HERE')
-  const itemFields = req.body
-  console.log('itemFields:', itemFields)
-  try {
-    const newItem = await updateList(item)
-    res.json(newItem)
-  } catch (err) {
-    console.error(err)
-    res.status(500).json({ err: 'Something went wrong' })
-  }
-})
+// app.post('/list/:id', async (req, res) => {
+//   console.log('WE ARE HERE')
+//   const itemFields = req.body
+//   console.log('itemFields:', itemFields)
+//   try {
+//     const newItem = await updateList(item)
+//     res.json(newItem)
+//   } catch (err) {
+//     console.error(err)
+//     res.status(500).json({ err: 'Something went wrong' })
+//   }
+// })
 
 // app.post('/list/:id', async (req, res) => {
 //   const item = req.body
@@ -104,11 +89,25 @@ app.post('/list/:id', async (req, res) => {
 //   }
 // })
 
+// Delete item from list
 app.delete('/list/:id', async (req, res) => {
   const id = req.params.id
 
   try {
     res.json(await deleteItem(id))
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ err: 'Something went wrong' })
+  }
+})
+
+// Leave a list
+app.delete('/lists/:id', async (req, res) => {
+  const id = req.params.id
+
+  try {
+    // TODO: set up leave function
+    // res.json(await deleteItem(id))
   } catch (err) {
     console.error(err)
     res.status(500).json({ err: 'Something went wrong' })

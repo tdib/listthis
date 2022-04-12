@@ -17,10 +17,9 @@ const useListsStore = create(set => ({
 
   // addList
   // leaveList
-
-  addItem: item =>
+  createList: list =>
     set(state => ({
-      items: [...state.items, item],
+      lists: [...state.lists, list],
     })),
 
   deleteItem: id =>

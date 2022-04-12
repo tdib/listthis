@@ -8,7 +8,7 @@ import {
   CheckBox,
   MoreButton,
 } from './listItemStyle.js'
-import { getItems, getListByID } from '../../services/items.js'
+import { getListByID } from '../../services/lists'
 import ItemDetailsPopup from '../ItemPopup/ItemDetailsPopup.js'
 import debounce from 'lodash.debounce'
 import { createOrUpdateItem } from '../../services/items'
