@@ -11,10 +11,12 @@ export const Title = styled.h1`
 
 export const TileGrid = styled.div`
   margin-top: 2rem;
-  /* display: grid; */
-  /* grid-auto-flow: column; */
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
   justify-content: flex-start;
+`
+
+export const InfoMessage = styled.span`
+  color: ${p => p.theme.tertiary}
 `

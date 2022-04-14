@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { X } from 'lucide-react'
 
 export const CardContainer = styled.div`
   display: flex;
@@ -22,4 +23,14 @@ export const ListName = styled.p`
   overflow: hidden;
   overflow-wrap: break-word;
   user-select: none;
+  flex: 1;
+`
+
+export const LeaveListButton = styled(X)`
+  color: ${p => p.theme.tertiary};
+  padding: 0.25rem;
+
+  :hover {
+    color: ${p => p.theme.quaternary};
+  }
 `

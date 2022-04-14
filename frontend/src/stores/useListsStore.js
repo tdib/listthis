@@ -5,16 +5,12 @@ import create from 'zustand'
 // current list (id, name, list items)
 const useListsStore = create(set => ({
   lists: null,
-  // [
-  //   {
-  //     id: null,
-  //     name: null,
-  //     items: null,
-  //   },
-  // ],
 
   loadLists: lists => set({ lists: lists }),
 
+  leaveList: listToRemove => set(state => ({
+    lists: state.lists.filter(list => list.id !== listToRemove)
+  })),
   // addList
   // leaveList
   createList: list =>

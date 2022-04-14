@@ -1,7 +1,7 @@
 const express = require('express')
 const fetch = require('node-fetch')
 const cors = require('cors')
-const { addItemToList, deleteItem, createNewList, getListByID, getListsByUserID } = require('./dynamo')
+const { addItemToList, deleteItem, createNewList, getListByID, getListsByUserID, updateList, removeUserFromList } = require('./dynamo')
 
 const PORT = process.env.PORT || 5000
 const app = express()
@@ -30,7 +30,6 @@ app.get('/lists/:userID', async (req, res) => {
 app.get('/list/:id', async (req, res) => {
   const id = req.params.id
   try {
-    // TODO: investigate crashing app
     const list = await getListByID(id)
     res.json(list.Item)
   } catch (err) {
@@ -45,6 +44,19 @@ app.post('/list/:id', async (req, res) => {
   try {
     const newItem = await addItemToList({ listID, item })
     res.json(newItem)
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ err: 'Something went wrong' })
+  }
+})
+
+// Update list items
+app.put('/list/:listID', async (req, res) => {
+  const { listID } = req.params
+  const { listItems } = req.body
+  try {
+    const updatedList = await updateList({ listID, listItems })
+    res.json(updatedList)
   } catch (err) {
     console.error(err)
     res.status(500).json({ err: 'Something went wrong' })
@@ -102,10 +114,10 @@ app.delete('/list/:listID/:itemID', async (req, res) => {
 })
 
 // Leave a list
-app.delete('/lists/:id', async (req, res) => {
-  const { listID, itemID } = req.params.id
-
+app.delete('/users/:userID/:listID', async (req, res) => {
+  const { userID, listID } = req.params
   try {
+    res.json(await removeUserFromList({ userID, listID}))
     // TODO: set up leave function
     // res.json(await deleteItem(id))
   } catch (err) {

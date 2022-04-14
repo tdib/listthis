@@ -8,7 +8,8 @@ import TabBar from './components/TabBar/TabBar'
 import { useCallback, useEffect, useMemo } from 'react'
 import useListStore from './stores/useListStore'
 import debounce from 'lodash.debounce'
-import { createNewList, createOrUpdateItem, getListByID, getListsByUserID, updateList } from './services/items'
+import { createNewList, createOrUpdateItem, getListByID, getListsByUserID } from './services/items'
+import { updateList } from './services/lists'
 import ListSelection from './components/ListSelection/ListSelection'
 import useUserStore from './stores/useUserStore'
 
@@ -25,6 +26,7 @@ const GlobalStyle = createGlobalStyle`
 
 const App = () => {
   const isDarkTheme = useIsDarkScheme()
+  const listID = useListStore(s => s.id)
   const items = useListStore(s => s.items)
 
   // TODO: implement logging in
@@ -37,21 +39,13 @@ const App = () => {
     lastName: 'Dib',
   })
 
-  // TODO: investigate why this is happening 4 times
-  // createNewList({ id, name })
-  // createOrUpdateItem({ listID: id, itemFields: testItem }) // HEREEEEEE
-  // const blah = getListByID(id)
-  // console.log('BLAH', blah)
-
-  // const debouncedUpdateList = useCallback(
-  //   debounce(({ id, name, items }) => updateList({ id, name, items }), 2000),
-  //   []
-  // )
-  // useEffect(() => {
-  //   // console.log('fdlkasjflkjsdlkfjasldk')
-  //   // updateList({ items })
-  //   // debouncedUpdateList({ id, name, items })
-  // }, [items])
+  const debouncedUpdateList = useCallback(
+    debounce(({ listID, items }) => updateList({ listID, items }), 2000),
+    []
+  )
+  useEffect(() => {
+    debouncedUpdateList({ listID, items })
+  }, [items])
 
   return (
     <ThemeProvider theme={{ ...styles, ...styles[isDarkTheme ? 'dark' : 'light'] }}>

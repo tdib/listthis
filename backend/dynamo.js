@@ -83,6 +83,16 @@ const addItemToList = async ({ listID, item }) => {
 
 // Gets all lists that the given user is associated with
 const getListsByUserID = async userID => {
+  const associatedListIDs = await getUserAssociatedLists(userID)
+
+  // Return list of lists extracted from associated ids
+  // const { Items: associatedLists } = await getListsByListIDs(associatedListIDs)
+  const associatedLists = await getListsByListIDs(associatedListIDs)
+
+  return associatedLists
+}
+
+const getUserAssociatedLists = async userID => {
   const params = {
     TableName: USERS_TABLE,
     Key: {
@@ -90,16 +100,9 @@ const getListsByUserID = async userID => {
     },
   }
 
-  // Get associated list ids from user
-  const {
-    Item: { associatedListIDs },
-  } = await dynamoClient.get(params).promise()
+  const { Item: { associatedListIDs }} = await dynamoClient.get(params).promise()
 
-  // Return list of lists extracted from associated ids
-  // const { Items: associatedLists } = await getListsByListIDs(associatedListIDs)
-  const associatedLists = await getListsByListIDs(associatedListIDs)
-
-  return associatedLists
+  return associatedListIDs
 }
 
 const getListsByListIDs = async listIDs => {
@@ -115,14 +118,25 @@ const getListsByListIDs = async listIDs => {
   return listsByID
 }
 
-const updateList = async list => {
+const updateList = async ({ listID, listItems }) => {
   const params = {
     TableName: LISTS_TABLE,
+    Key: {
+      id: listID,
+    },
+    UpdateExpression: 'SET #attrName = :listItems',
+    ExpressionAttributeNames: {
+      '#attrName': 'items',
+    },
+    ExpressionAttributeValues: {
+      ':listItems': listItems,
+    },
   }
-  return await dynamoClient.put(params).promise()
+  return await dynamoClient.update(params).promise()
 }
 
 const deleteItem = async ({ listID, itemID }) => {
+  // Get list from listID
   const {
     Item: { items: list },
   } = await getListByID(listID)
@@ -148,6 +162,30 @@ const deleteItem = async ({ listID, itemID }) => {
   return await dynamoClient.update(params).promise()
 }
 
+const removeUserFromList = async ({ userID, listID }) => {
+  // Get lists associated with userID
+  const userLists = await getUserAssociatedLists(userID)
+
+  // Remove listID from associated lists for user
+  userLists.splice(userLists.indexOf(listID), 1)
+
+  const params = {
+    TableName: USERS_TABLE,
+    Key: {
+      userID: userID,
+    },
+    UpdateExpression: 'SET #attrName = :updatedUserLists',
+    ExpressionAttributeNames: {
+      '#attrName': 'associatedListIDs',
+    },
+    ExpressionAttributeValues: {
+      ':updatedUserLists': userLists,
+    },
+  }
+
+  return await dynamoClient.update(params).promise()
+}
+
 module.exports = {
   dynamoClient,
   createNewList,
@@ -156,4 +194,5 @@ module.exports = {
   addItemToList,
   updateList,
   deleteItem,
+  removeUserFromList,
 }

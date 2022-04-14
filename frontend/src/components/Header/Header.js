@@ -4,16 +4,24 @@ import { Title, Subtitle, HRule, BackButton } from './headerStyle'
 import dayjs from 'dayjs'
 import advancedFormat from 'dayjs/plugin/advancedFormat'
 import useListStore from '../../stores/useListStore'
+import { updateList } from '../../services/lists'
 
 const Header = () => {
   dayjs.extend(advancedFormat)
-  const listName = useListStore(s => s.name) ?? 'Todays list'
+  // const listName = useListStore(s => s.name) ?? 'Todays list'
+  const { id: listID, name: listName, items } = useListStore()
   const unloadList = useListStore(s => s.unloadList)
+
+  const handleBackButton = () => {
+    updateList({ listID, items })
+    unloadList()
+  }
+
   return (
     <>
-      <BackButton onClick={unloadList} />
-      <Title>{listName}</Title>
-      <Subtitle>Your shopping list for {dayjs().format(' dddd, Do MMMM')}</Subtitle>
+      <BackButton onClick={handleBackButton} />
+      <Title>{listName || 'Untitled List'}</Title>
+      <Subtitle>Your list for {dayjs().format(' dddd, Do MMMM')}</Subtitle>
       <HRule />
     </>
   )

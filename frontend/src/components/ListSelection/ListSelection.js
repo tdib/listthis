@@ -1,15 +1,18 @@
 import React, { useEffect } from 'react'
 import ListCard from './ListCard'
 
-import { Title, Container, TileGrid, TileGridContainer } from './listSelectionStyle'
+import { Title, Container, TileGrid, InfoMessage } from './listSelectionStyle'
 import { getListsByUserID } from '../../services/lists'
 import useListsStore from '../../stores/useListsStore'
 import useUserStore from '../../stores/useUserStore'
+import useListStore from '../../stores/useListStore'
+import { TailSpin } from 'react-loader-spinner'
 
 const ListSelection = () => {
   const loadLists = useListsStore(s => s.loadLists)
-  const lists = useListsStore(s => s.lists)
-  const currUserID = useUserStore(s => s.userID)
+  const { lists } = useListsStore()
+  const { userID: currUserID } = useUserStore()
+  const { list: currList }= useListStore()
 
   // Load current users associated lists
   useEffect(() => {
@@ -20,7 +23,13 @@ const ListSelection = () => {
     <Container>
       <Title>Your lists</Title>
       <TileGrid>
-        {lists ? lists.map(list => <ListCard key={list.id} id={list.id} name={list.name} />) : <p>Loading lists...</p>}
+        {lists ?
+          lists.length === 0 ?
+            <InfoMessage>You are not in any lists! Create one by clicking the '+' button at the bottom of the screen!</InfoMessage> :
+            lists.map(list => <ListCard key={list.id} id={list.id} name={list.name} />)
+        :
+          <TailSpin color={'white'} />
+        }
       </TileGrid>
     </Container>
   )
