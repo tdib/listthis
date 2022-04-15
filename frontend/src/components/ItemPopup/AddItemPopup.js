@@ -10,6 +10,7 @@ import {
   TitleField,
   NoteHeading,
   NoteSection,
+  AddImageButton,
   SaveButton,
 } from './itemPopupStyle'
 import useListStore from '../../stores/useListStore'
@@ -20,33 +21,24 @@ import debounce from 'lodash.debounce'
 const AddItemPopup = ({ isOpen, onClose }) => {
   const { register, handleSubmit, watch } = useForm()
   let watchName = watch('name')
-  const addItem = useListStore(s => s.addItem)
-  const listID = useListStore(s => s.id)
+  const { listID, addItem } = useListStore()
 
   const onSubmit = data => {
     const newItem = {
-      id: crypto.randomUUID(),
+      itemID: crypto.randomUUID(),
       name: data.name,
       note: data.note,
-      imageURL: null,
+      imageURL: data.image,
       isChecked: false,
       dateAdded: new Date().toISOString(),
       authorID: 'dib',
     }
 
+    console.log(newItem.imageURL);
+
     // Add new item to zustand list store
     addItem(newItem)
     createItem({ listID, item: newItem })
-
-    // createOrUpdateItem({
-    //   id: crypto.randomUUID(),
-    //   name: data.name,
-    //   note: data.note,
-    //   imageURL: null,
-    //   isChecked: false,
-    //   dateAdded: new Date().toISOString(),
-    //   authorID: 'dib',
-    // })
   }
 
   return (
@@ -60,6 +52,7 @@ const AddItemPopup = ({ isOpen, onClose }) => {
             required={true}
             {...register('name')}
           />
+          <AddImageButton name={'image'} type={'file'} {...register('image')} />
           <NoteHeading>Note</NoteHeading>
           <NoteSection name={'note'} type={'textarea'} placeholder={'Type a note'} {...register('note')} />
           <SaveButton value={'Save'} type={'submit'} disabled={!watchName} onClick={onClose}></SaveButton>

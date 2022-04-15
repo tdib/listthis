@@ -7,7 +7,7 @@ export const getItems = async () => {
 
 // upsert
 export const createItem = async ({ listID, item }) => {
-  const { data } = await api.post(`/list/${listID}`, { listID, item })
+  const { data } = await api.post(`/list/${listID}`, { item })
   return data
 }
 

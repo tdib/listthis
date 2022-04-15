@@ -41,16 +41,10 @@ const ListItem = ({ item, onClick }) => {
 }
 
 const ListItems = () => {
-  const loadList = useListStore(s => s.loadList)
-  const toggleItem = useListStore(s => s.toggleItem)
+  const { toggleItem } = useListStore()
   const items = useListStore(s => s.items) ?? []
-  const id = 'test-id-list'
-  const currUserID = useUserStore(s => s.userID)
-  const loadLists = useListsStore(s => s.loadLists)
-
-  useEffect(() => {
-    getListByID(id).then(items => loadList(items))
-  }, [])
+  const { loadLists } = useListsStore()
+  const { userID: currUserID } = useUserStore()
 
 
   // const debouncedUpdateList = useCallback(
@@ -60,17 +54,17 @@ const ListItems = () => {
 
 
   // When current list is updated - reload listsStore
-  const debouncedLists = useCallback(
-    debounce(({currUserID}) => getListsByUserID(currUserID).then(lists => loadLists(lists)), 2000),
-    []
-  )
-  useEffect(() => {
-    debouncedLists({currUserID})
-  }, [items])
+  // const debouncedLists = useCallback(
+  //   debounce(({currUserID}) => getListsByUserID(currUserID).then(lists => loadLists(lists)), 2000),
+  //   []
+  // )
+  // useEffect(() => {
+  //   debouncedLists({currUserID})
+  // }, [items])
 
   const handleClick = useCallback(clickedItem => {
     // setItems(items.map(item => (item.id === clickedItem.id ? { ...item, isChecked: !item.isChecked } : item)))
-    toggleItem(clickedItem.id)
+    toggleItem(clickedItem.itemID)
     // listStore(s => s.toggleItem(clickedItem.id))
   }, []) // items?
 
@@ -78,7 +72,7 @@ const ListItems = () => {
     <AllItemsContainer>
       {items.map(item => (
         // <ListItem key={item.id} onClick={() => handleClick(item)} {...item} />
-        <ListItem key={item.id} onClick={() => handleClick(item)} item={item} />
+        <ListItem key={item.itemID} onClick={() => handleClick(item)} item={item} />
       ))}
     </AllItemsContainer>
   )

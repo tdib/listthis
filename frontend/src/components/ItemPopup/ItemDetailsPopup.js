@@ -15,9 +15,9 @@ import { deleteItemFromDB } from '../../services/items'
 // }
 
 const ItemDetailsPopup = ({ item, isOpen, onClose }) => {
-  const deleteItem = useListStore(s => s.deleteItem)
-  const { id, name, authorID, dateAdded, note, imageURL } = item
-  const listID = useListStore(s => s.id)
+  const { deleteItem } = useListStore()
+  const { itemID, name, authorID, dateAdded, note, imageURL } = item
+  const { listID } = useListStore()
   // console.log(item)
   return (
     <PanelWrapper dimBackground={isOpen}>
@@ -32,8 +32,8 @@ const ItemDetailsPopup = ({ item, isOpen, onClose }) => {
           <DeleteButton
             onClick={() => {
               if (window.confirm('Are you sure you would like to delete this item?')) {
-                deleteItem(id)
-                deleteItemFromDB({ listID, itemID: id })
+                deleteItem(itemID)
+                deleteItemFromDB({ listID, itemID })
                 onClose()
               }
               // handleDelete(id)

@@ -31,9 +31,8 @@ export const NoteSection = styled.div`
 `
 
 export const DeleteButton = styled.button`
-  margin: auto;
-  width: 80%;
-  height: 3rem;
+  margin-top: 2rem;
+  min-height: 2.5rem;
   color: ${p => p.theme.textPrimary};
   border-radius: 1.5rem;
   border: none;

@@ -26,7 +26,7 @@ const GlobalStyle = createGlobalStyle`
 
 const App = () => {
   const isDarkTheme = useIsDarkScheme()
-  const listID = useListStore(s => s.id)
+  const { listID } = useListStore()
   const items = useListStore(s => s.items)
 
   // TODO: implement logging in

@@ -7,7 +7,7 @@ import useUserStore from '../../stores/useUserStore'
 import { CardContainer, ListName, LeaveListButton } from './listCardStyle'
 import { removeUserFromList } from '../../services/lists'
 
-const ListCard = ({ id, name }) => {
+const ListCard = ({ listID, name }) => {
   const { loadList } = useListStore()
   const { lists, leaveList } = useListsStore()
   const { userID } = useUserStore()
@@ -17,7 +17,7 @@ const ListCard = ({ id, name }) => {
       <CardContainer
         onClick={() => {
           for (let list of lists) {
-            if (list.id === id) {
+            if (list.listID === listID) {
               loadList(list)
             }
           }
@@ -28,8 +28,8 @@ const ListCard = ({ id, name }) => {
         <LeaveListButton onClick={(e) => {
           e.stopPropagation()
           if (window.confirm('Are you sure you would like to leave this list? This action CANNOT BE UNDONE!')) {
-            leaveList(id)
-            removeUserFromList({ userID, listID: id })
+            leaveList(listID)
+            removeUserFromList({ userID, listID })
           }
         }} />
       </CardContainer>

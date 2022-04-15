@@ -25,7 +25,7 @@ const CreateListPopup = ({ isOpen, onClose }) => {
   const onSubmit = data => {
     // TODO: associate list with logged in user
     const newList = {
-      id: crypto.randomUUID(),
+      listID: crypto.randomUUID(),
       name: data.name,
       items: [],
     }
@@ -34,7 +34,7 @@ const CreateListPopup = ({ isOpen, onClose }) => {
     createList(newList)
 
     // Create list in database
-    createNewList({ listID: newList.id, listName: newList.name, userID: loggedInUserID })
+    createNewList({ listID: newList.listID, listName: newList.name, userID: loggedInUserID })
   }
 
   return (

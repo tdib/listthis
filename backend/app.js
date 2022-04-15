@@ -27,10 +27,10 @@ app.get('/lists/:userID', async (req, res) => {
 })
 
 // Get specific list (unused?)
-app.get('/list/:id', async (req, res) => {
-  const id = req.params.id
+app.get('/list/:listID', async (req, res) => {
+  const listID = req.params.listID
   try {
-    const list = await getListByID(id)
+    const list = await getListByID(listID)
     res.json(list.Item)
   } catch (err) {
     console.error(err)
@@ -39,8 +39,9 @@ app.get('/list/:id', async (req, res) => {
 })
 
 // Create item in a list (not working)
-app.post('/list/:id', async (req, res) => {
-  const { listID, item } = req.body
+app.post('/list/:listID', async (req, res) => {
+  const { listID } = req.params
+  const { item } = req.body
   try {
     const newItem = await addItemToList({ listID, item })
     res.json(newItem)
@@ -118,8 +119,6 @@ app.delete('/users/:userID/:listID', async (req, res) => {
   const { userID, listID } = req.params
   try {
     res.json(await removeUserFromList({ userID, listID}))
-    // TODO: set up leave function
-    // res.json(await deleteItem(id))
   } catch (err) {
     console.error(err)
     res.status(500).json({ err: 'Something went wrong' })

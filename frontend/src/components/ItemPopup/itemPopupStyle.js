@@ -36,6 +36,8 @@ export const Panel = styled.div`
 `
 
 export const AddItemForm = styled.form`
+  display: flex;
+  flex-direction: column;
   height: 30rem;
   width: 100%;
   margin: 1.5rem 0 0 1.5rem;
@@ -49,7 +51,6 @@ export const TitleField = styled.input`
   color: ${p => p.theme.textPrimary};
   font-size: 2rem;
   font-weight: bold;
-  margin-bottom: 1rem;
 
   ::placeholder {
     color: ${p => p.theme.tertiary};
@@ -58,6 +59,14 @@ export const TitleField = styled.input`
   :focus {
     outline-width: 0;
   }
+`
+
+export const AddImageButton = styled.input`
+  color: ${p => p.theme.textPrimary};
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+
+
 `
 
 export const NoteHeading = styled.label`
@@ -79,6 +88,7 @@ export const NoteSection = styled.textarea`
     outline-width: 0;
   }
 `
+
 
 export const SaveButton = styled.input`
   width: 10rem;

@@ -2,28 +2,29 @@ const AWS = require('aws-sdk')
 require('dotenv').config()
 
 // Set up credentials using access key id and secret access key
-const creds = new AWS.Credentials({
-  accessKeyId: process.env.aws_access_key_id,
-  secretAccessKey: process.env.aws_secret_access_key,
-  sessionToken: process.env.aws_session_token,
-})
+// const creds = new AWS.Credentials({
+//   accessKeyId: process.env.aws_ddb_access_key_id,
+//   secretAccessKey: process.env.aws_ddb_secret_access_key,
+// })
 
 // Set configuration to use credentials in given region
 AWS.config.update({
   region: process.env.aws_default_region,
-  creds,
+  accessKeyId: process.env.aws_ddb_access_key_id,
+  secretAccessKey: process.env.aws_ddb_secret_access_key,
+  // creds,
 })
 
 const dynamoClient = new AWS.DynamoDB.DocumentClient()
-const LISTS_TABLE = 'lists'
-const USERS_TABLE = 'users'
+const LISTS_TABLE = 'listthis-lists'
+const USERS_TABLE = 'listthis-users'
 
 // Create empty list
 const createNewList = async ({ listID, listName, userID }) => {
   const params = {
     TableName: LISTS_TABLE,
     Item: {
-      id: listID,
+      listID: listID,
       name: listName,
       items: [],
     },
@@ -51,11 +52,11 @@ const associateListIDwithUser = async ({ listID, userID }) => {
   return await dynamoClient.update(params).promise()
 }
 
-const getListByID = async id => {
+const getListByID = async listID => {
   const params = {
     TableName: LISTS_TABLE,
     Key: {
-      id: id,
+      listID: listID,
     },
   }
 
@@ -67,7 +68,7 @@ const addItemToList = async ({ listID, item }) => {
   const params = {
     TableName: LISTS_TABLE,
     Key: {
-      id: listID,
+      listID: listID,
     },
     UpdateExpression: 'SET #attrName = list_append(#attrName, :newItem)',
     ExpressionAttributeNames: {
@@ -114,7 +115,7 @@ const getListsByListIDs = async listIDs => {
 
   // Filter lists by id
   // TODO: investigate doing this directly through dynamo
-  const listsByID = allLists.filter(list => listIDs.includes(list.id))
+  const listsByID = allLists.filter(list => listIDs.includes(list.listID))
   return listsByID
 }
 
@@ -122,7 +123,7 @@ const updateList = async ({ listID, listItems }) => {
   const params = {
     TableName: LISTS_TABLE,
     Key: {
-      id: listID,
+      listID: listID,
     },
     UpdateExpression: 'SET #attrName = :listItems',
     ExpressionAttributeNames: {
@@ -142,13 +143,13 @@ const deleteItem = async ({ listID, itemID }) => {
   } = await getListByID(listID)
 
   // Create new list without deleted item
-  const updatedList = list.filter(item => (item.id != itemID ? item : null))
+  const updatedList = list.filter(item => (item.itemID != itemID ? item : null))
 
   // Set the items of the current list to the updated items
   const params = {
     TableName: LISTS_TABLE,
     Key: {
-      id: listID,
+      listID: listID,
     },
     UpdateExpression: 'SET #attrName = :updatedList',
     ExpressionAttributeNames: {

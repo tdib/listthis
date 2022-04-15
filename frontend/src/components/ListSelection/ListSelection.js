@@ -12,7 +12,6 @@ const ListSelection = () => {
   const loadLists = useListsStore(s => s.loadLists)
   const { lists } = useListsStore()
   const { userID: currUserID } = useUserStore()
-  const { list: currList }= useListStore()
 
   // Load current users associated lists
   useEffect(() => {
@@ -26,7 +25,7 @@ const ListSelection = () => {
         {lists ?
           lists.length === 0 ?
             <InfoMessage>You are not in any lists! Create one by clicking the '+' button at the bottom of the screen!</InfoMessage> :
-            lists.map(list => <ListCard key={list.id} id={list.id} name={list.name} />)
+            lists.map(list => <ListCard key={list.listID} listID={list.listID} name={list.name} />)
         :
           <TailSpin color={'white'} />
         }

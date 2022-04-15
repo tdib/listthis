@@ -10,8 +10,8 @@ export const getListsByUserID = async userID => {
   return data
 }
 
-export const getListByID = async id => {
-  const { data } = await api.get(`list/${id}`)
+export const getListByID = async listID => {
+  const { data } = await api.get(`list/${listID}`)
   return data
 }
 
