@@ -1,18 +1,12 @@
 const AWS = require('aws-sdk')
+const { deleteImage } = require('./s3')
 require('dotenv').config()
-
-// Set up credentials using access key id and secret access key
-// const creds = new AWS.Credentials({
-//   accessKeyId: process.env.aws_ddb_access_key_id,
-//   secretAccessKey: process.env.aws_ddb_secret_access_key,
-// })
 
 // Set configuration to use credentials in given region
 AWS.config.update({
   region: process.env.aws_default_region,
   accessKeyId: process.env.aws_ddb_access_key_id,
   secretAccessKey: process.env.aws_ddb_secret_access_key,
-  // creds,
 })
 
 const dynamoClient = new AWS.DynamoDB.DocumentClient()
@@ -52,6 +46,7 @@ const associateListIDwithUser = async ({ listID, userID }) => {
   return await dynamoClient.update(params).promise()
 }
 
+// Get a list by the given ID
 const getListByID = async listID => {
   const params = {
     TableName: LISTS_TABLE,
@@ -144,8 +139,22 @@ const deleteItem = async ({ listID, itemID }) => {
     Item: { items: list },
   } = await getListByID(listID)
 
+  const updatedList = []
+  // Remove image if any from item to delete
+  list.forEach(item => {
+    // Item should be deleted
+    if (item.itemID === itemID) {
+      if (item.imageURL) {
+        // Extract image ID/key from URL
+        deleteImage(item.imageURL.substring(item.imageURL.lastIndexOf('/') + 1))
+      }
+    } else {
+      updatedList.push(item)
+    }
+  })
+
   // Create new list without deleted item
-  const updatedList = list.filter(item => (item.itemID != itemID ? item : null))
+  // const updatedList = list.filter(item => (item.itemID != itemID ? item : null))
 
   // Set the items of the current list to the updated items
   const params = {

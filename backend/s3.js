@@ -1,5 +1,6 @@
 const AWS = require('aws-sdk')
 require('dotenv').config()
+const contentDisposition = require('content-disposition')
 
 // Set configuration to use credentials in given region
 AWS.config.update({
@@ -12,18 +13,32 @@ AWS.config.update({
 const s3Client = new AWS.S3()
 const IMAGES_BUCKET = 'listthis-images'
 
-const uploadImage = async ({ img }) => {
+const uploadImage = async ({ imgID, img }) => {
   const fileContent = Buffer.from(img.data, 'binary')
 
   const params = {
     Bucket: IMAGES_BUCKET,
-    Key: img.name,
+    Key: imgID,
+    ContentType: img.mimeType,
     Body: fileContent,
+    ContentDisposition: contentDisposition(img.name, {
+      type: 'inline',
+    }),
   }
 
   return await s3Client.upload(params).promise()
 }
 
+const deleteImage = async imgID => {
+  const params = {
+    Bucket: IMAGES_BUCKET,
+    Key: imgID,
+  }
+
+  return await s3Client.deleteObject(params).promise()
+}
+
 module.exports = {
   uploadImage,
+  deleteImage,
 }

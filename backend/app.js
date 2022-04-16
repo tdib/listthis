@@ -11,6 +11,7 @@ const {
   removeUserFromList,
 } = require('./dynamo')
 const { uploadImage } = require('./s3')
+const { getDistributionDomain } = require('./cloudfront')
 
 const PORT = process.env.PORT || 5000
 const app = express()
@@ -36,7 +37,7 @@ app.get('/lists/:userID', async (req, res) => {
   }
 })
 
-// Get specific list (unused?)
+// Get specific list
 app.get('/list/:listID', async (req, res) => {
   const listID = req.params.listID
   try {
@@ -86,32 +87,6 @@ app.post('/list', async (req, res) => {
   }
 })
 
-// app.post('/list/:id', async (req, res) => {
-//   console.log('WE ARE HERE')
-//   const itemFields = req.body
-//   console.log('itemFields:', itemFields)
-//   try {
-//     const newItem = await updateList(item)
-//     res.json(newItem)
-//   } catch (err) {
-//     console.error(err)
-//     res.status(500).json({ err: 'Something went wrong' })
-//   }
-// })
-
-// app.post('/list/:id', async (req, res) => {
-//   const item = req.body
-//   const id = req.params.id
-//   item.id = id
-//   try {
-//     const updatedItem = await addOrUpdateItem(item)
-//     res.json(updatedItem)
-//   } catch (err) {
-//     console.error(err)
-//     res.status(500).json({ err: 'Something went wrong' })
-//   }
-// })
-
 // Delete item from list
 app.delete('/list/:listID/:itemID', async (req, res) => {
   const { listID, itemID } = req.params
@@ -135,10 +110,18 @@ app.delete('/users/:userID/:listID', async (req, res) => {
   }
 })
 
+// Upload image to S3 and return CloudFront URL to it
 app.post('/lists/images', async (req, res) => {
   const { img } = req.files
+  const { imgID } = req.body
   try {
-    res.json(await uploadImage({ img }).then(uploadedImg => uploadedImg.Location))
+    // Upload image to S3 and get key
+    const uploadedImgKey = await uploadImage({ imgID, img }).then(uploadedImg => uploadedImg.key)
+    // Get distribution domain from cloudfront
+    const distributionDomain = await getDistributionDomain()
+    // Construct url to access image from cldoufront
+    const imageURL = 'https://' + distributionDomain + '/' + uploadedImgKey
+    res.json(imageURL)
   } catch (err) {
     console.error(err)
     res.status(500).json({ err: 'Something went wrong' })
