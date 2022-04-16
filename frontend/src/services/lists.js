@@ -15,7 +15,6 @@ export const getListByID = async listID => {
   return data
 }
 
-// id & name
 export const updateList = async ({ listID, items }) => {
   const { data } = await api.put(`/list/${listID}`, { listItems: items })
   return data
@@ -23,5 +22,10 @@ export const updateList = async ({ listID, items }) => {
 
 export const removeUserFromList = async ({ userID, listID }) => {
   const { data } = await api.delete(`/users/${userID}/${listID}`)
+  return data
+}
+
+export const pruneLists = async () => {
+  const { data } = await api.delete(`/lists/prune`)
   return data
 }

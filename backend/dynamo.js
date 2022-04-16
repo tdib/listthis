@@ -82,12 +82,12 @@ const getListsByUserID = async userID => {
   const associatedListIDs = await getUserAssociatedLists(userID)
 
   // Return list of lists extracted from associated ids
-  // const { Items: associatedLists } = await getListsByListIDs(associatedListIDs)
   const associatedLists = await getListsByListIDs(associatedListIDs)
 
   return associatedLists
 }
 
+// Gets list IDs associated with a user
 const getUserAssociatedLists = async userID => {
   const params = {
     TableName: USERS_TABLE,
@@ -103,6 +103,7 @@ const getUserAssociatedLists = async userID => {
   return associatedListIDs
 }
 
+// Gets lists filtered by a list of ids
 const getListsByListIDs = async listIDs => {
   const params = {
     TableName: LISTS_TABLE,
@@ -116,6 +117,7 @@ const getListsByListIDs = async listIDs => {
   return listsByID
 }
 
+// Replaces items in a list with a new list (slightly updated list)
 const updateList = async ({ listID, listItems }) => {
   const params = {
     TableName: LISTS_TABLE,
@@ -133,6 +135,7 @@ const updateList = async ({ listID, listItems }) => {
   return await dynamoClient.update(params).promise()
 }
 
+// Deletes an item in a list - If necessary also deletes the image from S3
 const deleteItem = async ({ listID, itemID }) => {
   // Get list from listID
   const {
@@ -146,15 +149,13 @@ const deleteItem = async ({ listID, itemID }) => {
     if (item.itemID === itemID) {
       if (item.imageURL) {
         // Extract image ID/key from URL
-        deleteImage(item.imageURL.substring(item.imageURL.lastIndexOf('/') + 1))
+        const imgURL = item.imageURL
+        deleteImage({ imgURL })
       }
     } else {
       updatedList.push(item)
     }
   })
-
-  // Create new list without deleted item
-  // const updatedList = list.filter(item => (item.itemID != itemID ? item : null))
 
   // Set the items of the current list to the updated items
   const params = {
@@ -174,6 +175,7 @@ const deleteItem = async ({ listID, itemID }) => {
   return await dynamoClient.update(params).promise()
 }
 
+// Removes a list ID from a user's associated lists
 const removeUserFromList = async ({ userID, listID }) => {
   // Get lists associated with userID
   const userLists = await getUserAssociatedLists(userID)
@@ -198,8 +200,73 @@ const removeUserFromList = async ({ userID, listID }) => {
   return await dynamoClient.update(params).promise()
 }
 
+// Find and remove lists with no user association - also deletes images within these lists
+const pruneLists = async () => {
+  // Get all lists in the database
+  const { Items: allLists } = await dynamoClient
+    .scan({
+      TableName: LISTS_TABLE,
+    })
+    .promise()
+
+  // Extract list IDs from lists
+  const allListIDsSet = new Set()
+  allLists.forEach(list => {
+    allListIDsSet.add(list.listID)
+  })
+
+  // Get all users in the database
+  const { Items: allUsers } = await dynamoClient
+    .scan({
+      TableName: USERS_TABLE,
+    })
+    .promise()
+
+  // Get list of lists that are associated to any user
+  let allAssociatedListIDs = []
+  allUsers.forEach(user => {
+    allAssociatedListIDs = allAssociatedListIDs.concat(user.associatedListIDs)
+  })
+  // Convert list into set (as long as one exists that is all we need)
+  const allAssociatedListIDsSet = new Set(allAssociatedListIDs)
+
+  // Find lists with no association (difference of sets)
+  const unpopulatedListIDs = new Set(allListIDsSet)
+  for (let listID of allAssociatedListIDsSet) {
+    if (unpopulatedListIDs.has(listID)) {
+      unpopulatedListIDs.delete(listID)
+    }
+  }
+
+  // Go through each unpopulated list and delete the images associated (if applicable)
+  for (let unpopulatedListID of unpopulatedListIDs) {
+    // Get an unpopulated list
+    const {
+      Item: { items: unpopulatedList },
+    } = await getListByID(unpopulatedListID)
+
+    // For every element in the current unpopulated list
+    for (let item of unpopulatedList) {
+      // Delete its associated image if it exists
+      if (item.imageURL) {
+        const imgURL = item.imageURL
+        deleteImage({ imgURL })
+      }
+    }
+
+    // Delete the list itself
+    await dynamoClient
+      .delete({
+        TableName: LISTS_TABLE,
+        Key: {
+          listID: unpopulatedListID,
+        },
+      })
+      .promise()
+  }
+}
+
 module.exports = {
-  dynamoClient,
   createNewList,
   getListsByUserID,
   getListByID,
@@ -207,4 +274,5 @@ module.exports = {
   updateList,
   deleteItem,
   removeUserFromList,
+  pruneLists,
 }

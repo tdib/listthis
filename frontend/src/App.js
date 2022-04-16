@@ -9,7 +9,7 @@ import { useCallback, useEffect, useMemo } from 'react'
 import useListStore from './stores/useListStore'
 import debounce from 'lodash.debounce'
 import { createNewList, createOrUpdateItem, getListByID, getListsByUserID } from './services/items'
-import { updateList } from './services/lists'
+import { pruneLists, updateList } from './services/lists'
 import ListSelection from './components/ListSelection/ListSelection'
 import useUserStore from './stores/useUserStore'
 
@@ -39,12 +39,16 @@ const App = () => {
     lastName: 'Dib',
   })
 
+  // Update list after a specified interval
   const debouncedUpdateList = useCallback(
     debounce(({ listID, items }) => updateList({ listID, items }), 2000),
     []
   )
   useEffect(() => {
-    debouncedUpdateList({ listID, items })
+    // Prevent null list from being created by ensuring there are items to update
+    if (items) {
+      debouncedUpdateList({ listID, items })
+    }
   }, [items])
 
   return (

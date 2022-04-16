@@ -18,7 +18,6 @@ import {
 import useListStore from '../../stores/useListStore'
 
 import { createItem, uploadImg } from '../../services/items'
-import debounce from 'lodash.debounce'
 
 const AddItemPopup = ({ isOpen, onClose }) => {
   const { register, handleSubmit, watch } = useForm()
@@ -28,6 +27,12 @@ const AddItemPopup = ({ isOpen, onClose }) => {
   const { listID, addItem } = useListStore()
   const [uploadedImg, setUploadedImg] = useState()
   const [uploadedImgPreview, setUploadedImgPreview] = useState()
+
+  useEffect(() => {
+    if (isOpen) {
+      // TODO: Reset inputs before opening
+    }
+  }, [isOpen])
 
   useEffect(() => {
     if (watchImg && watchImg[0]) {
@@ -45,7 +50,8 @@ const AddItemPopup = ({ isOpen, onClose }) => {
   const onSubmit = async data => {
     let imageURL = null
     if (uploadedImg) {
-      imageURL = await uploadImg({ img: uploadedImg })
+      const imgID = crypto.randomUUID()
+      imageURL = await uploadImg({ imgID, img: uploadedImg })
     }
 
     const newItem = {
@@ -88,7 +94,7 @@ const AddItemPopup = ({ isOpen, onClose }) => {
               {...register('note', noteText)}
             />
           </NoteWrapper>
-          <AddImageButton name={'image'} type={'file'} {...register('image')} />
+          <AddImageButton name={'image'} type={'file'} accept={'image/*'} {...register('image')} />
           {uploadedImgPreview && <ImgPreview src={uploadedImgPreview} />}
           <SaveButton value={'Save'} type={'submit'} disabled={!watchName} onClick={onClose}></SaveButton>
         </AddItemForm>

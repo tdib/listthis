@@ -16,9 +16,10 @@ export const deleteItemFromDB = async ({ listID, itemID }) => {
   return data
 }
 
-export const uploadImg = async ({ listID, itemID, img }) => {
+export const uploadImg = async ({ imgID, img }) => {
   let formData = new FormData()
   formData.append('img', img)
+  formData.append('imgID', imgID)
   const { data } = await api.post(`/lists/images`, formData, 'multipart/form-data')
   return data
 }

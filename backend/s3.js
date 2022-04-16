@@ -29,7 +29,12 @@ const uploadImage = async ({ imgID, img }) => {
   return await s3Client.upload(params).promise()
 }
 
-const deleteImage = async imgID => {
+const deleteImage = async ({ imgURL, imgID }) => {
+  if (imgURL) {
+    // Extract image ID/key from URL
+    imgID = imgURL.substring(imgURL.lastIndexOf('/') + 1)
+  }
+
   const params = {
     Bucket: IMAGES_BUCKET,
     Key: imgID,

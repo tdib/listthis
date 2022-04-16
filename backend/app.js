@@ -9,6 +9,7 @@ const {
   getListsByUserID,
   updateList,
   removeUserFromList,
+  pruneLists,
 } = require('./dynamo')
 const { uploadImage } = require('./s3')
 const { getDistributionDomain } = require('./cloudfront')
@@ -122,6 +123,16 @@ app.post('/lists/images', async (req, res) => {
     // Construct url to access image from cldoufront
     const imageURL = 'https://' + distributionDomain + '/' + uploadedImgKey
     res.json(imageURL)
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ err: 'Something went wrong' })
+  }
+})
+
+app.delete('/lists/prune', async (req, res) => {
+  try {
+    const response = await pruneLists()
+    res.json(response)
   } catch (err) {
     console.error(err)
     res.status(500).json({ err: 'Something went wrong' })
