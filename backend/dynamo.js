@@ -101,7 +101,9 @@ const getUserAssociatedLists = async userID => {
     },
   }
 
-  const { Item: { associatedListIDs }} = await dynamoClient.get(params).promise()
+  const {
+    Item: { associatedListIDs },
+  } = await dynamoClient.get(params).promise()
 
   return associatedListIDs
 }

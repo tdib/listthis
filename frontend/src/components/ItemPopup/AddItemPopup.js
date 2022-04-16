@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 import {
@@ -12,29 +12,52 @@ import {
   NoteSection,
   AddImageButton,
   SaveButton,
+  NoteWrapper,
+  ImgPreview,
 } from './itemPopupStyle'
 import useListStore from '../../stores/useListStore'
 
-import { createItem } from '../../services/items'
+import { createItem, uploadImg } from '../../services/items'
 import debounce from 'lodash.debounce'
 
 const AddItemPopup = ({ isOpen, onClose }) => {
   const { register, handleSubmit, watch } = useForm()
   let watchName = watch('name')
+  let watchImg = watch('image')
+  const [noteText, setNoteText] = useState()
   const { listID, addItem } = useListStore()
+  const [uploadedImg, setUploadedImg] = useState()
+  const [uploadedImgPreview, setUploadedImgPreview] = useState()
 
-  const onSubmit = data => {
+  useEffect(() => {
+    if (watchImg && watchImg[0]) {
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        setUploadedImgPreview(reader.result)
+        setUploadedImg(watchImg[0])
+      }
+      reader.readAsDataURL(watchImg[0])
+    } else {
+      setUploadedImgPreview(null)
+    }
+  }, [watchImg])
+
+  const onSubmit = async data => {
+    let imageURL = null
+    if (uploadedImg) {
+      imageURL = await uploadImg({ img: uploadedImg })
+    }
+
     const newItem = {
       itemID: crypto.randomUUID(),
       name: data.name,
-      note: data.note,
-      imageURL: data.image,
+      // note: data.note,
+      note: noteText,
+      imageURL: imageURL,
       isChecked: false,
       dateAdded: new Date().toISOString(),
       authorID: 'dib',
     }
-
-    console.log(newItem.imageURL);
 
     // Add new item to zustand list store
     addItem(newItem)
@@ -52,9 +75,21 @@ const AddItemPopup = ({ isOpen, onClose }) => {
             required={true}
             {...register('name')}
           />
+          <NoteWrapper>
+            <NoteHeading>Note</NoteHeading>
+            {/* <NoteSection name={'note'} type={'textarea'} placeholder={'Type a note'} {...register('note')} /> */}
+            <NoteSection
+              name={'note'}
+              role={'textbox'}
+              contentEditable
+              onInput={e => {
+                setNoteText(e.target.innerText)
+              }}
+              {...register('note', noteText)}
+            />
+          </NoteWrapper>
           <AddImageButton name={'image'} type={'file'} {...register('image')} />
-          <NoteHeading>Note</NoteHeading>
-          <NoteSection name={'note'} type={'textarea'} placeholder={'Type a note'} {...register('note')} />
+          {uploadedImgPreview && <ImgPreview src={uploadedImgPreview} />}
           <SaveButton value={'Save'} type={'submit'} disabled={!watchName} onClick={onClose}></SaveButton>
         </AddItemForm>
         <CloseButton onClick={onClose} doDisplay={isOpen}>

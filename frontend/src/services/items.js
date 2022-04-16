@@ -12,12 +12,13 @@ export const createItem = async ({ listID, item }) => {
 }
 
 export const deleteItemFromDB = async ({ listID, itemID }) => {
-  console.log('item', itemID)
   const { data } = await api.delete(`/list/${listID}/${itemID}`)
-  console.log(data)
   return data
 }
 
-export const setItems = async () => {
-  return undefined
+export const uploadImg = async ({ listID, itemID, img }) => {
+  let formData = new FormData()
+  formData.append('img', img)
+  const { data } = await api.post(`/lists/images`, formData, 'multipart/form-data')
+  return data
 }

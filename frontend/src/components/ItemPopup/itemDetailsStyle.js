@@ -6,6 +6,7 @@ export const DetailsContainer = styled.div`
   padding: 1.5rem;
   display: flex;
   flex-direction: column;
+  gap: 2rem;
 `
 
 export const Heading = styled.h1`
@@ -20,7 +21,7 @@ export const SubText = styled.span`
 `
 
 export const NoteHeading = styled.h2`
-  margin: 2rem 0 0 0;
+  margin: 0;
   font-size: 1.5rem;
   color: ${p => p.theme.textPrimary};
   font-weight: bold;

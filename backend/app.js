@@ -1,7 +1,16 @@
 const express = require('express')
-const fetch = require('node-fetch')
+const fileUpload = require('express-fileupload')
 const cors = require('cors')
-const { addItemToList, deleteItem, createNewList, getListByID, getListsByUserID, updateList, removeUserFromList } = require('./dynamo')
+const {
+  addItemToList,
+  deleteItem,
+  createNewList,
+  getListByID,
+  getListsByUserID,
+  updateList,
+  removeUserFromList,
+} = require('./dynamo')
+const { uploadImage } = require('./s3')
 
 const PORT = process.env.PORT || 5000
 const app = express()
@@ -11,6 +20,7 @@ const corsOptions = {
   origin: 'http://localhost:3000',
 }
 app.use(cors(corsOptions))
+app.use(fileUpload())
 
 app.get('/', (req, res) => res.send('Hello World!'))
 
@@ -118,7 +128,17 @@ app.delete('/list/:listID/:itemID', async (req, res) => {
 app.delete('/users/:userID/:listID', async (req, res) => {
   const { userID, listID } = req.params
   try {
-    res.json(await removeUserFromList({ userID, listID}))
+    res.json(await removeUserFromList({ userID, listID }))
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ err: 'Something went wrong' })
+  }
+})
+
+app.post('/lists/images', async (req, res) => {
+  const { img } = req.files
+  try {
+    res.json(await uploadImage({ img }).then(uploadedImg => uploadedImg.Location))
   } catch (err) {
     console.error(err)
     res.status(500).json({ err: 'Something went wrong' })
