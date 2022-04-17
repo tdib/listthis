@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { BrowserRouter, Routes, Route, Redirect } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 
 import useIsDarkScheme from './hooks/useIsDarkTheme'
 import styled, { ThemeProvider, createGlobalStyle } from 'styled-components'
@@ -35,7 +35,7 @@ const App = () => {
   const isDarkTheme = useIsDarkScheme()
   const { listID, items } = useListStore()
 
-  const { isLoggedIn } = useUserStore()
+  const { userID } = useUserStore()
 
   // Update list after a specified interval
   const debouncedUpdateList = useCallback(
@@ -55,8 +55,8 @@ const App = () => {
       <Main>
         <BrowserRouter>
           <Routes>
-            <Route exact path='/' element={<ListSelectionPage />} />
             <Route exact path='/login' element={<LoginPage />} />
+            <Route exact path='/lists' element={<ListSelectionPage />} />
             <Route exact path='/lists/:listID' element={<ListPage />} />
           </Routes>
         </BrowserRouter>
@@ -69,7 +69,7 @@ const App = () => {
           </>
         )} */}
       </Main>
-      {isLoggedIn ? <TabBar /> : null}
+      {userID ? <TabBar /> : null}
     </ThemeProvider>
   )
 }

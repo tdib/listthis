@@ -30,6 +30,7 @@ export const InputField = styled.input`
   border-radius: 0.25rem;
   height: 2rem;
   border: none;
+  text-indent: 0.5rem;
 
   :focus {
     outline: solid;

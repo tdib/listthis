@@ -20,12 +20,12 @@ export const updateList = async ({ listID, items }) => {
   return data
 }
 
-export const removeUserFromList = async ({ userID, listID }) => {
-  const { data } = await api.delete(`/users/${userID}/${listID}`)
+export const associateUserWithList = async ({ userID, listID }) => {
+  const { data } = await api.put(`/users/${userID}/${listID}`)
   return data
 }
 
-export const pruneLists = async () => {
-  const { data } = await api.delete(`/lists/prune`)
+export const removeUserFromList = async ({ userID, listID }) => {
+  const { data } = await api.delete(`/users/${userID}/${listID}`)
   return data
 }

@@ -10,16 +10,16 @@ import { TailSpin } from 'react-loader-spinner'
 
 const ListSelection = () => {
   const { lists, loadLists } = useListsStore()
-  const { userID: currUserID } = useUserStore()
+  const { userID } = useUserStore()
 
   // Load current users associated lists
   useEffect(() => {
-    getListsByUserID(currUserID).then(lists => loadLists(lists))
+    console.log(userID)
+    getListsByUserID(userID).then(lists => loadLists(lists))
   }, [])
 
   return (
-    <Container>
-      <Title>Your lists</Title>
+    <>
       <TileGrid>
         {lists ? (
           lists.length === 0 ? (
@@ -33,7 +33,7 @@ const ListSelection = () => {
           <TailSpin color={'white'} />
         )}
       </TileGrid>
-    </Container>
+    </>
   )
 }
 

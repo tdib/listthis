@@ -1,6 +1,7 @@
 const AWS = require('aws-sdk')
 const { deleteImage } = require('./s3')
 require('dotenv').config()
+const bcrypt = require('bcrypt')
 
 // Set configuration to use credentials in given region
 AWS.config.update({
@@ -175,6 +176,25 @@ const deleteItem = async ({ listID, itemID }) => {
   return await dynamoClient.update(params).promise()
 }
 
+// Appends a list ID to a user's associated lists
+const associateUserWithList = async ({ userID, listID }) => {
+  const params = {
+    TableName: USERS_TABLE,
+    Key: {
+      userID: userID,
+    },
+    UpdateExpression: 'SET #attrName = list_append(#attrName, :newList)',
+    ExpressionAttributeNames: {
+      '#attrName': 'associatedListIDs',
+    },
+    ExpressionAttributeValues: {
+      ':newList': [listID],
+    },
+  }
+
+  return await dynamoClient.update(params).promise()
+}
+
 // Removes a list ID from a user's associated lists
 const removeUserFromList = async ({ userID, listID }) => {
   // Get lists associated with userID
@@ -200,69 +220,42 @@ const removeUserFromList = async ({ userID, listID }) => {
   return await dynamoClient.update(params).promise()
 }
 
-// Find and remove lists with no user association - also deletes images within these lists
-const pruneLists = async () => {
-  // Get all lists in the database
-  const { Items: allLists } = await dynamoClient
-    .scan({
-      TableName: LISTS_TABLE,
-    })
-    .promise()
-
-  // Extract list IDs from lists
-  const allListIDsSet = new Set()
-  allLists.forEach(list => {
-    allListIDsSet.add(list.listID)
-  })
-
-  // Get all users in the database
-  const { Items: allUsers } = await dynamoClient
-    .scan({
-      TableName: USERS_TABLE,
-    })
-    .promise()
-
-  // Get list of lists that are associated to any user
-  let allAssociatedListIDs = []
-  allUsers.forEach(user => {
-    allAssociatedListIDs = allAssociatedListIDs.concat(user.associatedListIDs)
-  })
-  // Convert list into set (as long as one exists that is all we need)
-  const allAssociatedListIDsSet = new Set(allAssociatedListIDs)
-
-  // Find lists with no association (difference of sets)
-  const unpopulatedListIDs = new Set(allListIDsSet)
-  for (let listID of allAssociatedListIDsSet) {
-    if (unpopulatedListIDs.has(listID)) {
-      unpopulatedListIDs.delete(listID)
-    }
+const createNewUser = async ({ userID, username, password }) => {
+  const params = {
+    TableName: USERS_TABLE,
+    Item: {
+      userID: userID,
+      associatedListIDs: [],
+      username: username,
+      password: password,
+    },
   }
 
-  // Go through each unpopulated list and delete the images associated (if applicable)
-  for (let unpopulatedListID of unpopulatedListIDs) {
-    // Get an unpopulated list
-    const {
-      Item: { items: unpopulatedList },
-    } = await getListByID(unpopulatedListID)
+  return await dynamoClient.put(params).promise()
+}
 
-    // For every element in the current unpopulated list
-    for (let item of unpopulatedList) {
-      // Delete its associated image if it exists
-      if (item.imageURL) {
-        const imgURL = item.imageURL
-        deleteImage({ imgURL })
-      }
+const validateLogin = async ({ username, password }) => {
+  // Find user by username
+  const { Items: user } = await dynamoClient
+    .scan({
+      TableName: USERS_TABLE,
+      FilterExpression: 'username = :username',
+      ExpressionAttributeValues: {
+        ':username': username,
+      },
+    })
+    .promise()
+
+  // If a user matches the username
+  if (user.length) {
+    // Compare raw password to hashed password
+    const isMatch = await bcrypt.compare(password, user[0].password)
+
+    if (isMatch) {
+      return user
     }
-
-    // Delete the list itself
-    await dynamoClient
-      .delete({
-        TableName: LISTS_TABLE,
-        Key: {
-          listID: unpopulatedListID,
-        },
-      })
-      .promise()
+  } else {
+    return
   }
 }
 
@@ -274,5 +267,7 @@ module.exports = {
   updateList,
   deleteItem,
   removeUserFromList,
-  pruneLists,
+  createNewUser,
+  validateLogin,
+  associateUserWithList,
 }

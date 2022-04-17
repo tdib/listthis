@@ -5,20 +5,15 @@ const useUserStore = create(set => ({
   userID: null,
   username: null,
   associatedListIDs: null,
-  firstName: null,
-  lastName: null,
-  isLoggedIn: null,
 
   loadUser: user => set({ ...user }),
 
-  unloadUser: set({
-    userID: null,
-    username: null,
-    associatedListIDs: null,
-    firstName: null,
-    lastName: null,
-    isLoggedIn: null,
-  }),
+  unloadUser: user =>
+    set({
+      userID: null,
+      username: null,
+      associatedListIDs: null,
+    }),
 }))
 
 export default useUserStore

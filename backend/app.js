@@ -1,6 +1,9 @@
 const express = require('express')
 const fileUpload = require('express-fileupload')
 const cors = require('cors')
+const bcrypt = require('bcrypt')
+const cookieParser = require('cookie-parser')
+
 const {
   addItemToList,
   deleteItem,
@@ -9,10 +12,14 @@ const {
   getListsByUserID,
   updateList,
   removeUserFromList,
-  pruneLists,
+  createNewUser,
+  validateLogin,
+  associateUserWithList,
 } = require('./dynamo')
 const { uploadImage } = require('./s3')
 const { getDistributionDomain } = require('./cloudfront')
+
+const { createToken, validateToken } = require('./JWT')
 
 const PORT = process.env.PORT || 5000
 const app = express()
@@ -23,11 +30,14 @@ const corsOptions = {
 }
 app.use(cors(corsOptions))
 app.use(fileUpload())
+app.use(cookieParser())
 
-app.get('/', (req, res) => res.send('Hello World!'))
+app.get('/', validateToken, (req, res) => res.send('Hello World!'))
+
+app.get('/google/clientid', (req, res) => res.send(process.env.REACT_APP_GOOGLE_CLIENT_ID))
 
 // Get lists associated with a given user ID
-app.get('/lists/:userID', async (req, res) => {
+app.get('/lists/:userID', validateToken, async (req, res) => {
   const userID = req.params.userID
   try {
     const listsByUserID = await getListsByUserID(userID)
@@ -39,7 +49,7 @@ app.get('/lists/:userID', async (req, res) => {
 })
 
 // Get specific list
-app.get('/list/:listID', async (req, res) => {
+app.get('/list/:listID', validateToken, async (req, res) => {
   const listID = req.params.listID
   try {
     const list = await getListByID(listID)
@@ -51,9 +61,10 @@ app.get('/list/:listID', async (req, res) => {
 })
 
 // Create item in a list (not working)
-app.post('/list/:listID', async (req, res) => {
+app.post('/list/:listID', validateToken, async (req, res) => {
   const { listID } = req.params
   const { item } = req.body
+  console.log(listID, item)
   try {
     const newItem = await addItemToList({ listID, item })
     res.json(newItem)
@@ -64,7 +75,7 @@ app.post('/list/:listID', async (req, res) => {
 })
 
 // Update list items
-app.put('/list/:listID', async (req, res) => {
+app.put('/list/:listID', validateToken, async (req, res) => {
   const { listID } = req.params
   const { listItems } = req.body
   try {
@@ -77,7 +88,7 @@ app.put('/list/:listID', async (req, res) => {
 })
 
 // Create new list
-app.post('/list', async (req, res) => {
+app.post('/list', validateToken, async (req, res) => {
   const { listID, listName, userID } = req.body
   try {
     const newList = await createNewList({ listID, listName, userID })
@@ -89,7 +100,7 @@ app.post('/list', async (req, res) => {
 })
 
 // Delete item from list
-app.delete('/list/:listID/:itemID', async (req, res) => {
+app.delete('/list/:listID/:itemID', validateToken, async (req, res) => {
   const { listID, itemID } = req.params
 
   try {
@@ -101,7 +112,7 @@ app.delete('/list/:listID/:itemID', async (req, res) => {
 })
 
 // Leave a list
-app.delete('/users/:userID/:listID', async (req, res) => {
+app.delete('/users/:userID/:listID', validateToken, async (req, res) => {
   const { userID, listID } = req.params
   try {
     res.json(await removeUserFromList({ userID, listID }))
@@ -112,7 +123,7 @@ app.delete('/users/:userID/:listID', async (req, res) => {
 })
 
 // Upload image to S3 and return CloudFront URL to it
-app.post('/lists/images', async (req, res) => {
+app.post('/lists/images', validateToken, async (req, res) => {
   const { img } = req.files
   const { imgID } = req.body
   try {
@@ -129,10 +140,62 @@ app.post('/lists/images', async (req, res) => {
   }
 })
 
-app.delete('/lists/prune', async (req, res) => {
+// Associate user with listID
+app.put('/users/:userID/:listID', async (req, res) => {
+  const { userID, listID } = req.params
   try {
-    const response = await pruneLists()
-    res.json(response)
+    res.json(await associateUserWithList({ userID, listID }))
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ err: 'Something went wrong' })
+  }
+})
+
+app.post('/auth/signup', async (req, res) => {
+  const { userID, username, password } = req.body
+  try {
+    const hashedPass = await bcrypt.hash(password, 10)
+    const newUser = await createNewUser({ userID, username, password: hashedPass })
+    res.json(newUser)
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ err: 'Something went wrong' })
+  }
+})
+
+app.post('/auth/login', async (req, res) => {
+  const { username, password } = req.body
+  try {
+    const validatedUser = await validateLogin({ username, password })
+    // Correct login details provided
+    if (validatedUser) {
+      // Create access token to store in browser
+      const accessJWT = createToken(validatedUser)
+      res.cookie('access-token', accessJWT, {
+        maxAge: 1000 * 60 * 60 * 24 * 30, // 30 days in ms = 1000ms * 60s * 60m * 24h * 30d
+        httpOnly: true,
+      })
+      res.json({
+        isAuthenticated: true,
+        accessToken: accessJWT,
+        result: {
+          userID: validatedUser[0].userID,
+          username: validatedUser[0].username,
+          associatedListIDs: validatedUser[0].associatedListIDs,
+        },
+      })
+    } else {
+      res.json({ isAuthenticated: false })
+    }
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ err: 'Something went wrong' })
+  }
+})
+
+app.post('/auth', async (req, res) => {
+  try {
+    res.json(newUser)
   } catch (err) {
     console.error(err)
     res.status(500).json({ err: 'Something went wrong' })

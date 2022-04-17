@@ -114,6 +114,8 @@ export const SaveButton = styled.input`
   font-size: 1.1rem;
   font-weight: bold;
   transition: transform 0.1s;
+  text-align: center;
+  outline: none;
 
   :disabled {
     filter: brightness(0.85);
@@ -149,4 +151,10 @@ export const CloseButton = styled.button`
     cursor: pointer;
     filter: brightness(85%);
   }
+`
+
+export const ButtonContainer = styled.div`
+  display: flex;
+  gap: 1rem;
+  justify-content: space-around;
 `

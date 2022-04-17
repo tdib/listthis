@@ -5,6 +5,8 @@ const useListsStore = create(set => ({
 
   loadLists: lists => set({ lists: lists }),
 
+  unloadLists: lists => set({ lists: null }),
+
   leaveList: listToRemoveID =>
     set(state => ({
       lists: state.lists.filter(list => list.listID !== listToRemoveID),

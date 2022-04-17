@@ -10,25 +10,24 @@ import { useParams } from 'react-router-dom'
 import { useAsync } from '../../hooks'
 import { getListByID, getListsByUserID } from '../../services/lists'
 import { TailSpin } from 'react-loader-spinner'
-import { useNavigate } from 'react-router-dom'
+import { Navigate } from 'react-router-dom'
 
 // TODO: why does this import break
 // import { UnauthorisedPage } from '../../pages'
 import UnauthorisedPage from '../Unauthorised/UnauthorisedPage'
 
-const ListPage = ({ isLoggedIn }) => {
-  const { userID } = useUserStore()
-  const navigate = useNavigate()
-
-  if (!userID) {
-    console.log('NOT AUTHORISED')
-    navigate('/login')
-  }
-
+const ListPage = () => {
+  const { userID, associatedListIDs } = useUserStore()
   const { loadList, listID: currListID } = useListStore()
   const { listID } = useParams()
   const [isLoading, setIsLoading] = useState(true)
   const [isAuthorised, setIsAuthorised] = useState(false)
+
+  // User not logged in
+  if (!userID) {
+    console.log('NOT AUTHORISED')
+    return <Navigate to='/login' />
+  }
 
   // Link accessed directly
   if (!currListID) {
@@ -50,7 +49,8 @@ const ListPage = ({ isLoggedIn }) => {
     return <TailSpin color='white' />
   }
 
-  if (isAuthorised) {
+  // if (isAuthorised) {
+  if (associatedListIDs.includes(listID)) {
     return (
       <>
         <Header />

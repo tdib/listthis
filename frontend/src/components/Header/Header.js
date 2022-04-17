@@ -19,7 +19,7 @@ const Header = () => {
 
   return (
     <>
-      <Link to='/'>
+      <Link to='/lists'>
         <BackButton onClick={handleBackButton} />
       </Link>
       <Title>{listName || 'Untitled List'}</Title>
