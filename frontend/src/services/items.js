@@ -1,4 +1,4 @@
-import api from '.'
+import api from './'
 
 export const getItems = async () => {
   const { data } = await api.get('/list')

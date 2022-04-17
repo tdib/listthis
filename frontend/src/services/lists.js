@@ -1,4 +1,4 @@
-import api from '.'
+import api from './'
 
 export const createNewList = async ({ listID, listName, userID }) => {
   const { data } = await api.post(`/list`, { listID, listName, userID })

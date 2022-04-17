@@ -7,13 +7,18 @@ const useUserStore = create(set => ({
   associatedListIDs: null,
   firstName: null,
   lastName: null,
+  isLoggedIn: null,
 
   loadUser: user => set({ ...user }),
+
+  unloadUser: set({
+    userID: null,
+    username: null,
+    associatedListIDs: null,
+    firstName: null,
+    lastName: null,
+    isLoggedIn: null,
+  }),
 }))
 
 export default useUserStore
-
-// const items = useListStore(s => s.items)
-// useEffect(() => {
-//   debounce(setItemsinDB(), 5000)
-// }, [items])
