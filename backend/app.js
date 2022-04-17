@@ -14,7 +14,7 @@ const {
   removeUserFromList,
   createNewUser,
   validateLogin,
-  associateUserWithList,
+  associateListIDWithUser,
 } = require('./dynamo')
 const { uploadImage } = require('./s3')
 const { getDistributionDomain } = require('./cloudfront')
@@ -64,7 +64,6 @@ app.get('/list/:listID', validateToken, async (req, res) => {
 app.post('/list/:listID', validateToken, async (req, res) => {
   const { listID } = req.params
   const { item } = req.body
-  console.log(listID, item)
   try {
     const newItem = await addItemToList({ listID, item })
     res.json(newItem)
@@ -144,7 +143,7 @@ app.post('/lists/images', validateToken, async (req, res) => {
 app.put('/users/:userID/:listID', async (req, res) => {
   const { userID, listID } = req.params
   try {
-    res.json(await associateUserWithList({ userID, listID }))
+    res.json(await associateListIDWithUser({ listID, userID }))
   } catch (err) {
     console.error(err)
     res.status(500).json({ err: 'Something went wrong' })

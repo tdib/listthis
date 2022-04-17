@@ -51,6 +51,7 @@ export const LoginPage = () => {
       <Title>ListThis Login</Title>
       <LoginForm onSubmit={handleSubmit(onSubmit)}>
         <InputField
+          autoFocus={true}
           name={'username'}
           type={'text'}
           required={true}

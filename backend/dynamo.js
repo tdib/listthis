@@ -26,21 +26,22 @@ const createNewList = async ({ listID, listName, userID }) => {
   }
 
   // Link current user to list
-  await associateListIDwithUser({ listID, userID })
+  await associateListIDWithUser({ listID, userID })
 
   return await dynamoClient.put(params).promise()
 }
 
 // Link a list ID with a user ID
-const associateListIDwithUser = async ({ listID, userID }) => {
+const associateListIDWithUser = async ({ listID, userID }) => {
   const params = {
     TableName: USERS_TABLE,
     Key: {
       userID: userID,
     },
-    UpdateExpression: 'SET associatedListIDs = list_append(associatedListIDs, :newListID)',
+    // UpdateExpression: 'SET associatedListIDs = list_append(associatedListIDs, :newListID)',
+    UpdateExpression: 'ADD associatedListIDs :newListID',
     ExpressionAttributeValues: {
-      ':newListID': [listID],
+      ':newListID': dynamoClient.createSet(listID),
     },
   }
 
@@ -83,7 +84,7 @@ const getListsByUserID = async userID => {
   const associatedListIDs = await getUserAssociatedLists(userID)
 
   // Return list of lists extracted from associated ids
-  const associatedLists = await getListsByListIDs(associatedListIDs)
+  const associatedLists = await getListsByListIDs(associatedListIDs.values)
 
   return associatedLists
 }
@@ -176,32 +177,13 @@ const deleteItem = async ({ listID, itemID }) => {
   return await dynamoClient.update(params).promise()
 }
 
-// Appends a list ID to a user's associated lists
-const associateUserWithList = async ({ userID, listID }) => {
-  const params = {
-    TableName: USERS_TABLE,
-    Key: {
-      userID: userID,
-    },
-    UpdateExpression: 'SET #attrName = list_append(#attrName, :newList)',
-    ExpressionAttributeNames: {
-      '#attrName': 'associatedListIDs',
-    },
-    ExpressionAttributeValues: {
-      ':newList': [listID],
-    },
-  }
-
-  return await dynamoClient.update(params).promise()
-}
-
 // Removes a list ID from a user's associated lists
 const removeUserFromList = async ({ userID, listID }) => {
   // Get lists associated with userID
   const userLists = await getUserAssociatedLists(userID)
 
   // Remove listID from associated lists for user
-  userLists.splice(userLists.indexOf(listID), 1)
+  userLists.values.splice(userLists.values.indexOf(listID), 1)
 
   const params = {
     TableName: USERS_TABLE,
@@ -225,7 +207,7 @@ const createNewUser = async ({ userID, username, password }) => {
     TableName: USERS_TABLE,
     Item: {
       userID: userID,
-      associatedListIDs: [],
+      associatedListIDs: dynamoClient.createSet(''),
       username: username,
       password: password,
     },
@@ -261,6 +243,7 @@ const validateLogin = async ({ username, password }) => {
 
 module.exports = {
   createNewList,
+  associateListIDWithUser,
   getListsByUserID,
   getListByID,
   addItemToList,
@@ -269,5 +252,4 @@ module.exports = {
   removeUserFromList,
   createNewUser,
   validateLogin,
-  associateUserWithList,
 }

@@ -41,7 +41,7 @@ const CreateListPopup = ({ isOpen, onClose }) => {
     } else {
       getListByID(data.name).then(list => {
         createList(list)
-        associateUserWithList({ userID: loggedInUserID, listID: data.name }).then(res => console.log(res))
+        associateUserWithList({ userID: loggedInUserID, listID: data.name }).then(res => console.log('RES', res))
       })
     }
   }
@@ -60,6 +60,7 @@ const CreateListPopup = ({ isOpen, onClose }) => {
           <ButtonContainer>
             <SaveButton
               value={isCreating ? 'Join Existing' : 'Create New'}
+              readOnly={true}
               onClick={() => setIsCreating(!isCreating)}
             ></SaveButton>
             <SaveButton value={'Save'} type={'submit'} disabled={!watchName} onClick={onClose}></SaveButton>
