@@ -39,4 +39,4 @@ jobs:
           environment_name: Listthisfedeployment-env
           version_label: "listthis-deployment-${{ steps.format-time.outputs.replaced }}"
           region: ap-southeast-2
-          deployment_package: deploy.zip
+          deployment_package: frontend/deploy.zip

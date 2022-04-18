@@ -1,8 +1,10 @@
 import styled from 'styled-components'
 import { X } from 'lucide-react'
+import { Link } from 'react-router-dom'
 
 export const CardContainer = styled.div`
   display: flex;
+  /* display: flex; */
   width: 12rem;
   height: 12rem;
   border-radius: 1rem;
@@ -15,6 +17,11 @@ export const CardContainer = styled.div`
   }
 `
 
+export const LinkWrapper = styled(Link)`
+  text-decoration: none;
+  width: 100%;
+`
+
 export const ListName = styled.p`
   margin: 1rem;
   font-weight: 500;
@@ -23,12 +30,12 @@ export const ListName = styled.p`
   overflow: hidden;
   overflow-wrap: break-word;
   user-select: none;
-  flex: 1;
+  /* flex: 1; */
 `
 
 export const LeaveListButton = styled(X)`
   color: ${p => p.theme.tertiary};
-  padding: 0.25rem;
+  padding: 0.5rem;
 
   :hover {
     color: ${p => p.theme.quaternary};

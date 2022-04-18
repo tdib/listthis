@@ -6,6 +6,7 @@ export const instance = axios.create({
   timeout: 1000 * 10,
   headers: {
     'Content-Type': 'application/json',
+    'access-token': localStorage.getItem('access-token'),
   },
 })
 
@@ -29,5 +30,8 @@ const api = {
   put: instance.put,
   delete: instance.delete,
 }
+
+// export * from './items'
+// export * from './lists'
 
 export default api

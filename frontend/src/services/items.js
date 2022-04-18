@@ -1,4 +1,4 @@
-import api from '.'
+import api from './'
 
 export const getItems = async () => {
   const { data } = await api.get('/list')
@@ -7,17 +7,19 @@ export const getItems = async () => {
 
 // upsert
 export const createItem = async ({ listID, item }) => {
-  const { data } = await api.post(`/list/${listID}`, { listID, item })
+  const { data } = await api.post(`/list/${listID}`, { item })
   return data
 }
 
 export const deleteItemFromDB = async ({ listID, itemID }) => {
-  console.log('item', itemID)
   const { data } = await api.delete(`/list/${listID}/${itemID}`)
-  console.log(data)
   return data
 }
 
-export const setItems = async () => {
-  return undefined
+export const uploadImg = async ({ imgID, img }) => {
+  let formData = new FormData()
+  formData.append('img', img)
+  formData.append('imgID', imgID)
+  const { data } = await api.post(`/lists/images`, formData, 'multipart/form-data')
+  return data
 }

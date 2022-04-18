@@ -10,6 +10,8 @@ const styles = {
 
     accentPrimary: '#6C59B7',
     accentSecondary: '#4B4463',
+
+    link: '#7FB0B4',
   },
   light: {
     primary: '#222222',
@@ -22,6 +24,8 @@ const styles = {
 
     accentPrimary: '#6C59B7',
     accentSecondary: '#4B4463',
+
+    link: '#7FB0B4',
   },
 }
 

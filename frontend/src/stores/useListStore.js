@@ -4,7 +4,7 @@ import create from 'zustand'
 
 // current list (id, name, list items)
 const useListStore = create(set => ({
-  id: null,
+  listID: null,
   name: null,
   items: null,
 
@@ -12,7 +12,7 @@ const useListStore = create(set => ({
 
   unloadList: list =>
     set({
-      id: null,
+      listID: null,
       name: null,
       items: null,
     }),
@@ -22,20 +22,15 @@ const useListStore = create(set => ({
       items: [...state.items, item],
     })),
 
-  deleteItem: id =>
+  deleteItem: itemToDeleteID =>
     set(state => ({
-      items: state.items.filter(item => item.id !== id),
+      items: state.items.filter(item => item.itemID !== itemToDeleteID),
     })),
 
-  toggleItem: id =>
+  toggleItem: itemToToggleID =>
     set(state => ({
-      items: state.items.map(item => (item.id === id ? { ...item, isChecked: !item.isChecked } : item)),
+      items: state.items.map(item => (item.itemID === itemToToggleID ? { ...item, isChecked: !item.isChecked } : item)),
     })),
 }))
 
 export default useListStore
-
-// const items = useListStore(s => s.items)
-// useEffect(() => {
-//   debounce(setItemsinDB(), 5000)
-// }, [items])

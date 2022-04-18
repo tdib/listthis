@@ -1,4 +1,4 @@
-import api from '.'
+import api from './'
 
 export const createNewList = async ({ listID, listName, userID }) => {
   const { data } = await api.post(`/list`, { listID, listName, userID })
@@ -10,14 +10,18 @@ export const getListsByUserID = async userID => {
   return data
 }
 
-export const getListByID = async id => {
-  const { data } = await api.get(`list/${id}`)
+export const getListByID = async listID => {
+  const { data } = await api.get(`list/${listID}`)
   return data
 }
 
-// id & name
 export const updateList = async ({ listID, items }) => {
   const { data } = await api.put(`/list/${listID}`, { listItems: items })
+  return data
+}
+
+export const associateUserWithList = async ({ userID, listID }) => {
+  const { data } = await api.put(`/users/${userID}/${listID}`)
   return data
 }
 

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 
 import {
@@ -11,30 +11,47 @@ import {
   NoteHeading,
   NoteSection,
   SaveButton,
+  ButtonContainer,
 } from './itemPopupStyle'
 import useListsStore from '../../stores/useListsStore'
-import { createNewList } from '../../services/lists'
+import { associateUserWithList, createNewList, getListByID } from '../../services/lists'
 import useUserStore from '../../stores/useUserStore'
 
 const CreateListPopup = ({ isOpen, onClose }) => {
   const { register, handleSubmit, watch } = useForm()
   let watchName = watch('name')
-  const createList = useListsStore(s => s.createList)
-  const loggedInUserID = useUserStore(s => s.userID)
+  const { createList } = useListsStore()
+  const { userID, addAssociatedList, associatedListIDs } = useUserStore()
+  const [isCreating, setIsCreating] = useState(true)
 
   const onSubmit = data => {
-    // TODO: associate list with logged in user
-    const newList = {
-      id: crypto.randomUUID(),
-      name: data.name,
-      items: [],
+    if (isCreating) {
+      const newList = {
+        listID: crypto.randomUUID(),
+        name: data.name,
+        items: [],
+      }
+
+      // Add associated list to user store for client side access
+      addAssociatedList(newList)
+
+      // Create list in zustand store for live render
+      createList(newList)
+
+      // Create list in database
+      createNewList({ listID: newList.listID, listName: newList.name, userID })
+    } else {
+      getListByID(data.name).then(list => {
+        // Add associated list to user store for client side access
+        addAssociatedList(list)
+
+        // Create list in zustand store for live render
+        createList(list)
+
+        // Add list to associated lists in database
+        associateUserWithList({ userID, listID: data.name }).then(res => console.log('RES', res))
+      })
     }
-
-    // Create list in zustand store for live render
-    createList(newList)
-
-    // Create list in database
-    createNewList({ listID: newList.id, listName: newList.name, userID: loggedInUserID })
   }
 
   return (
@@ -42,13 +59,21 @@ const CreateListPopup = ({ isOpen, onClose }) => {
       <Panel isOpen={isOpen}>
         <AddItemForm onSubmit={handleSubmit(onSubmit)}>
           <TitleField
+            autoComplete={'off'}
             name={'name'}
             type={'text'}
-            placeholder={'Type a list name'}
+            placeholder={isCreating ? 'Type a list name' : 'Type the list ID to join'}
             required={true}
             {...register('name')}
           />
-          <SaveButton value={'Save'} type={'submit'} disabled={!watchName} onClick={onClose}></SaveButton>
+          <ButtonContainer>
+            <SaveButton
+              value={isCreating ? 'Join Existing' : 'Create New'}
+              readOnly={true}
+              onClick={() => setIsCreating(!isCreating)}
+            ></SaveButton>
+            <SaveButton value={'Save'} type={'submit'} disabled={!watchName} onClick={onClose}></SaveButton>
+          </ButtonContainer>
         </AddItemForm>
         <CloseButton onClick={onClose} doDisplay={isOpen}>
           <XIcon />

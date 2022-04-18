@@ -1,16 +1,16 @@
 import React from 'react'
-
-import { Title, Subtitle, HRule, BackButton } from './headerStyle'
 import dayjs from 'dayjs'
 import advancedFormat from 'dayjs/plugin/advancedFormat'
+
+import { Title, Subtitle, HRule, BackButton } from './headerStyle'
 import useListStore from '../../stores/useListStore'
 import { updateList } from '../../services/lists'
+import { Link } from 'react-router-dom'
 
 const Header = () => {
   dayjs.extend(advancedFormat)
-  // const listName = useListStore(s => s.name) ?? 'Todays list'
-  const { id: listID, name: listName, items } = useListStore()
-  const unloadList = useListStore(s => s.unloadList)
+  const { listID, name: listName, items } = useListStore()
+  const { unloadList } = useListStore()
 
   const handleBackButton = () => {
     updateList({ listID, items })
@@ -19,10 +19,11 @@ const Header = () => {
 
   return (
     <>
-      <BackButton onClick={handleBackButton} />
+      <Link to='/lists'>
+        <BackButton onClick={handleBackButton} />
+      </Link>
       <Title>{listName || 'Untitled List'}</Title>
       <Subtitle>Your list for {dayjs().format(' dddd, Do MMMM')}</Subtitle>
-      <HRule />
     </>
   )
 }

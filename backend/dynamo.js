@@ -1,61 +1,70 @@
 const AWS = require('aws-sdk')
+const { deleteImage } = require('./s3')
 require('dotenv').config()
-
-// Set up credentials using access key id and secret access key
-const creds = new AWS.Credentials({
-  accessKeyId: process.env.aws_access_key_id,
-  secretAccessKey: process.env.aws_secret_access_key,
-  sessionToken: process.env.aws_session_token,
-})
+const bcrypt = require('bcrypt')
 
 // Set configuration to use credentials in given region
 AWS.config.update({
   region: process.env.aws_default_region,
-  creds,
+  accessKeyId: process.env.aws_ddb_access_key_id,
+  secretAccessKey: process.env.aws_ddb_secret_access_key,
 })
 
 const dynamoClient = new AWS.DynamoDB.DocumentClient()
-const LISTS_TABLE = 'lists'
-const USERS_TABLE = 'users'
+const LISTS_TABLE = 'listthis-lists'
+const USERS_TABLE = 'listthis-users'
 
 // Create empty list
 const createNewList = async ({ listID, listName, userID }) => {
   const params = {
     TableName: LISTS_TABLE,
     Item: {
-      id: listID,
+      listID: listID,
       name: listName,
       items: [],
     },
   }
 
   // Link current user to list
-  await associateListIDwithUser({ listID, userID })
+  await associateListIDWithUser({ listID, userID })
 
   return await dynamoClient.put(params).promise()
 }
 
 // Link a list ID with a user ID
-const associateListIDwithUser = async ({ listID, userID }) => {
+const associateListIDWithUser = async ({ listID, userID }) => {
   const params = {
     TableName: USERS_TABLE,
     Key: {
       userID: userID,
     },
-    UpdateExpression: 'SET associatedListIDs = list_append(associatedListIDs, :newListID)',
+    // UpdateExpression: 'SET associatedListIDs = list_append(associatedListIDs, :newListID)',
+    UpdateExpression: 'ADD associatedListIDs :newListID',
     ExpressionAttributeValues: {
-      ':newListID': [listID],
+      ':newListID': dynamoClient.createSet(listID),
     },
   }
 
   return await dynamoClient.update(params).promise()
 }
 
-const getListByID = async id => {
+const getUserByID = async userID => {
+  const params = {
+    TableName: USERS_TABLE,
+    Key: {
+      userID: userID,
+    },
+  }
+
+  return await dynamoClient.get(params).promise()
+}
+
+// Get a list by the given ID
+const getListByID = async listID => {
   const params = {
     TableName: LISTS_TABLE,
     Key: {
-      id: id,
+      listID: listID,
     },
   }
 
@@ -67,7 +76,7 @@ const addItemToList = async ({ listID, item }) => {
   const params = {
     TableName: LISTS_TABLE,
     Key: {
-      id: listID,
+      listID: listID,
     },
     UpdateExpression: 'SET #attrName = list_append(#attrName, :newItem)',
     ExpressionAttributeNames: {
@@ -86,12 +95,12 @@ const getListsByUserID = async userID => {
   const associatedListIDs = await getUserAssociatedLists(userID)
 
   // Return list of lists extracted from associated ids
-  // const { Items: associatedLists } = await getListsByListIDs(associatedListIDs)
-  const associatedLists = await getListsByListIDs(associatedListIDs)
+  const associatedLists = await getListsByListIDs(associatedListIDs.values)
 
   return associatedLists
 }
 
+// Gets list IDs associated with a user
 const getUserAssociatedLists = async userID => {
   const params = {
     TableName: USERS_TABLE,
@@ -100,11 +109,14 @@ const getUserAssociatedLists = async userID => {
     },
   }
 
-  const { Item: { associatedListIDs }} = await dynamoClient.get(params).promise()
+  const {
+    Item: { associatedListIDs },
+  } = await dynamoClient.get(params).promise()
 
   return associatedListIDs
 }
 
+// Gets lists filtered by a list of ids
 const getListsByListIDs = async listIDs => {
   const params = {
     TableName: LISTS_TABLE,
@@ -114,15 +126,16 @@ const getListsByListIDs = async listIDs => {
 
   // Filter lists by id
   // TODO: investigate doing this directly through dynamo
-  const listsByID = allLists.filter(list => listIDs.includes(list.id))
+  const listsByID = allLists.filter(list => listIDs.includes(list.listID))
   return listsByID
 }
 
+// Replaces items in a list with a new list (slightly updated list)
 const updateList = async ({ listID, listItems }) => {
   const params = {
     TableName: LISTS_TABLE,
     Key: {
-      id: listID,
+      listID: listID,
     },
     UpdateExpression: 'SET #attrName = :listItems',
     ExpressionAttributeNames: {
@@ -135,20 +148,33 @@ const updateList = async ({ listID, listItems }) => {
   return await dynamoClient.update(params).promise()
 }
 
+// Deletes an item in a list - If necessary also deletes the image from S3
 const deleteItem = async ({ listID, itemID }) => {
   // Get list from listID
   const {
     Item: { items: list },
   } = await getListByID(listID)
 
-  // Create new list without deleted item
-  const updatedList = list.filter(item => (item.id != itemID ? item : null))
+  const updatedList = []
+  // Remove image if any from item to delete
+  list.forEach(item => {
+    // Item should be deleted
+    if (item.itemID === itemID) {
+      if (item.imageURL) {
+        // Extract image ID/key from URL
+        const imgURL = item.imageURL
+        deleteImage({ imgURL })
+      }
+    } else {
+      updatedList.push(item)
+    }
+  })
 
   // Set the items of the current list to the updated items
   const params = {
     TableName: LISTS_TABLE,
     Key: {
-      id: listID,
+      listID: listID,
     },
     UpdateExpression: 'SET #attrName = :updatedList',
     ExpressionAttributeNames: {
@@ -162,12 +188,13 @@ const deleteItem = async ({ listID, itemID }) => {
   return await dynamoClient.update(params).promise()
 }
 
+// Removes a list ID from a user's associated lists
 const removeUserFromList = async ({ userID, listID }) => {
   // Get lists associated with userID
   const userLists = await getUserAssociatedLists(userID)
 
   // Remove listID from associated lists for user
-  userLists.splice(userLists.indexOf(listID), 1)
+  userLists.values.splice(userLists.values.indexOf(listID), 1)
 
   const params = {
     TableName: USERS_TABLE,
@@ -186,13 +213,72 @@ const removeUserFromList = async ({ userID, listID }) => {
   return await dynamoClient.update(params).promise()
 }
 
+// Create a new user in the database
+const createNewUser = async ({ userID, username, password }) => {
+  // Check if a user already exists with username
+  const { Count: usersWithSameUsername } = await dynamoClient
+    .scan({
+      TableName: USERS_TABLE,
+      FilterExpression: 'username = :username',
+      ExpressionAttributeValues: {
+        ':username': username,
+      },
+    })
+    .promise()
+
+  // A user with the given username already exists
+  if (usersWithSameUsername > 0) {
+    return null
+  }
+
+  const params = {
+    TableName: USERS_TABLE,
+    Item: {
+      userID: userID,
+      associatedListIDs: dynamoClient.createSet(''),
+      username: username,
+      password: password,
+    },
+  }
+
+  return await dynamoClient.put(params).promise()
+}
+
+const validateLogin = async ({ username, password }) => {
+  // Find user by username
+  const { Items: user } = await dynamoClient
+    .scan({
+      TableName: USERS_TABLE,
+      FilterExpression: 'username = :username',
+      ExpressionAttributeValues: {
+        ':username': username,
+      },
+    })
+    .promise()
+
+  // If a user matches the username
+  if (user.length) {
+    // Compare raw password to hashed password
+    const isMatch = await bcrypt.compare(password, user[0].password)
+
+    if (isMatch) {
+      return user
+    }
+  } else {
+    return
+  }
+}
+
 module.exports = {
-  dynamoClient,
   createNewList,
+  associateListIDWithUser,
   getListsByUserID,
   getListByID,
   addItemToList,
   updateList,
   deleteItem,
   removeUserFromList,
+  createNewUser,
+  validateLogin,
+  getUserByID,
 }

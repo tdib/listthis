@@ -31,11 +31,14 @@ export const Panel = styled.div`
   width: 100%;
   background-color: ${p => p.theme.secondary};
   z-index: 1;
-  border-radius: 1rem;
+  border-radius: 1rem 1rem 0rem 0rem;
   transition: height 0.4s ease;
 `
 
 export const AddItemForm = styled.form`
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
   height: 30rem;
   width: 100%;
   margin: 1.5rem 0 0 1.5rem;
@@ -49,7 +52,6 @@ export const TitleField = styled.input`
   color: ${p => p.theme.textPrimary};
   font-size: 2rem;
   font-weight: bold;
-  margin-bottom: 1rem;
 
   ::placeholder {
     color: ${p => p.theme.tertiary};
@@ -60,18 +62,27 @@ export const TitleField = styled.input`
   }
 `
 
+export const NoteWrapper = styled.div``
+
 export const NoteHeading = styled.label`
   user-select: none;
   font-size: 1rem;
   color: ${p => p.theme.textPrimary};
 `
 
-export const NoteSection = styled.textarea`
+export const NoteSection = styled.span`
+  :empty::before {
+    content: 'Type a note';
+    color: ${p => p.theme.tertiary};
+  }
+
+  display: block;
   background: none;
   border: none;
   resize: none;
   width: 100%;
-  height: 20rem;
+  overflow: hidden;
+  height: min-content;
   color: ${p => p.theme.textPrimary};
   font-family: 'Franklin Gothic Light', 'Arial Narrow', Arial, sans-serif;
 
@@ -80,9 +91,21 @@ export const NoteSection = styled.textarea`
   }
 `
 
+export const AddImageButton = styled.input`
+  color: ${p => p.theme.textPrimary};
+  /* height: 100%; */
+  min-height: 3rem;
+`
+
+export const ImgPreview = styled.img`
+  align-self: center;
+  max-width: 100%;
+  min-width: 10rem;
+`
+
 export const SaveButton = styled.input`
   width: 10rem;
-  height: 3rem;
+  min-height: 3rem;
   border-radius: 1.5rem;
   background-color: ${p => p.theme.accentPrimary};
   border: none;
@@ -91,6 +114,8 @@ export const SaveButton = styled.input`
   font-size: 1.1rem;
   font-weight: bold;
   transition: transform 0.1s;
+  text-align: center;
+  outline: none;
 
   :disabled {
     filter: brightness(0.85);
@@ -126,4 +151,10 @@ export const CloseButton = styled.button`
     cursor: pointer;
     filter: brightness(85%);
   }
+`
+
+export const ButtonContainer = styled.div`
+  display: flex;
+  gap: 1rem;
+  justify-content: space-around;
 `
