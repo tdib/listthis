@@ -12,7 +12,7 @@ export const Title = styled.h1`
   color: ${p => p.theme.textPrimary};
 `
 
-export const LoginForm = styled.form`
+export const RegisterForm = styled.form`
   background-color: ${p => p.theme.secondary};
   width: 50%;
   max-width: 30rem;
@@ -44,7 +44,7 @@ export const InputField = styled.input`
     outline-color: ${p => p.theme.accentPrimary};
   }
 `
-export const LoginButton = styled.input`
+export const RegisterButton = styled.input`
   height: 2.5rem;
   background-color: ${p => p.theme.accentPrimary};
   border: none;

@@ -78,6 +78,8 @@ const AddItemPopup = ({ isOpen, onClose }) => {
       <Panel isOpen={isOpen}>
         <AddItemForm onSubmit={handleSubmit(onSubmit)}>
           <TitleField
+            autoFocus={true}
+            autoComplete={'off'}
             name={'name'}
             type={'text'}
             placeholder={'Type an item name'}

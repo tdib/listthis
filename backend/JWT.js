@@ -23,7 +23,7 @@ const validateToken = (req, res, next) => {
     }
   } catch (err) {
     console.log('TOKEN REJECTED')
-    return res.status(400).json({ err: 'Access token rejected. Please log in.' })
+    // return res.status(400).json({ err: 'Access token rejected. Please log in.' })
   }
 }
 

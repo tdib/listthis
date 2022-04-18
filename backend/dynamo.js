@@ -213,7 +213,24 @@ const removeUserFromList = async ({ userID, listID }) => {
   return await dynamoClient.update(params).promise()
 }
 
+// Create a new user in the database
 const createNewUser = async ({ userID, username, password }) => {
+  // Check if a user already exists with username
+  const { Count: usersWithSameUsername } = await dynamoClient
+    .scan({
+      TableName: USERS_TABLE,
+      FilterExpression: 'username = :username',
+      ExpressionAttributeValues: {
+        ':username': username,
+      },
+    })
+    .promise()
+
+  // A user with the given username already exists
+  if (usersWithSameUsername > 0) {
+    return null
+  }
+
   const params = {
     TableName: USERS_TABLE,
     Item: {

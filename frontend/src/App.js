@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom'
 
 import useIsDarkScheme from './hooks/useIsDarkTheme'
 import styled, { ThemeProvider, createGlobalStyle } from 'styled-components'
@@ -16,24 +16,50 @@ import ListSelection from './components/ListSelection/ListSelection'
 import useUserStore from './stores/useUserStore'
 import ListPage from './pages/List/ListPage'
 
-import { ListSelectionPage, LoginPage } from './pages'
+import { ListSelectionPage, LoginPage, UnauthorisedPage, RegisterPage, Page404 } from './pages'
 // import { ListSelection } from './components'
 import { TabBar } from './components'
+// import Page404 from './pages/404/404Page'
 
 const Main = styled.main`
   color: ${p => p.theme.secondary};
   padding: 2rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 `
 
 const GlobalStyle = createGlobalStyle`
   body {
-    background: ${p => p.theme.primary}
+    background: ${p => p.theme.primary};
+  }
+
+  *::-webkit-scrollbar {
+    width: .5rem;
+    height: .5rem;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: ${p => p.theme.secondary};
+  }
+
+  *::-webkit-scrollbar-thumb {
+    border-radius: 100px;
+    border: 4px solid ${p => p.theme.tertiary};
+    width: 12px;
+  }
+
+  #root {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
   }
 `
 
 const App = () => {
   const isDarkTheme = useIsDarkScheme()
   const { listID, items } = useListStore()
+  const { pathname } = useLocation()
 
   const { userID } = useUserStore()
 
@@ -53,13 +79,14 @@ const App = () => {
     <ThemeProvider theme={{ ...styles, ...styles[isDarkTheme ? 'dark' : 'light'] }}>
       <GlobalStyle />
       <Main>
-        <BrowserRouter>
-          <Routes>
-            <Route exact path='/login' element={<LoginPage />} />
-            <Route exact path='/lists' element={<ListSelectionPage />} />
-            <Route exact path='/lists/:listID' element={<ListPage />} />
-          </Routes>
-        </BrowserRouter>
+        <Routes>
+          <Route exact path='/' element={<Navigate replace to='/login' />} />
+          <Route exact path='/login' element={<LoginPage />} />
+          <Route exact path='/register' element={<RegisterPage />} />
+          <Route exact path='/lists' element={<ListSelectionPage />} />
+          <Route exact path='/lists/:listID' element={<ListPage />} />
+          <Route path='*' element={<Page404 />} />
+        </Routes>
         {/* {!items ? (
           <ListSelection />
         ) : (
@@ -69,7 +96,8 @@ const App = () => {
           </>
         )} */}
       </Main>
-      {userID ? <TabBar /> : null}
+      {/* {userID ? <TabBar /> : null} */}
+      {pathname.startsWith('/lists') ? <TabBar /> : null}
     </ThemeProvider>
   )
 }

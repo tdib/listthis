@@ -17,7 +17,6 @@ const ListSelectionPage = () => {
   }
 
   if (!userID) {
-    console.log('NOT AUTHORISED')
     return <Navigate to='/login' />
   }
 

@@ -59,6 +59,7 @@ const CreateListPopup = ({ isOpen, onClose }) => {
       <Panel isOpen={isOpen}>
         <AddItemForm onSubmit={handleSubmit(onSubmit)}>
           <TitleField
+            autoComplete={'off'}
             name={'name'}
             type={'text'}
             placeholder={isCreating ? 'Type a list name' : 'Type the list ID to join'}

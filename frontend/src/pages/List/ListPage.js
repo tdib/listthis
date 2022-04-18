@@ -25,7 +25,6 @@ const ListPage = () => {
 
   // User not logged in
   if (!userID) {
-    console.log('NOT AUTHORISED')
     return <Navigate to='/login' />
   }
 

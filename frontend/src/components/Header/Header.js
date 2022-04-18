@@ -24,7 +24,6 @@ const Header = () => {
       </Link>
       <Title>{listName || 'Untitled List'}</Title>
       <Subtitle>Your list for {dayjs().format(' dddd, Do MMMM')}</Subtitle>
-      <HRule />
     </>
   )
 }

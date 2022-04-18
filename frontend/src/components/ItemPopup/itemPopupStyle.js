@@ -31,7 +31,7 @@ export const Panel = styled.div`
   width: 100%;
   background-color: ${p => p.theme.secondary};
   z-index: 1;
-  border-radius: 1rem;
+  border-radius: 1rem 1rem 0rem 0rem;
   transition: height 0.4s ease;
 `
 

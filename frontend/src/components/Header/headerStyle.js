@@ -30,8 +30,7 @@ export const Title = styled.h1`
 
 export const Subtitle = styled.span`
   color: ${p => p.theme.quaternary};
-`
-
-export const HRule = styled.hr`
-  border-color: ${p => p.theme.quaternary};
+  padding-bottom: 0.75rem;
+  margin-bottom: 0.75rem;
+  border-bottom: 1.5px solid ${p => p.theme.quaternary};
 `
