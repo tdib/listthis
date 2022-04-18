@@ -87,16 +87,7 @@ const App = () => {
           <Route exact path='/lists/:listID' element={<ListPage />} />
           <Route path='*' element={<Page404 />} />
         </Routes>
-        {/* {!items ? (
-          <ListSelection />
-        ) : (
-          <>
-            <Header />
-            <ListItems />
-          </>
-        )} */}
       </Main>
-      {/* {userID ? <TabBar /> : null} */}
       {pathname.startsWith('/lists') ? <TabBar /> : null}
     </ThemeProvider>
   )
