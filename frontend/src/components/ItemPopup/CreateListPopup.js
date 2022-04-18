@@ -20,28 +20,36 @@ import useUserStore from '../../stores/useUserStore'
 const CreateListPopup = ({ isOpen, onClose }) => {
   const { register, handleSubmit, watch } = useForm()
   let watchName = watch('name')
-  const createList = useListsStore(s => s.createList)
-  const loggedInUserID = useUserStore(s => s.userID)
+  const { createList } = useListsStore()
+  const { userID, addAssociatedList, associatedListIDs } = useUserStore()
   const [isCreating, setIsCreating] = useState(true)
 
   const onSubmit = data => {
     if (isCreating) {
-      // TODO: associate list with logged in user
       const newList = {
         listID: crypto.randomUUID(),
         name: data.name,
         items: [],
       }
 
+      // Add associated list to user store for client side access
+      addAssociatedList(newList)
+
       // Create list in zustand store for live render
       createList(newList)
 
       // Create list in database
-      createNewList({ listID: newList.listID, listName: newList.name, userID: loggedInUserID })
+      createNewList({ listID: newList.listID, listName: newList.name, userID })
     } else {
       getListByID(data.name).then(list => {
+        // Add associated list to user store for client side access
+        addAssociatedList(list)
+
+        // Create list in zustand store for live render
         createList(list)
-        associateUserWithList({ userID: loggedInUserID, listID: data.name }).then(res => console.log('RES', res))
+
+        // Add list to associated lists in database
+        associateUserWithList({ userID, listID: data.name }).then(res => console.log('RES', res))
       })
     }
   }

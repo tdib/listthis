@@ -34,8 +34,3 @@ const useListStore = create(set => ({
 }))
 
 export default useListStore
-
-// const items = useListStore(s => s.items)
-// useEffect(() => {
-//   debounce(setItemsinDB(), 5000)
-// }, [items])

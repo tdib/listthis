@@ -14,6 +14,11 @@ const useUserStore = create(set => ({
       username: null,
       associatedListIDs: null,
     }),
+
+  addAssociatedList: newList =>
+    set(state => ({
+      associatedListIDs: [...state.associatedListIDs, newList.listID],
+    })),
 }))
 
 export default useUserStore

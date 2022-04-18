@@ -14,7 +14,6 @@ const ListSelection = () => {
 
   // Load current users associated lists
   useEffect(() => {
-    console.log(userID)
     getListsByUserID(userID).then(lists => loadLists(lists))
   }, [])
 

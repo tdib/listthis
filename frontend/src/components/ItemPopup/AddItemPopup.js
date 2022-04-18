@@ -18,6 +18,8 @@ import {
 import useListStore from '../../stores/useListStore'
 
 import { createItem, uploadImg } from '../../services/items'
+import { useUserStore } from '../../stores'
+import { getUserByID } from '../../services/users'
 
 const AddItemPopup = ({ isOpen, onClose }) => {
   const { register, handleSubmit, watch } = useForm()
@@ -27,6 +29,7 @@ const AddItemPopup = ({ isOpen, onClose }) => {
   const { listID, addItem } = useListStore()
   const [uploadedImg, setUploadedImg] = useState()
   const [uploadedImgPreview, setUploadedImgPreview] = useState()
+  const { userID } = useUserStore()
 
   useEffect(() => {
     if (isOpen) {
@@ -62,7 +65,7 @@ const AddItemPopup = ({ isOpen, onClose }) => {
       imageURL: imageURL,
       isChecked: false,
       dateAdded: new Date().toISOString(),
-      authorID: 'dib',
+      authorID: await getUserByID(userID).then(user => user.username), // get username from userID
     }
 
     // Add new item to zustand list store

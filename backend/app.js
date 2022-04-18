@@ -15,6 +15,7 @@ const {
   createNewUser,
   validateLogin,
   associateListIDWithUser,
+  getUserByID,
 } = require('./dynamo')
 const { uploadImage } = require('./s3')
 const { getDistributionDomain } = require('./cloudfront')
@@ -36,9 +37,22 @@ app.get('/', validateToken, (req, res) => res.send('Hello World!'))
 
 app.get('/google/clientid', (req, res) => res.send(process.env.REACT_APP_GOOGLE_CLIENT_ID))
 
+// Get user from a user ID
+app.get('/user/:userID', validateToken, async (req, res) => {
+  const { userID } = req.params
+  try {
+    const { Item: user } = await getUserByID(userID)
+    delete user.password
+    res.json(user)
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ err: 'Something went wrong' })
+  }
+})
+
 // Get lists associated with a given user ID
 app.get('/lists/:userID', validateToken, async (req, res) => {
-  const userID = req.params.userID
+  const { userID } = req.params
   try {
     const listsByUserID = await getListsByUserID(userID)
     res.json(listsByUserID)

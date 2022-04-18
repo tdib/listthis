@@ -48,6 +48,17 @@ const associateListIDWithUser = async ({ listID, userID }) => {
   return await dynamoClient.update(params).promise()
 }
 
+const getUserByID = async userID => {
+  const params = {
+    TableName: USERS_TABLE,
+    Key: {
+      userID: userID,
+    },
+  }
+
+  return await dynamoClient.get(params).promise()
+}
+
 // Get a list by the given ID
 const getListByID = async listID => {
   const params = {
@@ -252,4 +263,5 @@ module.exports = {
   removeUserFromList,
   createNewUser,
   validateLogin,
+  getUserByID,
 }
