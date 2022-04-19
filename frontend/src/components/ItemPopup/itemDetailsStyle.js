@@ -27,7 +27,7 @@ export const NoteHeading = styled.h2`
   font-weight: bold;
 `
 
-export const NoteSection = styled.div`
+export const NoteSection = styled.span`
   color: ${p => p.theme.quaternary};
 `
 
