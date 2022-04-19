@@ -2,11 +2,11 @@ FROM node:16-alpine as build
 
 WORKDIR /app
 
-COPY package*.json .
+COPY package*.json ./
 
 RUN npm ci --only=production
 
-COPY . ./
+COPY . .
 
 ENV PORT=5000
 EXPOSE 5000
