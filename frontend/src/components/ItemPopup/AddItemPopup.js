@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { v4 as uuid } from 'uuid'
 import { useForm } from 'react-hook-form'
 
 import {
@@ -53,12 +54,12 @@ const AddItemPopup = ({ isOpen, onClose }) => {
   const onSubmit = async data => {
     let imageURL = null
     if (uploadedImg) {
-      const imgID = crypto.randomUUID()
+      const imgID = uuid()
       imageURL = await uploadImg({ imgID, img: uploadedImg })
     }
 
     const newItem = {
-      itemID: crypto.randomUUID(),
+      itemID: uuid(),
       name: data.name,
       // note: data.note,
       note: noteText,
