@@ -15,11 +15,11 @@ const {
   validateLogin,
   associateListIDWithUser,
   getUserByID,
-} = require('./dynamo')
-const { uploadImage } = require('./s3')
-const { getDistributionDomain } = require('./cloudfront')
+} = require('./src/dynamo')
+const { uploadImage } = require('./src/s3')
+const { getDistributionDomain } = require('./src/cloudfront')
 
-const { createToken, validateToken } = require('./JWT')
+const { createToken, validateToken } = require('./src/JWT')
 
 const PORT = process.env.PORT || 5000
 const app = express()

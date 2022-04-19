@@ -1,12 +1,14 @@
-name: Deployment From Github To AWS
+name: Frontend Deployment to Elastic Beanstalk
+
 on:
   push:
     branches:
       - main
 
 jobs:
-  deploy-fe:
+  deploy-frontend:
     runs-on: ubuntu-latest
+    environment: production
     defaults:
       run:
         working-directory: frontend
