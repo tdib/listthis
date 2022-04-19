@@ -15,7 +15,7 @@ env:
   ECR_REPOSITORY: listthis-backend-repo
   ECS_SERVICE: listthis-backend-service
   ECS_CLUSTER: listthis-backend-cluster
-  ECS_TASK_DEFINITION: .aws/task-definition
+  ECS_TASK_DEFINITION: backend/.aws/task-definition
   CONTAINER_NAME: listthis-backend-container
 
 jobs:
