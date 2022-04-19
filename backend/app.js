@@ -2,7 +2,6 @@ const express = require('express')
 const fileUpload = require('express-fileupload')
 const cors = require('cors')
 const bcrypt = require('bcrypt')
-const cookieParser = require('cookie-parser')
 
 const {
   addItemToList,
@@ -27,11 +26,10 @@ const app = express()
 
 app.use(express.json())
 const corsOptions = {
-  origin: 'http://localhost:3000',
+  origin: 'https://listthis.tdib.xyz',
 }
 app.use(cors(corsOptions))
 app.use(fileUpload())
-app.use(cookieParser())
 
 app.get('/', validateToken, (req, res) => res.send('Hello World!'))
 
