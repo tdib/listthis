@@ -18,7 +18,7 @@ import { login, signup } from '../../services/users'
 export const RegisterPage = () => {
   const { register, handleSubmit } = useForm()
   const { userID, loadUser } = useUserStore()
-  const newUserID = crypto.randomUUID()
+  const newUserID = uuid()
   const navigate = useNavigate()
   const [error, setError] = useState()
 

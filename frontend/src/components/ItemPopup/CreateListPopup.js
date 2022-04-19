@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { v4 as uuid } from 'uuid'
 import { useForm } from 'react-hook-form'
 
 import {
@@ -27,7 +28,7 @@ const CreateListPopup = ({ isOpen, onClose }) => {
   const onSubmit = data => {
     if (isCreating) {
       const newList = {
-        listID: crypto.randomUUID(),
+        listID: uuid(),
         name: data.name,
         items: [],
       }
