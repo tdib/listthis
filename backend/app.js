@@ -15,6 +15,8 @@ const {
   validateLogin,
   associateListIDWithUser,
   getUserByID,
+  createInviteLink,
+  getListByInviteID,
 } = require('./src/dynamo')
 const { uploadImage } = require('./src/s3')
 const { getDistributionDomain } = require('./src/cloudfront')
@@ -26,7 +28,8 @@ const app = express()
 
 app.use(express.json())
 const corsOptions = {
-  origin: 'https://listthis.tdib.xyz',
+  // origin: 'https://listthis.tdib.xyz',
+  origin: 'http://localhost:3000',
 }
 app.use(cors(corsOptions))
 app.use(fileUpload())
@@ -152,7 +155,7 @@ app.post('/lists/images', validateToken, async (req, res) => {
 })
 
 // Associate user with listID
-app.put('/users/:userID/:listID', async (req, res) => {
+app.put('/users/:userID/:listID', validateToken, async (req, res) => {
   const { userID, listID } = req.params
   try {
     res.json(await associateListIDWithUser({ listID, userID }))
@@ -204,9 +207,27 @@ app.post('/auth/login', async (req, res) => {
   }
 })
 
-app.post('/auth', async (req, res) => {
+// Create an invite to given list ID
+app.post('/invite/:listID', validateToken, async (req, res) => {
+  const { listID } = req.params
+  const { inviteID, expiry } = req.body
+  const postURL = req.get('origin') + req.originalUrl
   try {
-    res.json(newUser)
+    await createInviteLink({ listID, inviteID, expiry })
+    res.json(postURL.slice(0, postURL.lastIndexOf('/')) + '/join/' + inviteID)
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ err: 'Something went wrong' })
+  }
+})
+
+// Get list from invite ID
+app.get('/invite/join/:inviteID', validateToken, async (req, res) => {
+  const { inviteID } = req.params
+  const { userID } = req.body
+  try {
+    const inviteList = await getListByInviteID(inviteID)
+    res.json(inviteList)
   } catch (err) {
     console.error(err)
     res.status(500).json({ err: 'Something went wrong' })

@@ -13,6 +13,7 @@ AWS.config.update({
 const dynamoClient = new AWS.DynamoDB.DocumentClient()
 const LISTS_TABLE = 'listthis-lists'
 const USERS_TABLE = 'listthis-users'
+const INVITES_TABLE = 'listthis-invites'
 
 // Create empty list
 const createNewList = async ({ listID, listName, userID }) => {
@@ -269,6 +270,50 @@ const validateLogin = async ({ username, password }) => {
   }
 }
 
+// Create an invite link
+const createInviteLink = async ({ inviteID, listID, expiry }) => {
+  const params = {
+    TableName: INVITES_TABLE,
+    Item: {
+      inviteID: inviteID,
+      listID: listID,
+      expiry: expiry,
+    },
+  }
+
+  return await dynamoClient.put(params).promise()
+}
+
+// Return information about a list based on its invite ID
+const getListByInviteID = async inviteID => {
+  // Get invite information via ID
+  const { Item: invite } = await dynamoClient
+    .get({
+      TableName: INVITES_TABLE,
+      Key: {
+        inviteID: inviteID,
+      },
+    })
+    .promise()
+
+  // Invalid link handling
+  if (!invite || invite.expiry < Math.round(Date.now() / 1000)) {
+    return { isValid: false }
+  }
+
+  // Get list information via list ID
+  const { Item: list } = await dynamoClient
+    .get({
+      TableName: LISTS_TABLE,
+      Key: {
+        listID: invite.listID,
+      },
+    })
+    .promise()
+
+  return list
+}
+
 module.exports = {
   createNewList,
   associateListIDWithUser,
@@ -281,4 +326,6 @@ module.exports = {
   createNewUser,
   validateLogin,
   getUserByID,
+  createInviteLink,
+  getListByInviteID,
 }

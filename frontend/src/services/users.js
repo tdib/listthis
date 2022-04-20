@@ -17,11 +17,3 @@ export const getUserByID = async userID => {
   const { data } = await api.get(`/user/${userID}`)
   return data
 }
-
-// export const isAuthenticated = async () => {
-//   const { data } = await api.post(`/auth/`, {
-//     headers: {
-//       'access-token': localStorage.getItem('access-token'),
-//     },
-//   })
-// }

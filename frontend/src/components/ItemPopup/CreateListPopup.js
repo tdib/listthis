@@ -22,7 +22,7 @@ const CreateListPopup = ({ isOpen, onClose }) => {
   const { register, handleSubmit, watch } = useForm()
   let watchName = watch('name')
   const { createList } = useListsStore()
-  const { userID, addAssociatedList, associatedListIDs } = useUserStore()
+  const { userID, addAssociatedList } = useUserStore()
   const [isCreating, setIsCreating] = useState(true)
 
   const onSubmit = data => {
@@ -50,7 +50,7 @@ const CreateListPopup = ({ isOpen, onClose }) => {
         createList(list)
 
         // Add list to associated lists in database
-        associateUserWithList({ userID, listID: data.name }).then(res => console.log('RES', res))
+        associateUserWithList({ userID, listID: data.name })
       })
     }
   }

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, useLocation, Navigate, useNavigate } from 'react-router-dom'
 
 import useIsDarkScheme from './hooks/useIsDarkTheme'
 import styled, { ThemeProvider, createGlobalStyle } from 'styled-components'
@@ -16,7 +16,7 @@ import ListSelection from './components/ListSelection/ListSelection'
 import useUserStore from './stores/useUserStore'
 import ListPage from './pages/List/ListPage'
 
-import { ListSelectionPage, LoginPage, UnauthorisedPage, RegisterPage, Page404 } from './pages'
+import { ListSelectionPage, LoginPage, RegisterPage, Page404, InvitePage } from './pages'
 // import { ListSelection } from './components'
 import { TabBar } from './components'
 // import Page404 from './pages/404/404Page'
@@ -60,6 +60,7 @@ const App = () => {
   const isDarkTheme = useIsDarkScheme()
   const { listID, items } = useListStore()
   const { pathname } = useLocation()
+  const navigate = useNavigate()
 
   const { userID } = useUserStore()
 
@@ -85,6 +86,7 @@ const App = () => {
           <Route exact path='/register' element={<RegisterPage />} />
           <Route exact path='/lists' element={<ListSelectionPage />} />
           <Route exact path='/lists/:listID' element={<ListPage />} />
+          <Route exact path='/invite/join/:inviteID' element={<InvitePage />} />
           <Route path='*' element={<Page404 />} />
         </Routes>
       </Main>
