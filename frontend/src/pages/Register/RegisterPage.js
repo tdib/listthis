@@ -38,7 +38,6 @@ export const RegisterPage = () => {
           }
         })
         .then(res => {
-          console.log('res', res)
           loadUser({ ...res.result })
         })
         .then(() => navigate('/lists'))
@@ -68,6 +67,7 @@ export const RegisterPage = () => {
           name={'password'}
           type={'password'}
           required={true}
+          minLength={4}
           placeholder={'Type a password'}
           {...register('password')}
         />

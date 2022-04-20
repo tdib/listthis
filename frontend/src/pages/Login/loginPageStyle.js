@@ -14,9 +14,7 @@ export const Title = styled.h1`
 
 export const LoginForm = styled.form`
   background-color: ${p => p.theme.secondary};
-  width: 50%;
-  max-width: 30rem;
-  min-width: 18rem;
+  width: 18rem;
   height: 30rem;
   height: fit-content;
   border-radius: 1.5rem;
