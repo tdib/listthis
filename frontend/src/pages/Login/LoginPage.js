@@ -22,8 +22,6 @@ export const LoginPage = () => {
     })
   }
 
-  console.log(state)
-
   return userID ? (
     <Navigate to={state?.returnURL ? state.returnURL : '/lists'} />
   ) : (

@@ -5,21 +5,14 @@ import useIsDarkScheme from './hooks/useIsDarkTheme'
 import styled, { ThemeProvider, createGlobalStyle } from 'styled-components'
 import styles from './styles'
 
-import Header from './components/Header/Header'
-import ListItems from './components/ListItem/ListItems.js'
-// import TabBar from './components/TabBar/TabBar'
 import useListStore from './stores/useListStore'
 import debounce from 'lodash.debounce'
-import { createNewList, createOrUpdateItem, getListByID, getListsByUserID } from './services/items'
-import { pruneLists, updateList } from './services/lists'
-import ListSelection from './components/ListSelection/ListSelection'
+import { updateList } from './services/lists'
 import useUserStore from './stores/useUserStore'
 import ListPage from './pages/List/ListPage'
 
 import { ListSelectionPage, LoginPage, RegisterPage, Page404, InvitePage } from './pages'
-// import { ListSelection } from './components'
 import { TabBar } from './components'
-// import Page404 from './pages/404/404Page'
 
 const Main = styled.main`
   color: ${p => p.theme.secondary};
