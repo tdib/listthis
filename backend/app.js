@@ -27,11 +27,7 @@ const PORT = process.env.PORT || 5000
 const app = express()
 
 app.use(express.json())
-const corsOptions = {
-  // origin: 'https://listthis.tdib.xyz',
-  origin: 'http://localhost:3000',
-}
-app.use(cors(corsOptions))
+app.use(cors())
 app.use(fileUpload())
 
 app.get('/', (req, res) => res.send('ListThis Backend!'))
