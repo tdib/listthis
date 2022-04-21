@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import { MoreVertical } from 'lucide-react'
+import { Image } from 'lucide-react'
 
 export const AllItemsContainer = styled.div`
   background-color: ${p => p.theme.primary};
@@ -45,6 +46,17 @@ export const TextContainer = styled.div`
 export const ItemName = styled.span`
   color: ${p => p.theme.textPrimary};
   display: inline-block;
+`
+
+export const SubLineWrapper = styled.div`
+  display: flex;
+  align-items: center;
+`
+
+export const ImageIcon = styled(Image)`
+  color: ${p => p.theme.tertiary};
+  margin-right: .25rem;
+  margin-top: .2rem;
 `
 
 export const ItemNote = styled.span`

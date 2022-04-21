@@ -7,12 +7,15 @@ import {
   TextContainer,
   CheckBox,
   MoreButton,
+  ImageIcon,
+  SubLineWrapper,
 } from './listItemStyle.js'
 import ItemDetailsPopup from '../ItemPopup/ItemDetailsPopup.js'
 import useListStore from '../../stores/useListStore.js'
+import { Image } from 'lucide-react'
 
 const ListItem = ({ item, onClick }) => {
-  const { name, note, isChecked } = item
+  const { name, note, isChecked, imageURL } = item
   const [itemDetailsOpen, setItemDetailsOpen] = useState(false)
   return (
     <>
@@ -20,7 +23,10 @@ const ListItem = ({ item, onClick }) => {
         <CheckBox checked={isChecked} />
         <TextContainer>
           <ItemName>{name}</ItemName>
-          <ItemNote>{note}</ItemNote>
+          <SubLineWrapper>
+            {imageURL && <ImageIcon size={15}/>}
+            <ItemNote>{note}</ItemNote>
+          </SubLineWrapper>
         </TextContainer>
         <MoreButton
           onClick={e => {

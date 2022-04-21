@@ -1,13 +1,8 @@
 import React, { useState } from 'react'
 
 import { Header, ListItems } from '../../components'
-// import { ListItems } from '../../components'
 import { useListStore, useUserStore } from '../../stores'
-// import { getListsByUserID, getListByID } from '../../services'
 import { useParams } from 'react-router-dom'
-// import Header from '../../components/Header/Header'
-// import ListItems from '../../components/ListItem/ListItems'
-import { useAsync } from '../../hooks'
 import { getListByID, getListsByUserID } from '../../services/lists'
 import { TailSpin } from 'react-loader-spinner'
 import { Navigate } from 'react-router-dom'

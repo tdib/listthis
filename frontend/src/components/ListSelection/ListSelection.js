@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import ListCard from './ListCard'
 
-import { Title, Container, TileGrid, InfoMessage, Blah, Euh } from './listSelectionStyle'
+import { TileGrid, InfoMessage } from './listSelectionStyle'
 import { getListsByUserID } from '../../services/lists'
 import useListsStore from '../../stores/useListsStore'
 import useUserStore from '../../stores/useUserStore'
@@ -29,9 +29,7 @@ const ListSelection = () => {
             lists.map(list => <ListCard key={list.listID} listID={list.listID} name={list.name} />)
           )
         ) : (
-          <Euh>
-            <TailSpin color={'white'} />
-          </Euh>
+          <TailSpin color={'white'} />
         )}
       </TileGrid>
     </>
