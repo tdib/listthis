@@ -34,9 +34,7 @@ const corsOptions = {
 app.use(cors(corsOptions))
 app.use(fileUpload())
 
-app.get('/', validateToken, (req, res) => res.send('Hello World!'))
-
-app.get('/google/clientid', (req, res) => res.send(process.env.REACT_APP_GOOGLE_CLIENT_ID))
+app.get('/', (req, res) => res.send('ListThis Backend!'))
 
 // Get user from a user ID
 app.get('/user/:userID', validateToken, async (req, res) => {
