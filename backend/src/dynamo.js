@@ -5,9 +5,9 @@ const bcrypt = require('bcrypt')
 
 // Set configuration to use credentials in given region
 AWS.config.update({
-  region: process.env.aws_default_region,
-  accessKeyId: process.env.aws_ddb_access_key_id,
-  secretAccessKey: process.env.aws_ddb_secret_access_key,
+  region: process.env.listthis_aws_default_region,
+  accessKeyId: process.env.listthis_aws_ddb_access_key_id,
+  secretAccessKey: process.env.listthis_aws_ddb_secret_access_key,
 })
 
 const dynamoClient = new AWS.DynamoDB.DocumentClient()

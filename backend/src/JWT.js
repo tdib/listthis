@@ -2,7 +2,7 @@ const { sign, verify } = require('jsonwebtoken')
 require('dotenv').config()
 
 const createToken = user => {
-  const accessToken = sign({ userID: user.userID, username: user.username }, process.env.JWT_SECRET)
+  const accessToken = sign({ userID: user.userID, username: user.username }, process.env.listthis_jwt_secret)
 
   return accessToken
 }
@@ -16,7 +16,7 @@ const validateToken = (req, res, next) => {
 
   try {
     // Verify the access-token cookie using our JWT secret
-    const validToken = verify(accessToken, process.env.JWT_SECRET)
+    const validToken = verify(accessToken, process.env.listthis_jwt_secret)
     if (validToken) {
       req.authenticated = true
       return next()
