@@ -7,7 +7,7 @@ import { useUserStore } from '../../stores'
 import { login } from '../../services/users'
 
 export const LoginPage = () => {
-  const { register, handleSubmit, watch } = useForm()
+  const { register, handleSubmit } = useForm()
   const { loadUser, userID } = useUserStore()
   const [error, setError] = useState()
   const { state } = useLocation()

@@ -39,7 +39,6 @@ const associateListIDWithUser = async ({ listID, userID }) => {
     Key: {
       userID: userID,
     },
-    // UpdateExpression: 'SET associatedListIDs = list_append(associatedListIDs, :newListID)',
     UpdateExpression: 'ADD associatedListIDs :newListID',
     ExpressionAttributeValues: {
       ':newListID': dynamoClient.createSet(listID),

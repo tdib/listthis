@@ -7,7 +7,6 @@ AWS.config.update({
   region: process.env.listthis_aws_default_region,
   accessKeyId: process.env.listthis_aws_s3_access_key_id,
   secretAccessKey: process.env.listthis_aws_s3_secret_access_key,
-  // creds,
 })
 
 const s3Client = new AWS.S3()

@@ -30,7 +30,7 @@ app.use(express.json())
 app.use(cors())
 app.use(fileUpload())
 
-app.get('/', (req, res) => res.send('ListThis Backend!'))
+app.get('/', (req, res) => res.send('📃 ListThis Backend!'))
 
 // Get user from a user ID
 app.get('/user/:userID', validateToken, async (req, res) => {

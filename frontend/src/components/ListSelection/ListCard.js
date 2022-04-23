@@ -20,7 +20,6 @@ const ListCard = ({ listID, name }) => {
       leaveList(listID)
       // Remove user association to list in backend
       removeUserFromList({ userID, listID })
-      // navigate('/')
     }
   }
 
@@ -30,7 +29,6 @@ const ListCard = ({ listID, name }) => {
         <ListName>{name || 'Untitled List'}</ListName>
       </LinkWrapper>
       <LeaveListButton
-        // to={'/lists'}
         onClick={e => {
           e.stopPropagation()
           handleLeaveList()

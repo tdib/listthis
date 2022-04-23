@@ -3,9 +3,7 @@ import ListCard from './ListCard'
 
 import { TileGrid, InfoMessage } from './listSelectionStyle'
 import { getListsByUserID } from '../../services/lists'
-import useListsStore from '../../stores/useListsStore'
-import useUserStore from '../../stores/useUserStore'
-import useListStore from '../../stores/useListStore'
+import { useListsStore, useUserStore } from '../../stores'
 import { TailSpin } from 'react-loader-spinner'
 
 const ListSelection = () => {

@@ -1,7 +1,7 @@
 import React from 'react'
-import { ListSelection, TabBar } from '../../components'
+import { ListSelection } from '../../components'
 import { useListStore, useUserStore, useListsStore } from '../../stores'
-import { Navigate, useNavigate } from 'react-router-dom'
+import { Navigate } from 'react-router-dom'
 import { TitleWrapper, Title, LogoutButton } from './listSelectionPageStyle'
 
 const ListSelectionPage = () => {

@@ -12,7 +12,6 @@ import {
 } from './listItemStyle.js'
 import ItemDetailsPopup from '../ItemPopup/ItemDetailsPopup.js'
 import useListStore from '../../stores/useListStore.js'
-import { Image } from 'lucide-react'
 
 const ListItem = ({ item, onClick }) => {
   const { name, note, isChecked, imageURL } = item
@@ -24,7 +23,7 @@ const ListItem = ({ item, onClick }) => {
         <TextContainer>
           <ItemName>{name}</ItemName>
           <SubLineWrapper>
-            {imageURL && <ImageIcon size={15}/>}
+            {imageURL && <ImageIcon size={15} />}
             <ItemNote>{note}</ItemNote>
           </SubLineWrapper>
         </TextContainer>
