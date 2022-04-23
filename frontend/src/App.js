@@ -1,18 +1,14 @@
-import { useCallback, useEffect, useState } from 'react'
-import { BrowserRouter, Routes, Route, useLocation, Navigate, useNavigate } from 'react-router-dom'
-
-import useIsDarkScheme from './hooks/useIsDarkTheme'
+import { useCallback, useEffect } from 'react'
+import { Routes, Route, useLocation, Navigate, useNavigate } from 'react-router-dom'
 import styled, { ThemeProvider, createGlobalStyle } from 'styled-components'
 import styles from './styles'
-
-import useListStore from './stores/useListStore'
 import debounce from 'lodash.debounce'
-import { updateList } from './services/lists'
-import useUserStore from './stores/useUserStore'
-import ListPage from './pages/List/ListPage'
 
-import { ListSelectionPage, LoginPage, RegisterPage, Page404, InvitePage } from './pages'
+import { ListSelectionPage, LoginPage, RegisterPage, ListPage, Page404, InvitePage } from './pages'
+import { useListStore, useUserStore } from './stores'
 import { TabBar } from './components'
+import { updateList } from './services/lists'
+import { useIsDarkScheme } from './hooks'
 
 const Main = styled.main`
   color: ${p => p.theme.secondary};

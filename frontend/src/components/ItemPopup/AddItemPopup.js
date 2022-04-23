@@ -87,7 +87,6 @@ const AddItemPopup = ({ isOpen, onClose }) => {
           />
           <NoteWrapper>
             <NoteHeading>Note</NoteHeading>
-            {/* <NoteSection name={'note'} type={'textarea'} placeholder={'Type a note'} {...register('note')} /> */}
             <NoteSection
               name={'note'}
               role={'textbox'}

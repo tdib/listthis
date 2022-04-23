@@ -31,7 +31,6 @@ const api = {
   delete: instance.delete,
 }
 
-// export * from './items'
-// export * from './lists'
+// TODO: export items from here
 
 export default api

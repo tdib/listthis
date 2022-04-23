@@ -1,1 +1,1 @@
-export { default as useIsDarkTheme } from './useIsDarkTheme'
+export { default as useIsDarkScheme } from './useIsDarkScheme'
