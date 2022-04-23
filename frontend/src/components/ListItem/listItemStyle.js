@@ -46,6 +46,8 @@ export const TextContainer = styled.div`
 export const ItemName = styled.span`
   color: ${p => p.theme.textPrimary};
   display: inline-block;
+  text-overflow: ellipsis;
+  overflow: hidden;
 `
 
 export const SubLineWrapper = styled.div`
@@ -63,6 +65,8 @@ export const ItemNote = styled.span`
   display: inline-block;
   color: ${p => p.theme.quaternary};
   font-size: 0.85rem;
+  text-overflow: ellipsis;
+  overflow: hidden;
 `
 
 export const CheckBox = styled.button`
