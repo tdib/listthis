@@ -13,6 +13,12 @@ export const CardContainer = styled.div`
     filter: brightness(1.15);
     cursor: pointer;
   }
+
+  @media (prefers-color-scheme: light) {
+    :hover {
+      filter: brightness(0.925);
+    }
+  }
 `
 
 export const LinkWrapper = styled(Link)`

@@ -49,4 +49,8 @@ export const DeleteButton = styled.button`
   :active {
     transform: scale(0.95);
   }
+
+  @media (prefers-color-scheme: light) {
+    color: ${p => p.theme.secondary};
+  }
 `

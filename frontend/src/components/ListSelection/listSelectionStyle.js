@@ -5,8 +5,11 @@ export const TileGrid = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
-  justify-content: flex-start;
-  align-self: center;
+
+  @media (max-width: 470px) {
+    flex-direction: column;
+    align-content: center;
+  }
 `
 
 export const InfoMessage = styled.span`

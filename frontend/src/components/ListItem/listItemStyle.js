@@ -46,6 +46,8 @@ export const TextContainer = styled.div`
 export const ItemName = styled.span`
   color: ${p => p.theme.textPrimary};
   display: inline-block;
+  text-overflow: ellipsis;
+  overflow: hidden;
 `
 
 export const SubLineWrapper = styled.div`
@@ -55,14 +57,16 @@ export const SubLineWrapper = styled.div`
 
 export const ImageIcon = styled(Image)`
   color: ${p => p.theme.tertiary};
-  margin-right: .25rem;
-  margin-top: .2rem;
+  margin-right: 0.25rem;
+  margin-top: 0.2rem;
 `
 
 export const ItemNote = styled.span`
   display: inline-block;
   color: ${p => p.theme.quaternary};
   font-size: 0.85rem;
+  text-overflow: ellipsis;
+  overflow: hidden;
 `
 
 export const CheckBox = styled.button`
@@ -75,6 +79,10 @@ export const CheckBox = styled.button`
   width: 1.5rem;
   height: 1.5rem;
   margin: 0.6rem;
+
+  @media (prefers-color-scheme: light) {
+    border-color: ${p => (p.checked ? p.theme.tertiary : p.theme.tertiary)};
+  }
 `
 
 export const MoreButton = styled(MoreVertical)`
