@@ -134,6 +134,10 @@ export const SaveButton = styled.input`
   :active {
     transform: scale(0.95);
   }
+
+  @media (prefers-color-scheme: light) {
+    color: ${p => p.theme.secondary};
+  }
 `
 
 export const XIcon = styled(X)`

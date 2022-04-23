@@ -41,7 +41,12 @@ export const InputField = styled.input`
     outline: solid;
     outline-color: ${p => p.theme.accentPrimary};
   }
+
+  @media (prefers-color-scheme: light) {
+    background-color: ${p => p.theme.primary};
+  }
 `
+
 export const RegisterButton = styled.input`
   height: 2.5rem;
   background-color: ${p => p.theme.accentPrimary};
@@ -59,6 +64,10 @@ export const RegisterButton = styled.input`
 
   :active {
     transform: scale(1.02);
+  }
+
+  @media (prefers-color-scheme: light) {
+    color: ${p => p.theme.secondary};
   }
 `
 

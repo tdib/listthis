@@ -14,7 +14,7 @@ const styles = {
     link: '#7FB0B4',
   },
   light: {
-    primary: '#eeeeee',
+    primary: '#f6f6f6',
     secondary: '#ffffff',
     tertiary: '#686868',
     quaternary: '#a0a0a0',

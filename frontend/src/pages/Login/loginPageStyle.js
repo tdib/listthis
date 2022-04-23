@@ -41,6 +41,10 @@ export const InputField = styled.input`
     outline: solid;
     outline-color: ${p => p.theme.accentPrimary};
   }
+
+  @media (prefers-color-scheme: light) {
+    background-color: ${p => p.theme.primary};
+  }
 `
 export const LoginButton = styled.input`
   height: 2.5rem;
@@ -59,6 +63,10 @@ export const LoginButton = styled.input`
 
   :active {
     transform: scale(1.02);
+  }
+
+  @media (prefers-color-scheme: light) {
+    color: ${p => p.theme.primary};
   }
 `
 

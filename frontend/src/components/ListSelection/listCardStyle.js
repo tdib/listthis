@@ -16,7 +16,7 @@ export const CardContainer = styled.div`
 
   @media (prefers-color-scheme: light) {
     :hover {
-      filter: brightness(0.9);
+      filter: brightness(0.925);
     }
   }
 `
