@@ -24,4 +24,4 @@ Note: `npm run dev` uses `nodemon` to refresh the server every time a change is 
 
 Your repository should contain the necessary secrets (access key id and secret access key for frontend and backend AWS accounts) under the Secrets > Actions section in the settings.
 
-Upon pushing to the main branch, GitHub actions will take care of the rest, deploying the frontend directory to Elastic Beanstalk, the (Docker image of) the backend to Elastic Container Registry (ECR), and a new task definition to Elastic Container Service (ECS) using the [task definition](./backend/.aws/task-definition.json) in the AWS configuration directory.
+Upon pushing to the main branch, GitHub actions will take care of the rest, deploying the frontend directory to Elastic Beanstalk, the (Docker image of) backend to Elastic Container Registry (ECR), and a new task definition to Elastic Container Service (ECS) using the [task definition](./backend/.aws/task-definition.json) in the AWS configuration directory.
