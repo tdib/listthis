@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { v4 as uuid } from 'uuid'
 import {
   Wrapper,
   Title,
@@ -10,7 +11,7 @@ import {
   ErrorWarning,
 } from './registerPageStyle'
 import { useForm } from 'react-hook-form'
-import { Navigate, useNavigate } from 'react-router-dom'
+import { Navigate, useNavigate, useLocation } from 'react-router-dom'
 
 import { useUserStore } from '../../stores'
 import { login, signup } from '../../services/users'
@@ -21,6 +22,7 @@ export const RegisterPage = () => {
   const newUserID = uuid()
   const navigate = useNavigate()
   const [error, setError] = useState()
+  const { state } = useLocation()
 
   const onSubmit = data => {
     if (data.password !== data.confirmPassword) {
@@ -37,10 +39,9 @@ export const RegisterPage = () => {
           }
         })
         .then(res => {
-          console.log('res', res)
           loadUser({ ...res.result })
         })
-        .then(() => navigate('/lists'))
+        .then(() => navigate(state.returnURL ?? '/lists'))
         .catch(err => {
           setError(err?.message ?? err)
         })
@@ -67,6 +68,7 @@ export const RegisterPage = () => {
           name={'password'}
           type={'password'}
           required={true}
+          minLength={4}
           placeholder={'Type a password'}
           {...register('password')}
         />
@@ -80,7 +82,15 @@ export const RegisterPage = () => {
         <div>
           <RegisterButton type={'submit'} value={'Register'} />
           <SupportText>
-            Already have an account? <Link href={'/login'}>Log in</Link>
+            Already have an account?{' '}
+            <Link
+              href={'/login'}
+              onClick={() =>
+                navigate('/login', { state: { returnURL: state?.returnURL ? state.returnURL : '/login' } })
+              }
+            >
+              Log in
+            </Link>
           </SupportText>
         </div>
       </RegisterForm>

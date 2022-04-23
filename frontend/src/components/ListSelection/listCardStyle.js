@@ -4,12 +4,10 @@ import { Link } from 'react-router-dom'
 
 export const CardContainer = styled.div`
   display: flex;
-  /* display: flex; */
   width: 12rem;
   height: 12rem;
   border-radius: 1rem;
   background-color: ${p => p.theme.secondary};
-  // min width
 
   :hover {
     filter: brightness(1.15);
@@ -36,7 +34,6 @@ export const ListName = styled.p`
   overflow: hidden;
   overflow-wrap: break-word;
   user-select: none;
-  /* flex: 1; */
 `
 
 export const LeaveListButton = styled(X)`

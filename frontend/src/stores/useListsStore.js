@@ -5,7 +5,7 @@ const useListsStore = create(set => ({
 
   loadLists: lists => set({ lists: lists }),
 
-  unloadLists: lists => set({ lists: null }),
+  unloadLists: () => set({ lists: null }),
 
   leaveList: listToRemoveID =>
     set(state => ({

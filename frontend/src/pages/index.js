@@ -1,6 +1,7 @@
+export { default as UnauthorisedPage } from './Unauthorised/UnauthorisedPage'
 export { default as ListPage } from './List/ListPage'
 export { default as ListSelectionPage } from './ListSelection/ListSelectionPage'
-export { default as UnauthorisedPage } from './Unauthorised/UnauthorisedPage'
 export { default as LoginPage } from './Login/LoginPage'
 export { default as RegisterPage } from './Register/RegisterPage'
 export { default as Page404 } from './404/404Page'
+export { default as InvitePage } from './Invite/InvitePage'

@@ -61,7 +61,6 @@ const AddItemPopup = ({ isOpen, onClose }) => {
     const newItem = {
       itemID: uuid(),
       name: data.name,
-      // note: data.note,
       note: noteText,
       imageURL: imageURL,
       isChecked: false,
@@ -79,7 +78,6 @@ const AddItemPopup = ({ isOpen, onClose }) => {
       <Panel isOpen={isOpen}>
         <AddItemForm onSubmit={handleSubmit(onSubmit)}>
           <TitleField
-            autoFocus={true}
             autoComplete={'off'}
             name={'name'}
             type={'text'}

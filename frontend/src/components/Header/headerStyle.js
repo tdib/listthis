@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { ChevronLeft } from 'lucide-react'
+import { ChevronLeft, Share2 } from 'lucide-react'
 
 export const BackButton = styled(ChevronLeft)`
   position: absolute;
@@ -33,4 +33,23 @@ export const Subtitle = styled.span`
   padding-bottom: 0.75rem;
   margin-bottom: 0.75rem;
   border-bottom: 1.5px solid ${p => p.theme.quaternary};
+`
+
+// export const ShareButton = styled(Share2)`
+export const ShareButton = styled(Share2)`
+  position: absolute;
+  top: 4rem;
+  right: 2rem;
+  color: ${p => (p.disabled ? p.theme.secondary : p.theme.tertiary)};
+  transition: transform 0.1s;
+
+  :hover {
+    color: ${p => (p.disabled ? null : p.theme.quaternary)};
+    transform: ${p => (p.disabled ? null : 'scale(1.15)')};
+    cursor: ${p => (p.disabled ? null : 'pointer')};
+  }
+
+  :active {
+    transform: ${p => (p.disabled ? null : 'scale(0.95)')};
+  }
 `

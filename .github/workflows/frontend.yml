@@ -1,12 +1,14 @@
-name: Deployment From Github To AWS
+name: Frontend Deployment to Elastic Beanstalk
+
 on:
   push:
     branches:
       - main
 
 jobs:
-  deploy-fe:
+  deploy-frontend:
     runs-on: ubuntu-latest
+    environment: production
     defaults:
       run:
         working-directory: frontend
@@ -33,8 +35,8 @@ jobs:
       - name: Deploy to EB
         uses: einaregilsson/beanstalk-deploy@v14
         with:
-          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws_access_key: ${{ secrets.FE_AWS_ACCESS_KEY_ID }}
+          aws_secret_key: ${{ secrets.FE_AWS_SECRET_ACCESS_KEY }}
           application_name: listthis-fe-deployment
           environment_name: Listthisfedeployment-env
           version_label: 'listthis-fe-deployment-${{ steps.format-time.outputs.replaced }}'

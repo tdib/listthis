@@ -2,7 +2,6 @@ const express = require('express')
 const fileUpload = require('express-fileupload')
 const cors = require('cors')
 const bcrypt = require('bcrypt')
-const cookieParser = require('cookie-parser')
 
 const {
   addItemToList,
@@ -16,26 +15,22 @@ const {
   validateLogin,
   associateListIDWithUser,
   getUserByID,
-} = require('./dynamo')
-const { uploadImage } = require('./s3')
-const { getDistributionDomain } = require('./cloudfront')
+  createInviteLink,
+  getListByInviteID,
+} = require('./src/dynamo')
+const { uploadImage } = require('./src/s3')
+const { getDistributionDomain } = require('./src/cloudfront')
 
-const { createToken, validateToken } = require('./JWT')
+const { createToken, validateToken } = require('./src/JWT')
 
 const PORT = process.env.PORT || 5000
 const app = express()
 
 app.use(express.json())
-const corsOptions = {
-  origin: 'http://localhost:3000',
-}
-app.use(cors(corsOptions))
+app.use(cors())
 app.use(fileUpload())
-app.use(cookieParser())
 
-app.get('/', validateToken, (req, res) => res.send('Hello World!'))
-
-app.get('/google/clientid', (req, res) => res.send(process.env.REACT_APP_GOOGLE_CLIENT_ID))
+app.get('/', (req, res) => res.send('ListThis Backend!'))
 
 // Get user from a user ID
 app.get('/user/:userID', validateToken, async (req, res) => {
@@ -154,7 +149,7 @@ app.post('/lists/images', validateToken, async (req, res) => {
 })
 
 // Associate user with listID
-app.put('/users/:userID/:listID', async (req, res) => {
+app.put('/users/:userID/:listID', validateToken, async (req, res) => {
   const { userID, listID } = req.params
   try {
     res.json(await associateListIDWithUser({ listID, userID }))
@@ -206,9 +201,27 @@ app.post('/auth/login', async (req, res) => {
   }
 })
 
-app.post('/auth', async (req, res) => {
+// Create an invite to given list ID
+app.post('/invite/:listID', validateToken, async (req, res) => {
+  const { listID } = req.params
+  const { inviteID, expiry } = req.body
+  const postURL = req.get('origin') + req.originalUrl
   try {
-    res.json(newUser)
+    await createInviteLink({ listID, inviteID, expiry })
+    res.json(postURL.slice(0, postURL.lastIndexOf('/')) + '/join/' + inviteID)
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ err: 'Something went wrong' })
+  }
+})
+
+// Get list from invite ID
+app.get('/invite/join/:inviteID', validateToken, async (req, res) => {
+  const { inviteID } = req.params
+  const { userID } = req.body
+  try {
+    const inviteList = await getListByInviteID(inviteID)
+    res.json(inviteList)
   } catch (err) {
     console.error(err)
     res.status(500).json({ err: 'Something went wrong' })

@@ -13,8 +13,10 @@ export const Title = styled.h1`
 `
 
 export const LogoutButton = styled(LogOut)`
+  color: ${p => p.theme.tertiary};
+
   :hover {
-    color: ${p => p.theme.tertiary};
+    color: ${p => p.theme.quaternary};
     cursor: pointer;
   }
 `

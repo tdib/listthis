@@ -1,25 +1,18 @@
 import { useCallback, useEffect, useState } from 'react'
-import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, useLocation, Navigate, useNavigate } from 'react-router-dom'
 
 import useIsDarkScheme from './hooks/useIsDarkTheme'
 import styled, { ThemeProvider, createGlobalStyle } from 'styled-components'
 import styles from './styles'
 
-import Header from './components/Header/Header'
-import ListItems from './components/ListItem/ListItems.js'
-// import TabBar from './components/TabBar/TabBar'
 import useListStore from './stores/useListStore'
 import debounce from 'lodash.debounce'
-import { createNewList, createOrUpdateItem, getListByID, getListsByUserID } from './services/items'
-import { pruneLists, updateList } from './services/lists'
-import ListSelection from './components/ListSelection/ListSelection'
+import { updateList } from './services/lists'
 import useUserStore from './stores/useUserStore'
 import ListPage from './pages/List/ListPage'
 
-import { ListSelectionPage, LoginPage, UnauthorisedPage, RegisterPage, Page404 } from './pages'
-// import { ListSelection } from './components'
+import { ListSelectionPage, LoginPage, RegisterPage, Page404, InvitePage } from './pages'
 import { TabBar } from './components'
-// import Page404 from './pages/404/404Page'
 
 const Main = styled.main`
   color: ${p => p.theme.secondary};
@@ -60,6 +53,7 @@ const App = () => {
   const isDarkTheme = useIsDarkScheme()
   const { listID, items } = useListStore()
   const { pathname } = useLocation()
+  const navigate = useNavigate()
 
   const { userID } = useUserStore()
 
@@ -85,6 +79,7 @@ const App = () => {
           <Route exact path='/register' element={<RegisterPage />} />
           <Route exact path='/lists' element={<ListSelectionPage />} />
           <Route exact path='/lists/:listID' element={<ListPage />} />
+          <Route exact path='/invite/join/:inviteID' element={<InvitePage />} />
           <Route path='*' element={<Page404 />} />
         </Routes>
       </Main>

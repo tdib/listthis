@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { Navigate } from 'react-router-dom'
+import { Navigate, useLocation, useNavigate } from 'react-router-dom'
 
 import { Wrapper, Title, LoginForm, InputField, LoginButton, SupportText, Link, ErrorWarning } from './loginPageStyle'
 import { useUserStore } from '../../stores'
@@ -10,6 +10,8 @@ export const LoginPage = () => {
   const { register, handleSubmit, watch } = useForm()
   const { loadUser, userID } = useUserStore()
   const [error, setError] = useState()
+  const { state } = useLocation()
+  const navigate = useNavigate()
 
   const onSubmit = data => {
     login({ username: data.username, password: data.password }).then(res => {
@@ -22,7 +24,7 @@ export const LoginPage = () => {
   }
 
   return userID ? (
-    <Navigate to={'/lists'} />
+    <Navigate to={state?.returnURL ? state.returnURL : '/lists'} />
   ) : (
     <Wrapper>
       <Title>ListThis Login</Title>
@@ -47,7 +49,13 @@ export const LoginPage = () => {
         <div>
           <LoginButton type={'submit'} value={'Log in'} />
           <SupportText>
-            Don't have an account? <Link href={'/register'}>Register here!</Link>
+            Don't have an account?{' '}
+            <Link
+              href={'/register'}
+              onClick={() => navigate('/register', { state: { returnURL: state.returnURL ?? '/register' } })}
+            >
+              Register here!
+            </Link>
           </SupportText>
         </div>
       </LoginForm>
