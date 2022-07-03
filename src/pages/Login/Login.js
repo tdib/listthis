@@ -1,36 +1,50 @@
 import { LoginForm, Label, SupportText, Link } from './loginStyle'
 import { Main, Button, Header, ErrorWarning } from '/src/components'
 import { signInWithEmailAndPassword } from 'firebase/auth'
-import { auth } from '../../config/firebase'
+import { auth } from '/src/config/firebase'
+import { useUserStore, useListsStore } from '/src/stores'
 
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
+import { getAssociatedLists } from '/src/services/lists'
 
 const Login = () => {
   const { register, handleSubmit } = useForm()
+  const { unloadUser, loadUser, userID, displayName, email: emailFromStore, associatedListIDs } = useUserStore()
   const [error, setError] = useState()
   const navigate = useNavigate()
+  const { loadLists } = useListsStore()
 
-  const loginFn = ({ email, password }) => {
-    console.log(email, password);
+  const loginFn = async ({ email, password }) => {
     setError()
     signInWithEmailAndPassword(auth, email, password)
-      .then(userCred => {
+      .then(async userCred => {
         const user = userCred.user
-        console.log(user)
-        // TODO: set current user to this
+        const associatedLists = await getAssociatedLists(user.uid)
+        loadLists(associatedLists)
+        
+        console.log('associated lists (post return)', associatedLists);
+        // TODO: do i need zustand?
+        loadUser({
+          userID: user.uid,
+          email: user.email,
+          displayName: user.displayName,
+          associatedListIDs: associatedLists.map(list => list.listID),
+        })
+        console.log('loaded user:', userID, displayName, emailFromStore, associatedListIDs);
         navigate('/lists')
       })
       .catch(error => {
         if (error.code && (error.code == 'auth/wrong-password' || error.code === 'auth/user-not-found')) {
           setError('The credentials you provided were incorrect')
+        } else if (error.code) {
+          setError(error.code)
+        } else {
+          setError('An unknown error occurred')
         }
         console.log(error);
       })
-
-    
-    
   }
 
   return <Main>
@@ -43,6 +57,7 @@ const Login = () => {
           autoFocus={true}
           required={true}
           id='email'
+          defaultValue={'thomas.dib02@gmail.com'}
           placeholder='johndoe@example.com'
           {...register('email')}
         />
@@ -53,6 +68,7 @@ const Login = () => {
           required={true}
           name='password'
           type='password'
+          defaultValue={'ffffff'}
           {...register('password')}
         />
       </div>

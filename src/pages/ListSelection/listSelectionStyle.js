@@ -11,3 +11,7 @@ export const HeaderContainer = styled('div')`
   justify-content: space-between;
   padding: 0em 1em;
 `
+
+export const InfoMessage = styled('span')`
+  color: var(--text-secondary);
+`

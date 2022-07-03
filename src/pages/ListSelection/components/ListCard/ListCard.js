@@ -1,5 +1,7 @@
 import { CardContainer, Title, Close } from './listCardStyle'
-import { Redo, X } from 'lucide-react'
+import { X } from 'lucide-react'
+import { useNavigate, Navigate } from 'react-router-dom'
+import { useListStore } from '/src/stores'
 
 const XStyle = {
   color: 'var(--text-secondary)',
@@ -13,10 +15,16 @@ const leaveList = ({ list }) => {
 
 }
 
+const ListCard = ({ data }) => {
+  const navigate = useNavigate()
+  const { listID, name, items } = data
+  const { loadList } = useListStore()
 
-const ListCard = ({ text, list }) => {
-  return <CardContainer onClick={() => {}}>
-    <Title>{text}</Title>
+  return <CardContainer onClick={() => {
+    loadList(data)
+    navigate(`/list/${listID}`)
+  }}>
+    <Title>{name}</Title>
     <X style={XStyle} onClick={e => {
       e.preventDefault()
       leaveList(list)

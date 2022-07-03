@@ -1,37 +1,49 @@
 import { LoginForm, Label, SupportText, Link } from './registerStyle'
 import { Main, Button, Header, ErrorWarning } from '/src/components'
-import { createUser, usernameExists } from '/src/services'
+import { createUser } from '/src/services'
+import { useUserStore } from '/src/stores'
 
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
+import {auth} from '/src/config/firebase'
 
 const Register = () => {
   const { register, handleSubmit } = useForm()
   const [error, setError] = useState()
   const navigate = useNavigate()
+  const { unloadUser, loadUser, userID, displayName: d, email: blah, associatedListIDs } = useUserStore()
 
-  const registerFn = async data => {
-    console.log('hi');
+  const registerFn = async ({ email, displayName, password, confirmPassword }) => {
+    unloadUser()
     setError()
-    const { email, username, password, confirmPassword } = data
     // Passwords unmatched error
     if (password !== confirmPassword) {
       setError('Passwords do not match')
       return
     }
 
-    if (!usernameExists(username)) {
-      setError('This username is already in use')
-      return
-    }
-
     try {
-      await createUser({ email, username, password })
+      console.log(0, auth.currentUser);
+      // Create user in firebase authentication & firestore
+      const user = await createUser({ email, displayName, password })
+      // Load user into zustand store
+      loadUser({
+        userID: user.uid,
+        displayName: user.displayName,
+        email: user.email,
+        associatedListIDs: []
+      })
+      console.log(1, auth.currentUser);
     } catch (error) {
       if (error.code && error.code == 'auth/email-already-in-use') {
         setError('This email is already in use')
+      } else if (error.code) {
+        setError(error.code)
+      } else {
+        setError('An unknown error occurred')
       }
+      return
     }
 
     navigate('/login')
@@ -54,12 +66,13 @@ const Register = () => {
         />
       </div>
       <div>
-        <Label htmlFor='username'>Username</Label>
+        {/* TODO: quetion mark that explains what this means */}
+        <Label htmlFor='displayName'>Display Name</Label>
         <input
           required={true}
           defaultValue={'dib'}
           placeholder='johndoe12'
-          {...register('username')}
+          {...register('displayName')}
         />
       </div>
       <div>
