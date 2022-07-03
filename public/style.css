@@ -9,3 +9,15 @@ body {
   flex-direction: column;
   min-height: 100vh;
 }
+
+:root {
+  --white: hsl(0, 0%, 95%);
+  --black: hsl(0, 0%, 5%);
+  --brand: hsl(252, 50%, 52%);
+  --background: rgb(35, 35, 35);
+  --surface: hsl(0, 0%, 21%);
+  --text: rgb(245, 245, 245);
+  --text-secondary: grey;
+  --link: hsl(174, 20%, 50%);
+  --error: hsl(3, 34%, 50%);
+}

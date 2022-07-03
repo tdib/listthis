@@ -1,2 +1,5 @@
 export { default as Main } from './Main/Main'
 export { default as Button } from './Button/Button'
+export { default as Header } from './Header/Header'
+export { default as Subheader } from './Subheader/Subheader'
+export { default as ErrorWarning } from './ErrorWarning/ErrorWarning'
