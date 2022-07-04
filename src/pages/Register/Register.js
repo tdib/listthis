@@ -1,21 +1,18 @@
-import { LoginForm, Label, SupportText, Link } from './registerStyle'
-import { Main, Button, Header, ErrorWarning } from '/src/components'
-import { createUser } from '/src/services'
-import { useUserStore } from '/src/stores'
+import { LoginForm, Label, SupportText, Link, HeaderContainer } from './registerStyle'
+
+import { Main, Button, Header, ErrorWarning, InputField } from '/src/components'
+import { auth, createUser } from '/src/services'
 
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
-import { auth } from '/src/services'
 
 const Register = () => {
   const { register, handleSubmit } = useForm()
   const [error, setError] = useState()
   const navigate = useNavigate()
-  const { unloadUser, loadUser, userID, displayName: d, email: blah, associatedListIDs } = useUserStore()
 
   const registerFn = async ({ email, displayName, password, confirmPassword }) => {
-    unloadUser()
     setError()
     // Passwords unmatched error
     if (password !== confirmPassword) {
@@ -47,16 +44,17 @@ const Register = () => {
     }
 
     navigate('/login')
-
   }
 
   return <Main>
-    <Header>Register</Header>
+    <HeaderContainer>
+      <Header>Register</Header>
+    </HeaderContainer>
     <LoginForm onSubmit={handleSubmit(registerFn)}>
       {error && <ErrorWarning>{error}</ErrorWarning>}
       <div>
         <Label htmlFor='email'>Email</Label>
-        <input
+        <InputField
           autoFocus={true}
           required={true}
           type='email'
@@ -66,9 +64,9 @@ const Register = () => {
         />
       </div>
       <div>
-        {/* TODO: quetion mark that explains what this means */}
+        {/* TODO: question mark that explains what this means */}
         <Label htmlFor='displayName'>Display Name</Label>
-        <input
+        <InputField
           required={true}
           defaultValue={'dib'}
           placeholder='johndoe12'
@@ -77,15 +75,17 @@ const Register = () => {
       </div>
       <div>
         <Label htmlFor='password'>Password</Label>
-        <input
+        <InputField
           required={true}
           type='password'
           minLength={6}
           defaultValue='ffffff'
           {...register('password')}
         />
+      </div>
+      <div>
         <Label htmlFor='confirm-password'>Confirm password</Label>
-        <input
+        <InputField
           required={true}
           type='password'
           defaultValue='ffffff'

@@ -1,4 +1,5 @@
 import { styled } from 'goober'
+import { X } from 'lucide-react'
 
 export const CardContainer = styled('div')`
   position: relative;
@@ -22,4 +23,16 @@ export const Title = styled('h3')`
   font-size: 1.5em;
   margin: 0;
   font-weight: bolder;
+`
+
+export const LeaveButton = styled(X)`
+  color: var(--text-secondary);
+  width: 1.25em;
+  position: absolute;
+  right: .75em;
+  top: .75em;
+
+  &:hover {
+    color: var(--text);
+  }
 `

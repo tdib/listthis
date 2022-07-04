@@ -41,3 +41,7 @@ export const Label = styled('label')`
   color: var(--white);
   margin-bottom: .3em;
 `
+
+export const HeaderContainer = styled('div')`
+  margin: 2em 0em;
+`

@@ -1,18 +1,18 @@
-import { CardsContainer, HeaderContainer, InfoMessage, LogOutButton } from './listSelectionStyle'
+import { CardsContainer, HeaderContainer, LogOutButton, InfoContainer } from './listSelectionStyle'
 import ListCard from './components/ListCard/ListCard'
-import { LogOut } from 'lucide-react'
+
 import { auth } from '/src/services'
-import { Main, Header } from '/src/components'
-import { signOut } from 'firebase/auth'
+import { Main, Header, Button, NewListPopup, TabBar, InfoMessage } from '/src/components'
+import { useListsStore } from '/src/stores'
+
+import { useState, useEffect } from 'react'
 import { useNavigate, Navigate } from 'react-router-dom'
-import { useUserStore, useListsStore } from '/src/stores'
-import { getAssociatedLists } from '/src/services'
+import { signOut } from 'firebase/auth'
 
 const ListSelection = () => {
   const navigate = useNavigate()
-  const { unloadUser } = useUserStore()
   const { lists, loadLists } = useListsStore()
-  console.log('lists', lists);
+  const [popupOpen, setPopupOpen] = useState(false)
 
   if (!auth.currentUser) {
     console.log('No auth current user! navigating to login');
@@ -30,24 +30,27 @@ const ListSelection = () => {
       <Header>Your lists</Header>
       <LogOutButton onClick={() => {
         signOut(auth)
-        unloadUser()
         navigate('/login')
-      }} /> 
+      }} />
     </HeaderContainer>
-    <CardsContainer>
-      {lists ? (lists.map(list => <ListCard data={list} key={list.listID} />)) : (
-        <InfoMessage>
-        You are not in any lists! Create one by clicking the '+' button at the bottom of the screen!
-        </InfoMessage>
-      )
-      }
-      {/* <ListCard text='Family list'></ListCard>
-      <ListCard text='Personal'></ListCard>
-      <ListCard text='Birthday Picnic at the Park'></ListCard>
-      <ListCard text='Reallyreallyreallyreallyreallylongword'></ListCard>
-      <ListCard text='Another list'></ListCard> */}
+      {/* TODO: center on screen */}
+      {lists.length ? (
+        <CardsContainer>
+          {lists.map(list => <ListCard data={list} key={list.listID} />)}
+        </CardsContainer>
+      ) : (
+        <InfoContainer>
+          <InfoMessage>
+            You are not in any lists! Create one by clicking the button below!
+          </InfoMessage>
+          <Button onClick={() => setPopupOpen(true)}>
+            Add list
+          </Button>
+        </InfoContainer>
+      )}
+      {popupOpen && <NewListPopup closeFn={() => setPopupOpen(false)} />}
 
-    </CardsContainer>
+      <TabBar clickFn={() => setPopupOpen(true)} />
 
   </Main>
 }

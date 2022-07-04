@@ -1,10 +1,11 @@
 import { styled } from 'goober'
-import { LogOut, ChevronLeft } from 'lucide-react'
+import { LogOut } from 'lucide-react'
 
 export const CardsContainer = styled('div')`
   display: flex;
   flex-direction: column;
   gap: 1.25em;
+  margin-bottom: 5em;
 `
 
 export const HeaderContainer = styled('div')`
@@ -12,10 +13,6 @@ export const HeaderContainer = styled('div')`
   justify-content: space-between;
   align-items: center;
   padding: 1em;
-`
-
-export const InfoMessage = styled('span')`
-  color: var(--text-secondary);
 `
 
 export const LogOutButton = styled(LogOut)`
@@ -26,4 +23,14 @@ export const LogOutButton = styled(LogOut)`
     color: white;
     cursor: pointer;
   }
+`
+
+export const InfoContainer = styled('div')`
+  display: flex;
+  flex-direction: column;
+  gap: 1.5em;
+  flex: 1;
+  padding: 1em;
+  box-sizing: border-box;
+  margin: auto;
 `

@@ -1,33 +1,29 @@
-import { CardContainer, Title, Close } from './listCardStyle'
-import { X } from 'lucide-react'
+import { CardContainer, Title, LeaveButton } from './listCardStyle'
+
+import { useListStore, useListsStore } from '/src/stores'
+import { auth, leaveListDB } from '/src/services'
+
 import { useNavigate, Navigate } from 'react-router-dom'
-import { useListStore } from '/src/stores'
-
-const XStyle = {
-  color: 'var(--text-secondary)',
-  width: '1.25em',
-  position: 'absolute',
-  right: '.75em',
-  top: '.75em',
-}
-
-const leaveList = ({ list }) => {
-
-}
 
 const ListCard = ({ data }) => {
   const navigate = useNavigate()
   const { listID, name, items } = data
   const { loadList } = useListStore()
+  const { leaveList } = useListsStore()
 
   return <CardContainer onClick={() => {
     loadList(data)
     navigate(`/list/${listID}`)
   }}>
     <Title>{name}</Title>
-    <X style={XStyle} onClick={e => {
-      e.preventDefault()
-      leaveList(list)
+    <LeaveButton onClick={e => {
+      e.stopPropagation()
+      if (window.confirm('Are you sure you want to leave this list? This action cannot be undone!')) {
+        // Remove user from firestore list
+        leaveListDB({ UUID: auth.currentUser.uid, listID: listID})
+        // Remove user from zustand store list
+        leaveList(listID)
+      }
     }} />
   </CardContainer>
 }

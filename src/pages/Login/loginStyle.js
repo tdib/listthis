@@ -9,22 +9,6 @@ export const LoginForm = styled('form')`
   background: var(--surface);
 `
 
-export const InputField = styled('input')`
-  padding: 0;
-  width: 100%;
-  border-radius: 0.25rem;
-  height: 2em;
-  border: none;
-  text-indent: 0.5rem;
-  background: var(--white);
-  color: var(--black);
-
-  &:focus {
-    outline: solid;
-    outline-color: var(--brand);
-  }
-`
-
 export const SupportText = styled('span')`
   display: block;
   /* margin: -0.75em; */
@@ -40,4 +24,8 @@ export const Label = styled('label')`
   text-align: left;
   color: var(--white);
   margin-bottom: .3em;
+`
+
+export const HeaderContainer = styled('div')`
+  margin: 2em 0em;
 `

@@ -3,6 +3,7 @@ import create from 'zustand'
 // current list (id, name, list items)
 const useListStore = create(set => ({
   listID: null,
+  associatedUUIDs: null,
   name: null,
   items: null,
 
@@ -11,6 +12,7 @@ const useListStore = create(set => ({
   unloadList: () =>
     set({
       listID: null,
+      associatedUUIDs: null,
       name: null,
       items: null,
     }),

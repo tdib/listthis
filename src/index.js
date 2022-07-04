@@ -1,12 +1,13 @@
-import { Suspense } from 'react'
-import { createRoot } from 'react-dom/client'
-import { createElement } from 'react'
-import { setup } from 'goober'
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
-import { onAuthStateChanged, signOut } from 'firebase/auth'
+import * as Pages from './pages'
+import { Main, Spinner } from '/src/components'
 import { auth } from '/src/services'
 
-import * as Pages from './pages'
+import { Suspense, createElement } from 'react'
+import { setup } from 'goober'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { createRoot } from 'react-dom/client'
+import { onAuthStateChanged, signOut } from 'firebase/auth'
+
 
 // Set up goober to use React
 setup(
@@ -33,7 +34,7 @@ const root = createRoot(
 // Render app
 root.render(
   <BrowserRouter>
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<Main><Spinner /></Main>}>
       <Routes>
         {/* TODO: only navigate if logged out, else list selection */}
         {/* <Route path='/' element={auth.currentUser ? <Pages.ListSelection /> : <Navigate to='/login' />} /> */}
@@ -42,7 +43,7 @@ root.render(
         <Route path='/register' element={<Pages.Register />} />
         <Route path='/lists' element={<Pages.ListSelection />} />
         <Route path='/list/:id' element={<Pages.List />} />
-        <Route path='*' element={<h1>404</h1>} />
+        <Route path='*' element={<Pages.PageNotFound />} />
       </Routes>
     </Suspense>
   </BrowserRouter>

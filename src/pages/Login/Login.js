@@ -1,38 +1,29 @@
-import { LoginForm, Label, SupportText, Link } from './loginStyle'
-import { Main, Button, Header, ErrorWarning } from '/src/components'
-import { signInWithEmailAndPassword } from 'firebase/auth'
-import { auth } from '/src/services'
-import { useUserStore, useListsStore } from '/src/stores'
+import { LoginForm, Label, SupportText, Link, HeaderContainer } from './loginStyle'
+
+import { Main, Button, Header, ErrorWarning, InputField } from '/src/components'
+import { useListsStore } from '/src/stores'
+import { auth, getAssociatedLists } from '/src/services'
 
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
-import { getAssociatedLists } from '/src/services'
+import { signInWithEmailAndPassword } from 'firebase/auth'
 
 const Login = () => {
   const { register, handleSubmit } = useForm()
-  const { unloadUser, loadUser, userID, displayName, email: emailFromStore, associatedListIDs } = useUserStore()
   const [error, setError] = useState()
   const navigate = useNavigate()
   const { loadLists } = useListsStore()
 
   const loginFn = async ({ email, password }) => {
     setError()
+
     signInWithEmailAndPassword(auth, email, password)
       .then(async userCred => {
         const user = userCred.user
         const associatedLists = await getAssociatedLists(user.uid)
         loadLists(associatedLists)
         
-        console.log('associated lists (post return)', associatedLists);
-        // TODO: do i need zustand?
-        loadUser({
-          userID: user.uid,
-          email: user.email,
-          displayName: user.displayName,
-          associatedListIDs: associatedLists.map(list => list.listID),
-        })
-        console.log('loaded user:', userID, displayName, emailFromStore, associatedListIDs);
         navigate('/lists')
       })
       .catch(error => {
@@ -48,12 +39,14 @@ const Login = () => {
   }
 
   return <Main>
-    <Header>Login</Header>
+    <HeaderContainer>
+      <Header>Login</Header>
+    </HeaderContainer>
     <LoginForm onSubmit={handleSubmit(loginFn)}>
       {error && <ErrorWarning>{error}</ErrorWarning>}
       <div>
         <Label htmlFor='email'>Email</Label>
-        <input
+        <InputField
           autoFocus={true}
           required={true}
           id='email'
@@ -64,7 +57,7 @@ const Login = () => {
       </div>
       <div>
         <Label htmlFor='password'>Password</Label>
-        <input
+        <InputField
           required={true}
           name='password'
           type='password'

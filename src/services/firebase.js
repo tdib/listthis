@@ -1,6 +1,7 @@
 import { initializeApp } from 'firebase/app'
-import { getFirestore } from 'firebase/firestore'
-import { getAuth } from 'firebase/auth'
+import { collection, getFirestore } from 'firebase/firestore'
+import { getAuth, setPersistence, browserLocalPersistence, browserSessionPersistence } from 'firebase/auth'
+
 
 const firebaseConfig = {
   apiKey: 'AIzaSyB8gOh7dCu9zJ_lNSeh-yYwML9f2JiuroI',
@@ -12,6 +13,11 @@ const firebaseConfig = {
   measurementId: 'G-67MZ1F73QM'
 }
 
+
 export const app = initializeApp(firebaseConfig)
 export const db = getFirestore()
-export const auth = getAuth()
+const authOg = getAuth()
+setPersistence(authOg, browserSessionPersistence)
+export const auth = authOg
+export const listsRef = collection(db, 'lists')
+
