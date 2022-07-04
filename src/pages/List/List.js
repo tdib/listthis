@@ -1,15 +1,16 @@
 import { Main, Header } from '/src/components'
 import { useParams } from 'react-router-dom'
 import { useUserStore, useListStore } from '/src/stores'
-import { auth } from '/src/config/firebase'
-import { Navigate } from 'react-router-dom'
+import { auth } from '/src/services'
+import { Navigate, useNavigate } from 'react-router-dom'
 import ListItem from './components/ListItem'
+import { HeaderContainer, BackButton } from './listStyle'
 
 const List = () => {
   const { id } = useParams()
+  const navigate = useNavigate()
   const { associatedListIDs } = useUserStore()
   const { listID, name, items } = useListStore()
-  console.log('hopefully loaded list = ', listID, name, items);
 
 
   if (!auth.currentUser) {
@@ -25,7 +26,10 @@ const List = () => {
   // TODO: refresh case (list store doesn't have data)
 
   return <Main>
-    <Header>{name}</Header>
+    <HeaderContainer>
+      <BackButton onClick={() => navigate('/lists')}/>
+      <Header>{name}</Header>
+    </HeaderContainer>
     {items && items.map(item => <ListItem item={item} key={item.itemID}></ListItem>)}
   </Main>
 }

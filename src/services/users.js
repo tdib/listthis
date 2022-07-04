@@ -1,6 +1,6 @@
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth'
 import { doc, setDoc } from 'firebase/firestore'
-import { auth, db } from '/src/config/firebase'
+import { auth, db } from './firebase'
 
 // Create user in firebase (authentication) and firestore
 export const createUser = async ({ email, displayName, password }) => {

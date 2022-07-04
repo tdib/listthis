@@ -1,5 +1,5 @@
 import { collection, doc, getDocs, getDoc, query, where, documentId } from 'firebase/firestore'
-import { db } from '/src/config/firebase'
+import { db } from './firebase'
 
 export const getAssociatedLists = async userID => {
   // Get document of given user

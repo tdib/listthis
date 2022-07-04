@@ -4,7 +4,7 @@ import { createElement } from 'react'
 import { setup } from 'goober'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { onAuthStateChanged, signOut } from 'firebase/auth'
-import { auth } from '/src/config/firebase'
+import { auth } from '/src/services'
 
 import * as Pages from './pages'
 

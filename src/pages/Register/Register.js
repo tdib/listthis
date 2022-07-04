@@ -6,7 +6,7 @@ import { useUserStore } from '/src/stores'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
-import {auth} from '/src/config/firebase'
+import { auth } from '/src/services'
 
 const Register = () => {
   const { register, handleSubmit } = useForm()

@@ -1,22 +1,12 @@
-import { CardsContainer, HeaderContainer, InfoMessage } from './listSelectionStyle'
+import { CardsContainer, HeaderContainer, InfoMessage, LogOutButton } from './listSelectionStyle'
 import ListCard from './components/ListCard/ListCard'
 import { LogOut } from 'lucide-react'
-import { auth } from '/src/config/firebase'
+import { auth } from '/src/services'
 import { Main, Header } from '/src/components'
 import { signOut } from 'firebase/auth'
 import { useNavigate, Navigate } from 'react-router-dom'
 import { useUserStore, useListsStore } from '/src/stores'
 import { getAssociatedLists } from '/src/services'
-
-const LogOutStyle = {
-  color: 'var(--text-secondary)',
-  'alignSelf': 'center',
-
-  '&:hover': {
-    background: 'white',
-    color: 'red',
-  },
-}
 
 const ListSelection = () => {
   const navigate = useNavigate()
@@ -38,7 +28,7 @@ const ListSelection = () => {
   return <Main>
     <HeaderContainer>
       <Header>Your lists</Header>
-      <LogOut style={LogOutStyle} onClick={() => {
+      <LogOutButton onClick={() => {
         signOut(auth)
         unloadUser()
         navigate('/login')

@@ -1,13 +1,13 @@
 import { LoginForm, Label, SupportText, Link } from './loginStyle'
 import { Main, Button, Header, ErrorWarning } from '/src/components'
 import { signInWithEmailAndPassword } from 'firebase/auth'
-import { auth } from '/src/config/firebase'
+import { auth } from '/src/services'
 import { useUserStore, useListsStore } from '/src/stores'
 
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
-import { getAssociatedLists } from '/src/services/lists'
+import { getAssociatedLists } from '/src/services'
 
 const Login = () => {
   const { register, handleSubmit } = useForm()
