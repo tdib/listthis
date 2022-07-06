@@ -3,27 +3,22 @@ import { CardContainer, Title, LeaveButton } from './listCardStyle'
 import { useListStore, useListsStore } from '/src/stores'
 import { auth, leaveListDB } from '/src/services'
 
-import { useNavigate, Navigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
-const ListCard = ({ data }) => {
+const ListCard = ({ data, openWarningFn }) => {
   const navigate = useNavigate()
-  const { listID, name, items } = data
-  const { loadList } = useListStore()
-  const { leaveList } = useListsStore()
+  const { listUID, name, items } = data
+  const loadList = useListStore(s => s.loadList)
+  const leaveList = useListsStore(s => s.leaveList)
 
   return <CardContainer onClick={() => {
     loadList(data)
-    navigate(`/list/${listID}`)
+    navigate(`/list/${listUID}`)
   }}>
     <Title>{name}</Title>
     <LeaveButton onClick={e => {
       e.stopPropagation()
-      if (window.confirm('Are you sure you want to leave this list? This action cannot be undone!')) {
-        // Remove user from firestore list
-        leaveListDB({ UUID: auth.currentUser.uid, listID: listID})
-        // Remove user from zustand store list
-        leaveList(listID)
-      }
+      openWarningFn()
     }} />
   </CardContainer>
 }

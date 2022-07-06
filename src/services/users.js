@@ -10,7 +10,7 @@ export const createUser = async ({ email, displayName, password }) => {
   await updateProfile(user, { displayName: displayName })
   // Add user to Firestore
   await setDoc(doc(db, 'users', user.uid), {
-    associatedListIDs: [],
+    associatedListUIDs: [],
   })
   return user
 }

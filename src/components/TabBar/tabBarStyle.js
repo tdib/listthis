@@ -13,19 +13,21 @@ export const TabBarContainer = styled('div')`
   box-shadow: 0 0 50px var(--shadow);
 `
 
-export const AddButtonCircle = styled('div')`
-  width: 3.5em;
-  height: 3.5em;
+export const AddButtonCircle = styled('button')`
+  width: 4.25em;
+  height: 4.25em;
   border-radius: 50%;
   position: absolute;
   left: 50%;
   transform: translate(-50%);
-  bottom: 1.25em;
+  bottom: 1.5em;
   display: flex;
   justify-content: center;
   align-items: center;
   background: var(--brand);
   box-shadow: 0 0 5px var(--shadow);
+
+  border: none;
 
   &:hover {
     cursor: pointer;
@@ -35,6 +37,6 @@ export const AddButtonCircle = styled('div')`
 export const AddButtonPlus = styled(Plus)`
   position: absolute;
   color: var(--white);
-  width: 2em;
-  height: 2em;
+  width: 2.3em;
+  height: 2.3em;
 `

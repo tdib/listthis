@@ -9,13 +9,23 @@ const useListsStore = create(set => ({
 
   leaveList: listToRemoveID =>
     set(state => ({
-      lists: state.lists.filter(list => list.listID !== listToRemoveID),
+      lists: state.lists.filter(list => list.listUID !== listToRemoveID),
     })),
 
   createList: list =>
     set(state => ({
       lists: [...state.lists, list],
     })),
+
+  // TODO: update list
+  upsertList: newList => {
+    set(state => ({
+      lists: state.lists.find(list => list.listUID === newList.listUID)
+      ? state.lists.map(list => list.listUID === newList.listUID ? newList : list)
+      : [...state.lists, newList]
+      // lists: state.lists.map(list => list.listUID === newList.listUID ? newList : list)
+    }))
+  }
 }))
 
 export default useListsStore

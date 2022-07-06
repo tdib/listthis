@@ -12,7 +12,6 @@ export const PopupPanel = styled('form')`
   bottom: 0;
   left: 0;
   border-radius: .75em .75em 0 0;
-  /* box-shadow: 0px 0px 0px 100vh var(--shadow); */
   box-sizing: border-box;
   padding: 1.5em;
   z-index: 1;
@@ -54,4 +53,26 @@ export const TitleField = styled('input', forwardRef)`
 
 export const NoteField = styled('textarea', forwardRef)`
   margin-bottom: 1em;
+`
+
+// Warning panel only
+export const WarningPanel = styled('div')`
+  --width: 22em;
+  --height: 12.5em;
+  position: fixed;
+  border-radius: .5em;
+  background: var(--surface);
+  width: var(--width);
+  height: var(--height);
+  box-sizing: border-box;
+  padding: 1.5em 2.5em;
+  /* margin-bottom: 6em; */
+  top: calc(50% - calc(var(--height) / 2));
+  left: calc(50% - calc(var(--width) / 2));
+`
+
+export const ButtonContainer = styled('div')`
+  display: flex;
+  gap: 1em;
+  justify-content: right;
 `

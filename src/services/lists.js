@@ -28,7 +28,7 @@ export const getAssociatedLists = async UUID => {
 
   // Extract list data
   let associatedLists = []
-  docs.forEach(doc => associatedLists.push({ ...doc.data(), listID: doc.id }))
+  docs.forEach(doc => associatedLists.push({ ...doc.data(), listUID: doc.id }))
   return associatedLists
 }
 
@@ -36,9 +36,9 @@ export const createListDB = async list => {
   return await addDoc(listsRef, {...list})
 }
 
-export const leaveListDB = async ({ UUID, listID }) => {
+export const leaveListDB = async ({ UUID, listUID }) => {
   // Remove user from given list
-  const listToLeaveRef = doc(db, 'lists', listID)
+  const listToLeaveRef = doc(db, 'lists', listUID)
   await updateDoc(listToLeaveRef, {
     associatedUUIDs: arrayRemove(UUID)
   })
@@ -50,27 +50,32 @@ export const leaveListDB = async ({ UUID, listID }) => {
   }
 }
 
-export const addItemDB = async ({ item, listID }) => {
-  const { name, note, isChecked, imageURL } = item
+export const addItemDB = async ({ item, listUID }) => {
+  const { itemUID, name, note, isChecked, imageURL } = item
   const newItem = {
     authorUID: auth.currentUser.uid,
     dateAdded: Timestamp.now(),
+    itemUID,
     name,
     note,
     isChecked,
     imageURL,
   }
-  // id (auto gen)
-  // authorid
-  // dateAdded
-  // name
-  // note
-  // isChecked
-  // imageURL
-  console.log(item, listID);
-  console.log(newItem);
-  const listRef = doc(db, 'lists', listID)
+  const listRef = doc(db, 'lists', listUID)
   await updateDoc(listRef, {
-    items: arrayUnion({ ...newItem })
+    items: arrayUnion(newItem)
   })
+}
+
+export const getList = async listUID => {
+  const listDoc = await getDoc(doc(db, 'lists', listUID))
+  return listDoc.data()
+}
+
+export const getAllLists = async () => {
+  const q = query(collection(db, 'lists'))
+  const allListsDocs = await getDocs(q)
+  let allLists = []
+  allListsDocs.forEach(doc => allLists.push({ ...doc.data(), listUID: doc.id }))
+  return allLists
 }

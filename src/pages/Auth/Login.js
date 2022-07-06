@@ -1,4 +1,4 @@
-import { LoginForm, Label, SupportText, Link, HeaderContainer } from './loginStyle'
+import { Form, Label, SupportText, HeaderContainer, SubmitContainer } from './authStyle'
 
 import { Main, Button, Header, ErrorWarning, InputField } from '/src/components'
 import { useListsStore } from '/src/stores'
@@ -6,14 +6,14 @@ import { auth, getAssociatedLists } from '/src/services'
 
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { signInWithEmailAndPassword } from 'firebase/auth'
 
 const Login = () => {
   const { register, handleSubmit } = useForm()
   const [error, setError] = useState()
   const navigate = useNavigate()
-  const { loadLists } = useListsStore()
+  const loadLists = useListsStore(s => s.loadLists)
 
   const loginFn = async ({ email, password }) => {
     setError()
@@ -34,15 +34,15 @@ const Login = () => {
         } else {
           setError('An unknown error occurred')
         }
-        console.log(error);
+        console.error(error);
       })
   }
 
-  return <Main>
+  return <Main $vCentered>
     <HeaderContainer>
-      <Header>Login</Header>
+      <Header $hCentered>Login</Header>
     </HeaderContainer>
-    <LoginForm onSubmit={handleSubmit(loginFn)}>
+    <Form onSubmit={handleSubmit(loginFn)}>
       {error && <ErrorWarning>{error}</ErrorWarning>}
       <div>
         <Label htmlFor='email'>Email</Label>
@@ -50,6 +50,7 @@ const Login = () => {
           autoFocus={true}
           required={true}
           id='email'
+          type='email'
           defaultValue={'thomas.dib02@gmail.com'}
           placeholder='johndoe@example.com'
           {...register('email')}
@@ -59,23 +60,20 @@ const Login = () => {
         <Label htmlFor='password'>Password</Label>
         <InputField
           required={true}
-          name='password'
+          id='password'
           type='password'
           defaultValue={'ffffff'}
           {...register('password')}
         />
       </div>
+      <SubmitContainer>
         <Button type='submit'>Log in</Button>
         <SupportText>
           Don't have an account?{' '}
-          <Link
-            href={'/register'}
-            onClick={() => navigate('/register')}
-          >
-            Register here!
-          </Link>
+          <Link to='/register'>Register here!</Link>
         </SupportText>
-    </LoginForm>
+      </SubmitContainer>
+    </Form>
 
   </Main>
 }

@@ -2,12 +2,6 @@ import { styled } from 'goober'
 import { MoreVertical } from 'lucide-react'
 import { Image } from 'lucide-react'
 
-export const AllItemsContainer = styled('div')`
-  display: flex;
-  flex-direction: column;
-  gap: 0.5em;
-  margin-bottom: 2em;
-`
 
 export const ListItemContainer = styled('div')`
   display: flex;
@@ -44,11 +38,13 @@ export const TextContainer = styled('div')`
 `
 
 export const ItemName = styled('span')`
-  color: var(--text);
   display: inline-block;
   text-align: left;
   text-overflow: ellipsis;
   overflow: hidden;
+
+  color: ${p => p.checked ? 'var(--text-secondary)' : 'var(--text)'};
+  transition: all .3s;
 `
 
 export const SubLineWrapper = styled('div')`
@@ -68,6 +64,9 @@ export const ItemNote = styled('span')`
   font-size: 0.85em;
   text-overflow: ellipsis;
   overflow: hidden;
+
+  text-decoration: ${p => p.checked ? 'line-through' : 'none'};
+  transition: all .3s;
 `
 
 export const CheckBox = styled('button')`

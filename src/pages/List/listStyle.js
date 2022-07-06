@@ -19,3 +19,10 @@ export const BackButton = styled(ChevronLeft)`
     cursor: pointer;
   }
 `
+
+export const AllItemsContainer = styled('div')`
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  margin-bottom: 4em;
+`

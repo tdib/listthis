@@ -4,8 +4,11 @@ const Main = styled('main')`
   padding: 1em;
   display: flex;
   flex: 1;
-  background: var(--background);
   flex-direction: column;
+
+  ${p => p.$vCentered && `
+    justify-content: center;
+  `}
 `
 
 export default Main

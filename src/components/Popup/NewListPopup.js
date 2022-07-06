@@ -6,24 +6,27 @@ import { useListsStore } from '/src/stores'
 
 import { useForm } from 'react-hook-form'
 
-const createNewListFn = ({ listName }) => {
-  const newList = {
-    associatedUUIDs: [auth.currentUser.uid],
-    name: listName,
-    items: [],
-  }
-  // Create new list in firestore
-  createListDB(newList)
-    .then(() => {
-      // TODO: create new list in zustand store
-      // const { createList } = useListsStore()
-      // createList(newList)
-    })
-  .catch(console.error)
-}
 
 const NewListPopup = ({ closeFn }) => {
-  const { register, handleSubmit } = useForm()
+  const { register, handleSubmit, watch } = useForm()
+  const createList = useListsStore(s => s.createList)
+  const listName = watch('listName')
+
+  const createNewListFn = ({ listName }) => {
+    const newList = {
+      associatedUUIDs: [auth.currentUser.uid],
+      name: listName,
+      items: [],
+    }
+    // Create new list in firestore
+    createListDB(newList)
+      .then(({ id }) => {
+        // TODO: create new list in zustand store
+        createList({ ...newList, listUID: id })
+      })
+    .catch(console.error)
+    closeFn()
+  }
 
   return <>
     <PopupPanel onSubmit={handleSubmit(createNewListFn)}>
@@ -34,9 +37,9 @@ const NewListPopup = ({ closeFn }) => {
         autoComplete='off'
         {...register('listName')} />
       <CloseButton onClick={closeFn} />
-      <Button type='submit'>Create list</Button>
+      <Button disabled={!listName} type='submit'>Create list</Button>
     </PopupPanel>
-    <Shadow />
+    <Shadow onClick={closeFn} />
   </>
 }
 

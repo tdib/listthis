@@ -33,4 +33,6 @@ export const InfoContainer = styled('div')`
   padding: 1em;
   box-sizing: border-box;
   margin: auto;
+  justify-content: center;
+  margin-bottom: 4em;
 `

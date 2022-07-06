@@ -8,21 +8,37 @@ import {
 
 import { Button } from '/src/components'
 import { addItemDB, auth } from '/src/services'
-import { useListsStore } from '/src/stores'
+import { useListsStore, useListStore } from '/src/stores'
 
 import { useForm } from 'react-hook-form'
 
-const createNewItemFn = (data) => {
-  const item = {
-    ...data,
-    isChecked: false,
-  }
-
-  addItemDB({ item })
-}
 
 const NewItemPopup = ({ closeFn }) => {
-  const { register, handleSubmit } = useForm()
+  const { register, handleSubmit, watch } = useForm()
+  const addItem = useListStore(s => s.addItem)
+  const upsertList = useListsStore(s => s.upsertList)
+  const { lists } = useListsStore()
+  const { listUID, associatedUUIDs, name, items } = useListStore()
+  const itemName = watch('name')
+
+  const createNewItemFn = (data) => {
+    const item = {
+      ...data,
+      isChecked: false,
+      itemUID: crypto.randomUUID(),
+      imageURL: null,
+    }
+
+    // Add new item in firestore
+    addItemDB({ item, listUID })
+    // Add new item in current list store
+    addItem(item)
+    // Add new item in lists store
+    upsertList({ listUID, associatedUUIDs, name, items: [ ...items, item ]})
+
+    // Close popup
+    closeFn()
+  }
 
   return <>
     <PopupPanel onSubmit={handleSubmit(createNewItemFn)}>
@@ -33,11 +49,10 @@ const NewItemPopup = ({ closeFn }) => {
         autoComplete='off'
         {...register('name')} />
       <CloseButton onClick={closeFn} />
-      <NoteField
-        {...register('note')}></NoteField>
-      <Button type='submit'>Add item</Button>
+      <NoteField {...register('note')} />
+      <Button disabled={!itemName} type='submit'>Add item</Button>
     </PopupPanel>
-    <Shadow />
+    <Shadow onClick={closeFn} />
   </>
 }
 

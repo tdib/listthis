@@ -7,7 +7,7 @@ import { setup } from 'goober'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { createRoot } from 'react-dom/client'
 import { onAuthStateChanged, signOut } from 'firebase/auth'
-
+import { initializeApp } from 'firebase/app'
 
 // Set up goober to use React
 setup(
@@ -42,7 +42,7 @@ root.render(
         <Route path='/login' element={<Pages.Login />} />
         <Route path='/register' element={<Pages.Register />} />
         <Route path='/lists' element={<Pages.ListSelection />} />
-        <Route path='/list/:id' element={<Pages.List />} />
+        <Route path='/list/:listUID' element={<Pages.List />} />
         <Route path='*' element={<Pages.PageNotFound />} />
       </Routes>
     </Suspense>

@@ -1,11 +1,11 @@
-import { LoginForm, Label, SupportText, Link, HeaderContainer } from './registerStyle'
+import { Form, Label, SupportText, HeaderContainer, SubmitContainer } from './authStyle'
 
 import { Main, Button, Header, ErrorWarning, InputField } from '/src/components'
 import { auth, createUser } from '/src/services'
 
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 
 const Register = () => {
   const { register, handleSubmit } = useForm()
@@ -21,7 +21,6 @@ const Register = () => {
     }
 
     try {
-      console.log(0, auth.currentUser);
       // Create user in firebase authentication & firestore
       const user = await createUser({ email, displayName, password })
       // Load user into zustand store
@@ -29,9 +28,8 @@ const Register = () => {
         userID: user.uid,
         displayName: user.displayName,
         email: user.email,
-        associatedListIDs: []
+        associatedListUIDs: []
       })
-      console.log(1, auth.currentUser);
     } catch (error) {
       if (error.code && error.code == 'auth/email-already-in-use') {
         setError('This email is already in use')
@@ -46,11 +44,11 @@ const Register = () => {
     navigate('/login')
   }
 
-  return <Main>
+  return <Main $vCentered>
     <HeaderContainer>
-      <Header>Register</Header>
+      <Header $hCentered>Register</Header>
     </HeaderContainer>
-    <LoginForm onSubmit={handleSubmit(registerFn)}>
+    <Form onSubmit={handleSubmit(registerFn)}>
       {error && <ErrorWarning>{error}</ErrorWarning>}
       <div>
         <Label htmlFor='email'>Email</Label>
@@ -92,18 +90,14 @@ const Register = () => {
           {...register('confirmPassword')}
         />
       </div>
+      <SubmitContainer>
         <Button type='submit'>Register</Button>
         <SupportText>
           Already have an account?{' '}
-          <Link
-            href={'/login'}
-            onClick={() => navigate('/login')}
-          >
-            Log in
-          </Link>
+          <Link to='/login'>Log in</Link>
         </SupportText>
-    </LoginForm>
-
+      </SubmitContainer>
+    </Form>
   </Main>
 }
 

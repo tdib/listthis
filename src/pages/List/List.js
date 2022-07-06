@@ -1,4 +1,4 @@
-import { HeaderContainer, BackButton } from './listStyle'
+import { HeaderContainer, BackButton, AllItemsContainer } from './listStyle'
 import ListItem from './components/ListItem'
 
 import { Main, Header, TabBar, NewItemPopup, InfoMessage } from '/src/components'
@@ -6,18 +6,28 @@ import { useListStore } from '/src/stores'
 import { auth } from '/src/services'
 
 import { useParams, Navigate, useNavigate } from 'react-router-dom'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { getList } from '../../services/lists'
 
 const List = () => {
-  const { id } = useParams()
+  const { listUID } = useParams()
   const navigate = useNavigate()
-  const { listID, name, items } = useListStore()
+  const items = useListStore(s => s.items)
+  const name = useListStore(s => s.name)
+  const loadList = useListStore(s => s.loadList)
   const [popupOpen, setPopupOpen] = useState(false)
+  // console.log('local items', items);
 
   if (!auth.currentUser) {
-    console.log('You are not logged in');
+    console.warn('You are not logged in. Navigating to login.');
     return <Navigate to='/login' />
   }
+
+  // useEffect(() => {
+  //   getList(listUID)
+  //     .then(loadList)
+  //   // console.log('fslist', firestoreList)
+  // }, [])
 
   // TODO: user not allowed to view list
   // if (!associatedListIDs.includes(id)) {
@@ -27,20 +37,24 @@ const List = () => {
 
   // TODO: refresh case (list store doesn't have data)
 
-  return <Main>
-    <HeaderContainer>
-      <BackButton onClick={() => navigate('/lists')}/>
-      <Header>{name}</Header>
-    </HeaderContainer>
-    {items.length ? (
-      items.map(item => <ListItem item={item} key={item.itemID}></ListItem>)
-    ) : (
-      <InfoMessage>There are no items in this list. You can add items by pressing on the "+" button at the bottom of the screen!</InfoMessage>
-    )}
+  return <>
+    <Main>
+      <HeaderContainer>
+        <BackButton onClick={() => navigate('/lists')}/>
+        <Header>{name}</Header>
+      </HeaderContainer>
+      {items?.length ? (
+        <AllItemsContainer>
+          {items.map(item => <ListItem item={item} key={item.itemUID}></ListItem>)}
+        </AllItemsContainer>
+      ) : (
+        <InfoMessage>There are no items in this list. You can add items by pressing on the "+" button at the bottom of the screen!</InfoMessage>
+      )}
 
-    {popupOpen && <NewItemPopup closeFn={() => setPopupOpen(false)} />}
+      {popupOpen && <NewItemPopup closeFn={() => setPopupOpen(false)} />}
+    </Main>
     <TabBar clickFn={() => setPopupOpen(true)}/>
-  </Main>
+  </>
 }
 
 export default List

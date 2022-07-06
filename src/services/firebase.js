@@ -16,8 +16,6 @@ const firebaseConfig = {
 
 export const app = initializeApp(firebaseConfig)
 export const db = getFirestore()
-const authOg = getAuth()
-setPersistence(authOg, browserSessionPersistence)
-export const auth = authOg
+export const auth = getAuth()
 export const listsRef = collection(db, 'lists')
 

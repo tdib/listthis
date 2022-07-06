@@ -2,16 +2,17 @@ import create from 'zustand'
 
 // current list (id, name, list items)
 const useListStore = create(set => ({
-  listID: null,
+  listUID: null,
   associatedUUIDs: null,
   name: null,
   items: null,
+
 
   loadList: list => set({ ...list }),
 
   unloadList: () =>
     set({
-      listID: null,
+      listUID: null,
       associatedUUIDs: null,
       name: null,
       items: null,
@@ -27,10 +28,11 @@ const useListStore = create(set => ({
       items: state.items.filter(item => item.itemID !== itemToDeleteID),
     })),
 
-  toggleItem: itemToToggleID =>
+  toggleItem: itemToToggleUID =>
     set(state => ({
-      items: state.items.map(item => (item.itemID === itemToToggleID ? { ...item, isChecked: !item.isChecked } : item)),
+      items: state.items.map(item => (item.itemUID === itemToToggleUID ? { ...item, isChecked: !item.isChecked } : item)),
     })),
+
 }))
 
 export default useListStore
