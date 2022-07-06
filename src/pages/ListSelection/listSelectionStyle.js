@@ -15,13 +15,20 @@ export const HeaderContainer = styled('div')`
   padding: 1em;
 `
 
-export const LogOutButton = styled(LogOut)`
+export const LogOutButtonContainer = styled('button')`
   color: var(--text-secondary);
   align-self: center;
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 0;
 
   &:hover {
     color: white;
-    cursor: pointer;
+  }
+  
+  svg {
+    display: block;
   }
 `
 

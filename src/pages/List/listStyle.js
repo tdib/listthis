@@ -10,14 +10,31 @@ export const HeaderContainer = styled('div')`
   align-items: center;
 `
 
-export const BackButton = styled(ChevronLeft)`
+export const BackButtonContainer = styled('button')`
+  width: 2em;
+  height: 2em;
   color: var(--text-secondary);
-  margin-right: 1em;
+  background: none;
+  border: none;
+  margin: 0;
+  margin-right: .75em;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   &:hover {
     color: var(--text);
-    cursor: pointer;
   }
+
+  svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
 `
 
 export const AllItemsContainer = styled('div')`

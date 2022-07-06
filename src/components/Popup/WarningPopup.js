@@ -1,6 +1,6 @@
 import { Shadow, WarningPanel, ButtonContainer } from './popupStyle'
 
-import { Header, Subheader, InfoMessage, Button } from '/src/components'
+import { Header, InfoMessage } from '/src/components'
 
 
 const WarningPopup = ({ header, description, buttons }) => {

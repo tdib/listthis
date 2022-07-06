@@ -1,6 +1,6 @@
 import {
   PopupPanel,
-  CloseButton,
+  CloseButtonContainer,
   Shadow,
   TitleField,
   NoteField,
@@ -11,6 +11,7 @@ import { addItemDB, auth } from '/src/services'
 import { useListsStore, useListStore } from '/src/stores'
 
 import { useForm } from 'react-hook-form'
+import { X } from 'lucide-react'
 
 
 const NewItemPopup = ({ closeFn }) => {
@@ -48,9 +49,11 @@ const NewItemPopup = ({ closeFn }) => {
         autoFocus={true}
         autoComplete='off'
         {...register('name')} />
-      <CloseButton onClick={closeFn} />
       <NoteField {...register('note')} />
       <Button disabled={!itemName} type='submit'>Add item</Button>
+      <CloseButtonContainer title='Close panel' onClick={closeFn}>
+        <X />
+      </CloseButtonContainer>
     </PopupPanel>
     <Shadow onClick={closeFn} />
   </>

@@ -1,9 +1,10 @@
-import { CardContainer, Title, LeaveButton } from './listCardStyle'
+import { CardContainer, Title, LeaveButtonContainer } from './listCardStyle'
 
 import { useListStore, useListsStore } from '/src/stores'
 import { auth, leaveListDB } from '/src/services'
 
 import { useNavigate } from 'react-router-dom'
+import { X } from 'lucide-react'
 
 const ListCard = ({ data, openWarningFn }) => {
   const navigate = useNavigate()
@@ -16,10 +17,12 @@ const ListCard = ({ data, openWarningFn }) => {
     navigate(`/list/${listUID}`)
   }}>
     <Title>{name}</Title>
-    <LeaveButton onClick={e => {
+    <LeaveButtonContainer title='Leave list' onClick={e => {
       e.stopPropagation()
       openWarningFn()
-    }} />
+    }}>
+      <X />
+    </LeaveButtonContainer>
   </CardContainer>
 }
 

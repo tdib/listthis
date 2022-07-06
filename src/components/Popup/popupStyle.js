@@ -1,5 +1,4 @@
 import { styled } from 'goober'
-import { X } from 'lucide-react'
 import { forwardRef } from 'react'
 
 export const PopupPanel = styled('form')`
@@ -8,27 +7,13 @@ export const PopupPanel = styled('form')`
   flex-direction: column;
   width: 100vw;
   height: 30em;
-  position: absolute;
+  position: fixed;
   bottom: 0;
   left: 0;
   border-radius: .75em .75em 0 0;
   box-sizing: border-box;
   padding: 1.5em;
   z-index: 1;
-`
-
-export const CloseButton = styled(X)`
-  width: 2em;
-  height: 2em;
-  position: absolute;
-  top: .5em;
-  right: .5em;
-  color: var(--text-secondary);
-
-  &:hover {
-    color: var(--text);
-    cursor: pointer;
-  }
 `
 
 export const Shadow = styled('div')`
@@ -54,6 +39,35 @@ export const TitleField = styled('input', forwardRef)`
 export const NoteField = styled('textarea', forwardRef)`
   margin-bottom: 1em;
 `
+
+export const CloseButtonContainer = styled('button')`
+  width: 2em;
+  height: 2em;
+  position: absolute;
+  top: .5em;
+  right: .5em;
+  color: var(--text-secondary);
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin: 0;
+  padding: 0;
+  font: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    color: var(--text);
+  }
+
+  svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+`
+
 
 // Warning panel only
 export const WarningPanel = styled('div')`

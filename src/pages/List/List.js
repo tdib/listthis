@@ -1,4 +1,4 @@
-import { HeaderContainer, BackButton, AllItemsContainer } from './listStyle'
+import { HeaderContainer, AllItemsContainer, BackButtonContainer } from './listStyle'
 import ListItem from './components/ListItem'
 
 import { Main, Header, TabBar, NewItemPopup, InfoMessage } from '/src/components'
@@ -8,6 +8,7 @@ import { auth } from '/src/services'
 import { useParams, Navigate, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { getList } from '../../services/lists'
+import { ChevronLeft } from 'lucide-react'
 
 const List = () => {
   const { listUID } = useParams()
@@ -40,7 +41,9 @@ const List = () => {
   return <>
     <Main>
       <HeaderContainer>
-        <BackButton onClick={() => navigate('/lists')}/>
+        <BackButtonContainer title='Back to all lists' onClick={() => navigate('/lists')}>
+          <ChevronLeft />
+        </BackButtonContainer>
         <Header>{name}</Header>
       </HeaderContainer>
       {items?.length ? (

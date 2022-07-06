@@ -44,7 +44,7 @@ export const ItemName = styled('span')`
   overflow: hidden;
 
   color: ${p => p.checked ? 'var(--text-secondary)' : 'var(--text)'};
-  transition: all .3s;
+  transition: all .2s;
 `
 
 export const SubLineWrapper = styled('div')`
@@ -64,9 +64,6 @@ export const ItemNote = styled('span')`
   font-size: 0.85em;
   text-overflow: ellipsis;
   overflow: hidden;
-
-  text-decoration: ${p => p.checked ? 'line-through' : 'none'};
-  transition: all .3s;
 `
 
 export const CheckBox = styled('button')`
@@ -75,18 +72,29 @@ export const CheckBox = styled('button')`
   border-color: ${p => (p.checked ? 'var(--white)' : 'var(--text-secondary)')};
   border-width: 0.15em;
   background: ${p => (p.checked ? 'var(--brand)' : 'none')};
-  border-radius: 1em;
+  border-radius: 100%;
   width: 2em;
+  min-width: 2em;
   height: 2em;
   margin: 0.6em;
   margin-right: 1em;
 `
 
-export const MoreButton = styled(MoreVertical)`
-  margin-left: auto;
+export const MoreDetailsContainer = styled('button')`
+  background: none;
+  border: none;
+  margin: 0;
+  padding: 0;
   margin-right: 0.5em;
   align-self: center;
   color: var(--text-secondary);
+  font: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  min-width: 1.25em;
+
 
   &:hover {
     color: var(--text);
@@ -94,5 +102,11 @@ export const MoreButton = styled(MoreVertical)`
 
   &:active {
     transform: scale(0.95);
+  }
+
+  svg {
+    width: 100%;
+    height: 100%;
+    display: block;
   }
 `

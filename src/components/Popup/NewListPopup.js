@@ -1,10 +1,11 @@
-import { PopupPanel, CloseButton, TitleField, Shadow } from './popupStyle'
+import { PopupPanel, CloseButtonContainer, TitleField, Shadow } from './popupStyle'
 
 import { Button } from '/src/components'
 import { createListDB, auth } from '/src/services'
 import { useListsStore } from '/src/stores'
 
 import { useForm } from 'react-hook-form'
+import { X } from 'lucide-react'
 
 
 const NewListPopup = ({ closeFn }) => {
@@ -36,8 +37,10 @@ const NewListPopup = ({ closeFn }) => {
         autoFocus={true}
         autoComplete='off'
         {...register('listName')} />
-      <CloseButton onClick={closeFn} />
       <Button disabled={!listName} type='submit'>Create list</Button>
+      <CloseButtonContainer title='Close panel' onClick={closeFn}>
+        <X />
+      </CloseButtonContainer>
     </PopupPanel>
     <Shadow onClick={closeFn} />
   </>

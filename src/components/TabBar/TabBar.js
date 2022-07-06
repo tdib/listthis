@@ -1,8 +1,8 @@
 import { TabBarContainer, AddButtonCircle, AddButtonPlus } from './tabBarStyle'
 
-const TabBar = ({ clickFn }) => {
+const TabBar = ({ title, clickFn }) => {
   return <TabBarContainer>
-    <AddButtonCircle onClick={clickFn}>
+    <AddButtonCircle title={title} onClick={clickFn}>
       <AddButtonPlus />
     </AddButtonCircle>
   </TabBarContainer>

@@ -1,4 +1,3 @@
-import { useListStore } from '/src/stores';
 import {
   AllItemsContainer,
   ListItemContainer,
@@ -6,10 +5,14 @@ import {
   ItemNote,
   TextContainer,
   CheckBox,
-  MoreButton,
+  MoreDetailsContainer,
   ImageIcon,
   SubLineWrapper,
 } from './listItemStyle.js'
+
+import { useListStore } from '/src/stores';
+
+import { MoreVertical } from 'lucide-react';
 
 const ListItem = ({ item }) => {
   const toggleItem = useListStore(s => s.toggleItem)
@@ -24,11 +27,11 @@ const ListItem = ({ item }) => {
           <ItemNote checked={isChecked}>{note}</ItemNote>
         </SubLineWrapper>
       </TextContainer>
-      <MoreButton
-        onClick={e => {
+      <MoreDetailsContainer title='More details' onClick={e => {
           e.stopPropagation()
-        }}
-      />
+        }}>
+        <MoreVertical />
+      </MoreDetailsContainer>
     </ListItemContainer>
     {/* <ItemDetailsPopup item={item} isOpen={itemDetailsOpen} onClose={() => setItemDetailsOpen(false)} /> */}
 

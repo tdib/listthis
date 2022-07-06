@@ -1,4 +1,4 @@
-import { CardsContainer, HeaderContainer, LogOutButton, InfoContainer } from './listSelectionStyle'
+import { CardsContainer, HeaderContainer, LogOutButtonContainer, InfoContainer } from './listSelectionStyle'
 import ListCard from './components/ListCard/ListCard'
 
 import { auth, getAllLists, leaveListDB } from '/src/services'
@@ -8,6 +8,7 @@ import { useListsStore } from '/src/stores'
 import { useState, useEffect } from 'react'
 import { useNavigate, Navigate } from 'react-router-dom'
 import { onAuthStateChanged, signOut } from 'firebase/auth'
+import { LogOut } from 'lucide-react'
 
 const ListSelection = () => {
   const navigate = useNavigate()
@@ -43,10 +44,12 @@ const ListSelection = () => {
     <Main>
       <HeaderContainer>
         <Header>Your lists</Header>
-        <LogOutButton onClick={() => {
+        <LogOutButtonContainer title='Log out' onClick={() => {
           signOut(auth)
           navigate('/login')
-        }} />
+        }}>
+          <LogOut />
+        </LogOutButtonContainer>
       </HeaderContainer>
         {lists?.length ? (
           <CardsContainer>
@@ -83,7 +86,7 @@ const ListSelection = () => {
         }}>Leave</Button>
       ]} />}
     </Main>
-    <TabBar clickFn={() => setNewListPopupOpen(true)} />
+    <TabBar title='Create new list' clickFn={() => setNewListPopupOpen(true)} />
   </>
 }
 
