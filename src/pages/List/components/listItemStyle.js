@@ -1,5 +1,4 @@
 import { styled } from 'goober'
-import { MoreVertical } from 'lucide-react'
 import { Image } from 'lucide-react'
 
 
@@ -83,7 +82,7 @@ export const CheckBox = styled('button')`
 export const MoreDetailsContainer = styled('button')`
   background: none;
   border: none;
-  margin: 0;
+  margin: auto;
   padding: 0;
   margin-right: 0.5em;
   align-self: center;
