@@ -3,12 +3,15 @@ import { persist } from 'zustand/middleware'
 
 const useListsStore = create(
   persist(
-    set => ({
+    (set, get) => ({
       lists: null,
+      currListUID: null,
+
+      setCurrListUID: listUID => set({ currListUID: listUID }),
+      getCurrList: () => get().lists.find(list => list.listUID === get().currListUID),
 
       loadLists: lists => set({ lists: lists }),
-
-      unloadLists: () => set({ lists: null }),
+      unloadLists: () => set({ lists: null, currListUID: null }),
 
       leaveList: listToRemoveID =>
         set(state => ({
@@ -20,15 +23,17 @@ const useListsStore = create(
           lists: [...state.lists, list],
         })),
 
-      // TODO: update list
-      upsertList: newList => {
+      upsertList: newList => 
         set(state => ({
           lists: state.lists.find(list => list.listUID === newList.listUID)
           ? state.lists.map(list => list.listUID === newList.listUID ? newList : list)
           : [...state.lists, newList]
-          // lists: state.lists.map(list => list.listUID === newList.listUID ? newList : list)
-        }))
-      }
+        })),
+
+
+      // add item
+      // remove item
+      // check item
     }),
     { name: 'listsCache' }
   )

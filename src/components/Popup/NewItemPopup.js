@@ -8,7 +8,7 @@ import {
 
 import { Button } from '/src/components'
 import { addItemDB, auth } from '/src/services'
-import { useListsStore, useListStore } from '/src/stores'
+import { useListsStore } from '/src/stores'
 
 import { useForm } from 'react-hook-form'
 import { X } from 'lucide-react'
@@ -16,10 +16,11 @@ import { X } from 'lucide-react'
 
 const NewItemPopup = ({ closeFn }) => {
   const { register, handleSubmit, watch } = useForm()
-  const addItem = useListStore(s => s.addItem)
+  // const addItem = useListStore(s => s.addItem)
   const upsertList = useListsStore(s => s.upsertList)
+  const currList = useListsStore(s => s.getCurrList)()
+  const { name, items, listUID, associatedUUIDs } = currList
   const { lists } = useListsStore()
-  const { listUID, associatedUUIDs, name, items } = useListStore()
   const itemName = watch('name')
 
   const createNewItemFn = (data) => {
@@ -32,8 +33,6 @@ const NewItemPopup = ({ closeFn }) => {
 
     // Add new item in firestore
     addItemDB({ item, listUID })
-    // Add new item in current list store
-    addItem(item)
     // Add new item in lists store
     upsertList({ listUID, associatedUUIDs, name, items: [ ...items, item ]})
 

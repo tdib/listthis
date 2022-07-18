@@ -2,7 +2,6 @@ import { Shadow, WarningPanel, ButtonContainer, WarningContainer } from './popup
 
 import { Header, InfoMessage } from '/src/components'
 
-
 const WarningPopup = ({ header, description, buttons }) => {
   return <>
     <Shadow />

@@ -17,6 +17,12 @@ const ListSelection = () => {
   const [warningPopupOpen, setWarningPopupOpen] = useState(false)
   const [listToLeaveUID, setListToLeaveUID] = useState()
   const leaveList = useListsStore(s => s.leaveList)
+  const setCurrListUID = useListsStore(s => s.setCurrListUID)
+  const curr = useListsStore(s => s.currListUID)
+  const currList = useListsStore(s => s.getCurrList)()
+  console.log('lists', lists);
+  console.log('currUID', curr);
+  console.log('currList (lists page)', currList);
 
   onAuthStateChanged(auth, (user) => {
     if (!user) {
