@@ -1,6 +1,6 @@
 import { styled } from 'goober'
 
-const Main = styled('main')`
+const Main = styled('div')`
   padding: 1em;
   display: flex;
   flex: 1;
@@ -9,6 +9,8 @@ const Main = styled('main')`
   ${p => p.$vCentered && `
     justify-content: center;
   `}
+
+  overflow-y: overlay;
 `
 
 export default Main
