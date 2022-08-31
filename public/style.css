@@ -5,12 +5,13 @@
 :root {
   --brand: hsl(250, 50%, 52%);
   --text-secondary: hsl(0, 0%, 60%);
+  --shadow: hsla(0, 0%, 0%, 30%);
   --link: hsl(174, 20%, 50%);
   --error: hsl(3, 40%, 50%);
-}
+  --disabled-button: hsl(0, 0%, 45%);
 
-.dark {
-  --background: rgb(35, 35, 35);
+  /* Dark theme (default) */
+  --background: hsl(0, 0%, 14%);
   --surface: hsl(0, 0%, 21%);
   --active: hsl(0, 0%, 21%);
   --text: hsl(0, 0%, 96%);
