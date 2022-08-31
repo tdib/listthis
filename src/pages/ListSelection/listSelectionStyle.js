@@ -24,7 +24,7 @@ export const LogOutButtonContainer = styled('button')`
   padding: 0;
 
   &:hover {
-    color: white;
+    color: var(--text);
   }
   
   svg {

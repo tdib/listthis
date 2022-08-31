@@ -27,7 +27,7 @@ export const SupportText = styled('span')`
 export const Label = styled('label')`
   display: block;
   text-align: left;
-  color: var(--white);
+  color: var(--text);
   margin-bottom: .3em;
 `
 

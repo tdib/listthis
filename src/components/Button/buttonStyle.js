@@ -7,7 +7,7 @@ export const StyledButton = styled('button')`
   border-radius: .4rem;
   /* TODO: lower weight */
   font-weight: bold;
-  color: var(--white);
+  color: white;
   transition: transform .075s ease;
   text-decoration: none;
   cursor: pointer;

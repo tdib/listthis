@@ -38,6 +38,10 @@ export const TitleField = styled('input', forwardRef)`
 
 export const NoteField = styled('textarea', forwardRef)`
   margin-bottom: 1em;
+  background-color: var(--background);
+  width: 100%;
+  min-width: 100%;
+  max-width: 100%;
 `
 
 export const CloseButtonContainer = styled('button')`
