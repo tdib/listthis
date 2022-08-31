@@ -10,8 +10,10 @@
   },
   "dependencies": {
     "@dnd-kit/core": "^6.0.5",
+    "csstype": "^3.0.10",
+    "dayjs": "^1.11.3",
     "firebase": "^9.8.4",
-    "goober": "^2.1.10",
+    "goober": "^2.1.11",
     "lucide-react": "^0.72.0",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
@@ -22,7 +24,7 @@
     "zustand": "^4.0.0-rc.1"
   },
   "devDependencies": {
-    "parcel": "^2.6.2",
+    "parcel": "^2.7.0",
     "process": "^0.11.10"
   }
 }

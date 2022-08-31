@@ -17,12 +17,12 @@ const ListSelection = () => {
   const [warningPopupOpen, setWarningPopupOpen] = useState(false)
   const [listToLeaveUID, setListToLeaveUID] = useState()
   const leaveList = useListsStore(s => s.leaveList)
+
+  // Ensure current list UID is null on page (applicable on refreshes)
   const setCurrListUID = useListsStore(s => s.setCurrListUID)
-  const curr = useListsStore(s => s.currListUID)
-  const currList = useListsStore(s => s.getCurrList)()
-  console.log('lists', lists);
-  console.log('currUID', curr);
-  console.log('currList (lists page)', currList);
+  useEffect(() => {
+    setCurrListUID(null)
+  }, [])
 
   onAuthStateChanged(auth, (user) => {
     if (!user) {
@@ -79,11 +79,11 @@ const ListSelection = () => {
       // TODO: list name
       description={'Are you sure you would like to leave this list? This action cannot be undone.'}
       buttons={[
-        <Button style={{ flex: 1 }} $secondary onClick={() => {
+        <Button key={0} style={{ flex: 1 }} $secondary onClick={() => {
           setListToLeaveUID()
           setWarningPopupOpen(false)
         }}>Cancel</Button>,
-        <Button style={{ flex: 1 }} onClick={() => {
+        <Button key={1} style={{ flex: 1 }} onClick={() => {
           // Remove user from firestore list
           leaveListDB({ UUID: auth.currentUser.uid, listUID: listToLeaveUID })
           // Remove user from zustand store list

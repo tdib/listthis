@@ -91,3 +91,6 @@ export const ButtonContainer = styled('div')`
   gap: 1em;
   justify-content: right;
 `
+
+
+// Item details popup only
