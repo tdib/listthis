@@ -75,19 +75,23 @@ export const CloseButtonContainer = styled('button')`
 
 // Warning panel only
 export const WarningContainer = styled('div')`
-  display: flex;
-  place-items: center;
-  justify-content: center;
-  align-items: flex-end;
+  position: fixed;
+  background-color: var(--shadow);
+  height: 100%;
+  width: 100%;
+  left: 0;
+  top: 0;
 `
 
 export const WarningPanel = styled('div')`
-  position: fixed;
+  position: absolute;
   border-radius: .5em;
   background: var(--surface);
   box-sizing: border-box;
   padding: 1.5em 2.5em;
   margin: 2em 1em;
+  top: 50%;
+  transform: translateY(calc(-50% - var(--tabbar-size)));
 `
 
 export const ButtonContainer = styled('div')`

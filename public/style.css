@@ -3,6 +3,8 @@
 }
 
 :root {
+  --tabbar-size: 3.5em;
+
   --brand: hsl(250, 50%, 52%);
   --text-secondary: hsl(0, 0%, 60%);
   --shadow: hsla(0, 0%, 0%, 30%);

@@ -5,7 +5,7 @@ export const TabBarContainer = styled('div')`
   position: fixed;
   bottom: 0;
   width: 100%;
-  height: 3.5em;
+  height: var(--tabbar-size);
   background: var(--surface);
   box-shadow: 0 0 50px var(--shadow);
 `

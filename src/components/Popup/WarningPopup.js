@@ -4,7 +4,6 @@ import { Header, InfoMessage } from '/src/components'
 
 const WarningPopup = ({ header, description, buttons }) => {
   return <>
-    <Shadow />
     <WarningContainer>
       <WarningPanel>
         <Header style={{ marginBottom: '.25em'}}>{header}</Header>
