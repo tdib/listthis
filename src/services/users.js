@@ -1,5 +1,5 @@
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth'
-import { doc, setDoc } from 'firebase/firestore'
+import { collection, doc, getDoc, setDoc } from 'firebase/firestore'
 import { auth, db } from './firebase'
 
 // Create user in firebase (authentication) and firestore
@@ -15,6 +15,10 @@ export const createUser = async ({ email, displayName, password }) => {
   return user
 }
 
-export const getUser = async userID => {
-  return doc(db, 'users', userID)
+export const getUserRecord = async userUID => {
+  // auth.getUser(userUID)
+  //   .catch(err => {
+  //     console.error(err)
+  //   })
+  // return await getDoc(db, 'users', userID)
 }

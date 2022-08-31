@@ -8,6 +8,8 @@ export const Form = styled('form')`
   border-radius: .5em;
   background: var(--surface);
   margin-bottom: 6em;
+  max-width: 25em;
+  align-self: center;
 `
 
 export const SubmitContainer = styled('div')`

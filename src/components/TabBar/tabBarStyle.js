@@ -2,9 +2,6 @@ import { styled } from 'goober'
 import { Plus } from 'lucide-react'
 
 export const TabBarContainer = styled('div')`
-  position: fixed;
-  left: 0;
-  bottom: 0;
   width: 100%;
   height: 3.5em;
   background: var(--surface);

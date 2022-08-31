@@ -1,12 +1,16 @@
 import { styled } from 'goober'
-import { X } from 'lucide-react'
 
-export const CardContainer = styled('button')`
+export const CardContainer = styled('div')`
+  position: relative;
+`
+
+export const CardSurface = styled('button')`
   position: relative;
   display: flex;
   padding: 1.75em 2.75em 1.75em 1.5em;
   border-radius: .5em;
   height: fit-content;
+  width: 100%;
   background: var(--surface);
   word-break: break-word;
   border: none;

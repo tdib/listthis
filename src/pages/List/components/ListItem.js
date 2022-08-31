@@ -10,15 +10,29 @@ import {
   SubLineWrapper,
 } from './listItemStyle.js'
 
-import { useListStore } from '/src/stores';
+import { useListsStore } from '/src/stores';
+import { ItemDetailsPopup } from '/src/components'
 
 import { MoreVertical } from 'lucide-react';
+import { useState } from 'react'
 
 const ListItem = ({ item }) => {
-  const toggleItem = useListStore(s => s.toggleItem)
+  // const toggleItem = useListStore(s => s.toggleItem)
+  const [itemDetailsOpen, setItemDetailsOpen] = useState(false)
+  const upsertList = useListsStore(s => s.upsertList)
+  const getCurrList = useListsStore(s => s.getCurrList)
   const { authorID, dateAdded, imageURL, isChecked, itemUID, name, note } = item
 
-  return <ListItemContainer onClick={() => toggleItem(itemUID)}>
+  return <>
+    <ListItemContainer onClick={() => {
+      const currList = getCurrList()
+      upsertList({
+        ...currList,
+        items: currList.items.map((item) => 
+          item.itemUID === itemUID ? { ...item, isChecked: !item.isChecked} : item
+        )
+      })
+    }}>
       <CheckBox checked={isChecked} />
       <TextContainer>
         <ItemName checked={isChecked}>{name}</ItemName>
@@ -29,12 +43,17 @@ const ListItem = ({ item }) => {
       </TextContainer>
       <MoreDetailsContainer title='More details' onClick={e => {
           e.stopPropagation()
-        }}>
+          setItemDetailsOpen(true)
+        }}
+      >
         <MoreVertical />
       </MoreDetailsContainer>
     </ListItemContainer>
-    {/* <ItemDetailsPopup item={item} isOpen={itemDetailsOpen} onClose={() => setItemDetailsOpen(false)} /> */}
-
+    {itemDetailsOpen && <ItemDetailsPopup
+      item={item}
+      closeFn={() => setItemDetailsOpen(false)} />
+    }
+  </>
 }
 
 export default ListItem

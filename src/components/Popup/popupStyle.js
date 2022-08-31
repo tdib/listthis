@@ -70,19 +70,20 @@ export const CloseButtonContainer = styled('button')`
 
 
 // Warning panel only
+export const WarningContainer = styled('div')`
+  display: flex;
+  place-items: center;
+  justify-content: center;
+  align-items: flex-end;
+`
+
 export const WarningPanel = styled('div')`
-  --width: 22em;
-  --height: 12.5em;
   position: fixed;
   border-radius: .5em;
   background: var(--surface);
-  width: var(--width);
-  height: var(--height);
   box-sizing: border-box;
   padding: 1.5em 2.5em;
-  /* margin-bottom: 6em; */
-  top: calc(50% - calc(var(--height) / 2));
-  left: calc(50% - calc(var(--width) / 2));
+  margin: 2em 1em;
 `
 
 export const ButtonContainer = styled('div')`
@@ -90,3 +91,6 @@ export const ButtonContainer = styled('div')`
   gap: 1em;
   justify-content: right;
 `
+
+
+// Item details popup only

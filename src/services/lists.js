@@ -1,6 +1,7 @@
 import {
   collection,
   addDoc,
+  setDoc,
   getDocs,
   doc,
   firebase,
@@ -67,7 +68,7 @@ export const addItemDB = async ({ item, listUID }) => {
   })
 }
 
-export const getList = async listUID => {
+export const getList = async (listUID) => {
   const listDoc = await getDoc(doc(db, 'lists', listUID))
   return listDoc.data()
 }
@@ -78,4 +79,11 @@ export const getAllLists = async () => {
   let allLists = []
   allListsDocs.forEach(doc => allLists.push({ ...doc.data(), listUID: doc.id }))
   return allLists
+}
+
+// Given a list, update the list with the corresponding ID in firestore
+export const upsertListDB = async (list) => {
+  await setDoc(doc(db, 'lists', list.listUID), {
+    ...list
+  })
 }
