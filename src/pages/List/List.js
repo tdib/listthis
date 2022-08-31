@@ -2,15 +2,14 @@ import { HeaderContainer, AllItemsContainer, BackButtonContainer } from './listS
 import ListItem from './components/ListItem'
 
 import { Main, Header, TabBar, NewItemPopup, InfoMessage } from '/src/components'
-// import { useListStore } from '/src/stores'
-import { auth } from '/src/services'
+import { auth, upsertListDB } from '/src/services'
+import { useListsStore } from '/src/stores'
 
 import { useParams, Navigate, useNavigate } from 'react-router-dom'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { onAuthStateChanged } from 'firebase/auth'
-import { getList } from '../../services/lists'
 import { ChevronLeft } from 'lucide-react'
-import useListsStore from '../../stores/useListsStore'
+import { debounce } from 'lodash'
 
 const List = () => {
   const { listUID } = useParams()
@@ -19,7 +18,23 @@ const List = () => {
   const setCurrListUID = useListsStore(s => s.setCurrListUID)
   // TODO: why does this need to be destructured like this?
   const { getCurrList } = useListsStore()
-  const { name, items } = getCurrList()
+  const { name, items, associatedUUIDs } = getCurrList()
+  const currList = {
+    listUID,
+    name,
+    items,
+    associatedUUIDs
+  }
+
+  // Update list in database after 2s of inactivity
+  const debouncedListUpdate = useCallback(
+    debounce((currList) => upsertListDB(currList), 2000), []
+  )
+  useEffect(() => {
+    if (currList) {
+      debouncedListUpdate(currList)
+    }
+  }, [currList])
 
   onAuthStateChanged(auth, (user) => {
     if (!user) {
@@ -49,6 +64,7 @@ const List = () => {
     <Main>
       <HeaderContainer>
         <BackButtonContainer title='Back to all lists' onClick={() => {
+          upsertListDB(currList)
           setCurrListUID(null)
           navigate('/lists')
         }}>

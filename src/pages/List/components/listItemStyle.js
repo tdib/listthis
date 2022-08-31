@@ -1,7 +1,6 @@
 import { styled } from 'goober'
 import { Image } from 'lucide-react'
 
-
 export const ListItemContainer = styled('div')`
   display: flex;
   user-select: none;

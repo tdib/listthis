@@ -24,35 +24,35 @@ const ListItem = ({ item }) => {
   const { authorID, dateAdded, imageURL, isChecked, itemUID, name, note } = item
 
   return <>
-  
-  <ListItemContainer onClick={() => {
-    const currList = getCurrList()
-    upsertList({
-      ...currList,
-      items: currList.items.map(item => 
-        item.itemUID === itemUID ? { ...item, isChecked: !item.isChecked} : item
-      )
-    })
-  }}>
-    <CheckBox checked={isChecked} />
-    <TextContainer>
-      <ItemName checked={isChecked}>{name}</ItemName>
-      <SubLineWrapper>
-        {imageURL && <ImageIcon size={15} />}
-        <ItemNote checked={isChecked}>{note}</ItemNote>
-      </SubLineWrapper>
-    </TextContainer>
-    <MoreDetailsContainer title='More details' onClick={e => {
-        e.stopPropagation()
-        setItemDetailsOpen(true)
-      }}>
-      <MoreVertical />
-    </MoreDetailsContainer>
-  </ListItemContainer>
-  {itemDetailsOpen && <ItemDetailsPopup
-    item={item}
-    closeFn={() => setItemDetailsOpen(false)} />
-  }
+    <ListItemContainer onClick={() => {
+      const currList = getCurrList()
+      upsertList({
+        ...currList,
+        items: currList.items.map((item) => 
+          item.itemUID === itemUID ? { ...item, isChecked: !item.isChecked} : item
+        )
+      })
+    }}>
+      <CheckBox checked={isChecked} />
+      <TextContainer>
+        <ItemName checked={isChecked}>{name}</ItemName>
+        <SubLineWrapper>
+          {imageURL && <ImageIcon size={15} />}
+          <ItemNote checked={isChecked}>{note}</ItemNote>
+        </SubLineWrapper>
+      </TextContainer>
+      <MoreDetailsContainer title='More details' onClick={e => {
+          e.stopPropagation()
+          setItemDetailsOpen(true)
+        }}
+      >
+        <MoreVertical />
+      </MoreDetailsContainer>
+    </ListItemContainer>
+    {itemDetailsOpen && <ItemDetailsPopup
+      item={item}
+      closeFn={() => setItemDetailsOpen(false)} />
+    }
   </>
 }
 
