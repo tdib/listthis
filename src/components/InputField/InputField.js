@@ -8,8 +8,8 @@ const InputField = styled('input', forwardRef)`
   height: 2em;
   border: none;
   text-indent: 0.5rem;
-  background: var(--white);
-  color: var(--black);
+  background: var(--background);
+  color: var(--text);
 
   &:focus {
     outline: solid;

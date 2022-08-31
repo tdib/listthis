@@ -1,21 +1,34 @@
+* {
+  font-family: 'Poppins', sans-serif;
+}
+
 :root {
-  --white: hsl(0, 0%, 95%);
-  --black: hsl(0, 0%, 5%);
-  --brand: hsl(252, 50%, 52%);
-  --background: rgb(35, 35, 35);
-  --surface: hsl(0, 0%, 21%);
-  --text: rgb(245, 245, 245);
-  --text-secondary: grey;
-  --link: hsl(174, 20%, 50%);
-  --error: hsl(3, 34%, 50%);
+  --tabbar-size: 3.5em;
+
+  --brand: hsl(250, 50%, 52%);
+  --text-secondary: hsl(0, 0%, 60%);
   --shadow: hsla(0, 0%, 0%, 30%);
+  --link: hsl(174, 20%, 50%);
+  --error: hsl(3, 40%, 50%);
   --disabled-button: hsl(0, 0%, 45%);
+
+  /* Dark theme (default) */
+  --background: hsl(0, 0%, 14%);
+  --surface: hsl(0, 0%, 21%);
+  --active: hsl(0, 0%, 21%);
+  --text: hsl(0, 0%, 96%);
+}
+
+.light {
+  --background: hsl(0, 0%, 92%);
+  --surface: hsl(0, 0%, 100%);
+  --active: hsl(0, 0%, 83%);
+  --text: hsl(0, 0%, 5%);
 }
 
 body {
   color-scheme: light dark;
   margin: 0;
-  font-family: sans-serif;
   /* background: var(--background); */
   overflow-y: overlay;
   /* Fixes keyboard pushing elements up on mobile */

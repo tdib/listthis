@@ -8,7 +8,7 @@ export const ListItemContainer = styled('div')`
   padding: .25em;
 
   &:hover {
-    background-color: var(--surface);
+    background-color: var(--active);
 
     > button {
       transform: scale(1.05);
@@ -67,7 +67,7 @@ export const ItemNote = styled('span')`
 export const CheckBox = styled('button')`
   align-self: center;
   border-style: solid;
-  border-color: ${p => (p.checked ? 'var(--white)' : 'var(--text-secondary)')};
+  border-color: ${p => (p.checked ? 'var(--text)' : 'var(--text-secondary)')};
   border-width: 0.15em;
   background: ${p => (p.checked ? 'var(--brand)' : 'none')};
   border-radius: 100%;

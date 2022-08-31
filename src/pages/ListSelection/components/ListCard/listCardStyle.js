@@ -2,6 +2,14 @@ import { styled } from 'goober'
 
 export const CardContainer = styled('div')`
   position: relative;
+  height: 11em;
+  aspect-ratio: 3 / 2;
+
+  @media (max-width: 450px) {
+    height: fit-content;
+
+    aspect-ratio: 0;
+  }
 `
 
 export const CardSurface = styled('button')`
@@ -11,6 +19,7 @@ export const CardSurface = styled('button')`
   border-radius: .5em;
   height: fit-content;
   width: 100%;
+  height: 100%;
   background: var(--surface);
   word-break: break-word;
   border: none;

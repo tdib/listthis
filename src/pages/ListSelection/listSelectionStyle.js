@@ -3,9 +3,16 @@ import { LogOut } from 'lucide-react'
 
 export const CardsContainer = styled('div')`
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
   gap: 1.25em;
   margin-bottom: 5em;
+  justify-content: center;
+
+  @media (max-width: 450px) {
+    flex-direction: column;
+    height: fit-content;
+    flex-grow: 0;
+  }
 `
 
 export const HeaderContainer = styled('div')`
@@ -24,7 +31,7 @@ export const LogOutButtonContainer = styled('button')`
   padding: 0;
 
   &:hover {
-    color: white;
+    color: var(--text);
   }
   
   svg {
