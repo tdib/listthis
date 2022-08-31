@@ -14,6 +14,10 @@ export const PopupPanel = styled('form')`
   box-sizing: border-box;
   padding: 1.5em;
   z-index: 1;
+
+  @media (max-width: 450px) {
+    height: min-content;
+  }
 `
 
 export const Shadow = styled('div')`
@@ -42,6 +46,16 @@ export const NoteField = styled('textarea', forwardRef)`
   width: 100%;
   min-width: 100%;
   max-width: 100%;
+  max-height: 80vh;
+  box-sizing: border-box;
+  border-radius: .4em;
+  border: none;
+  padding: .75em;
+  font-size: 1em;
+
+  &:focus {
+    outline: 2px solid var(--brand);
+  }
 `
 
 export const CloseButtonContainer = styled('button')`
