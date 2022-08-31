@@ -1,3 +1,7 @@
+* {
+  font-family: 'Poppins', sans-serif;
+}
+
 :root {
   --white: hsl(0, 0%, 95%);
   --black: hsl(0, 0%, 5%);
@@ -15,7 +19,6 @@
 body {
   color-scheme: light dark;
   margin: 0;
-  font-family: sans-serif;
   /* background: var(--background); */
   overflow-y: overlay;
   /* Fixes keyboard pushing elements up on mobile */
