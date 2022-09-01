@@ -6,8 +6,7 @@ export const StyledButton = styled('button')`
   align-items: center;
   justify-content: center;
   padding: .5em .75em;
-  background: ${p => p.$secondary ? 'var(--background)' : 'var(--brand)'};
-  background: ${p => p.$warning ? 'var(--error)' : 'var(--brand)'};
+  background: ${p => p.$warning ? 'var(--error)' : p.$secondary ? 'var(--background)' : 'var(--brand)'};
   border: none;
   border-radius: .4rem;
   font-weight: 600;

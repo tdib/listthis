@@ -44,7 +44,7 @@ const Register = () => {
     navigate('/login')
   }
 
-  return <Main $vCentered>
+  return <Main $vCentered $hCentered>
     <HeaderContainer>
       <Header $hCentered>Register</Header>
     </HeaderContainer>
@@ -56,7 +56,7 @@ const Register = () => {
           autoFocus={true}
           required={true}
           type='email'
-          defaultValue={'thomas.dib02@gmail.com'}
+          defaultValue={'test@test.com'}
           placeholder='johndoe@example.com'
           {...register('email')}
         />
@@ -66,7 +66,7 @@ const Register = () => {
         <Label htmlFor='displayName'>Display Name</Label>
         <InputField
           required={true}
-          defaultValue={'dib'}
+          defaultValue={'test'}
           placeholder='johndoe12'
           {...register('displayName')}
         />
@@ -77,7 +77,7 @@ const Register = () => {
           required={true}
           type='password'
           minLength={6}
-          defaultValue='ffffff'
+          defaultValue='testtest'
           {...register('password')}
         />
       </div>
@@ -86,7 +86,7 @@ const Register = () => {
         <InputField
           required={true}
           type='password'
-          defaultValue='ffffff'
+          defaultValue='testtest'
           {...register('confirmPassword')}
         />
       </div>

@@ -2,7 +2,7 @@ import { CardsContainer, HeaderContainer, HeaderButtonContainer, InfoContainer }
 import ListCard from './components/ListCard/ListCard'
 
 import { auth, getAllLists, leaveListDB } from '/src/services'
-import { Main, Header, WarningPopup, NewListPopup, TabBar, InfoMessage, Button } from '/src/components'
+import { Main, Header, Modal, NewListPopup, TabBar, InfoMessage, Button } from '/src/components'
 import { useListsStore } from '/src/stores'
 
 import { useState, useEffect } from 'react'
@@ -14,7 +14,7 @@ const ListSelection = () => {
   const navigate = useNavigate()
   const { lists, loadLists } = useListsStore()
   const [newListPopupOpen, setNewListPopupOpen] = useState(false)
-  const [warningPopupOpen, setWarningPopupOpen] = useState(false)
+  const [warningModalOpen, setWarningModalOpen] = useState(false)
   const [listToLeaveUID, setListToLeaveUID] = useState()
   const leaveList = useListsStore(s => s.leaveList)
 
@@ -50,7 +50,8 @@ const ListSelection = () => {
     const currTheme = localStorage.getItem('listthis-theme')
     const otherTheme = currTheme === 'dark' ? 'light' : 'dark'
     localStorage.setItem('listthis-theme', otherTheme)
-    document.querySelector('#app').classList.toggle('light')
+    // document.querySelector('#app').classList.toggle('light')
+    document.body.classList.toggle('light')
   }
 
   return <>
@@ -76,7 +77,7 @@ const ListSelection = () => {
             key={list.listUID}
             data={list}
             openWarningFn={() => {
-              setWarningPopupOpen(true)
+              setWarningModalOpen(true)
               setListToLeaveUID(list.listUID)
             }} 
           />)}
@@ -87,21 +88,21 @@ const ListSelection = () => {
         </InfoContainer>
       )}
       {newListPopupOpen && <NewListPopup closeFn={() => setNewListPopupOpen(false)} />}
-      {warningPopupOpen && <WarningPopup 
+      {warningModalOpen && <Modal 
         header={'Leave this list?'}
         // TODO: list name
         description={'Are you sure you would like to leave this list? This action cannot be undone.'}
         buttons={[
           <Button key={0} style={{ flex: 1 }} $secondary onClick={() => {
             setListToLeaveUID()
-            setWarningPopupOpen(false)
+            setWarningModalOpen(false)
           }}>Cancel</Button>,
           <Button key={1} style={{ flex: 1 }} onClick={() => {
             // Remove user from firestore list
             leaveListDB({ UUID: auth.currentUser.uid, listUID: listToLeaveUID })
             // Remove user from zustand store list
             leaveList(listToLeaveUID)
-            setWarningPopupOpen(false)
+            setWarningModalOpen(false)
           }}>Leave</Button>
         ]}
       />}

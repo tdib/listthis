@@ -51,7 +51,7 @@ const Login = () => {
           required={true}
           id='email'
           type='email'
-          defaultValue={'thomas.dib02@gmail.com'}
+          defaultValue={'test@test.com'}
           placeholder='johndoe@example.com'
           {...register('email')}
         />
@@ -62,7 +62,7 @@ const Login = () => {
           required={true}
           id='password'
           type='password'
-          defaultValue={'ffffff'}
+          defaultValue={'testtest'}
           {...register('password')}
         />
       </div>
