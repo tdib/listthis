@@ -16,9 +16,10 @@ export const createUser = async ({ email, displayName, password }) => {
 }
 
 export const getUserRecord = async userUID => {
-  // auth.getUser(userUID)
+  // console.log('not to worry we are here');
+  // return auth.getUser(userUID)
+  //   .then((user) => console.log('user', user))
   //   .catch(err => {
   //     console.error(err)
   //   })
-  // return await getDoc(db, 'users', userID)
 }

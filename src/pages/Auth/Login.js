@@ -38,7 +38,7 @@ const Login = () => {
       })
   }
 
-  return <Main $vCentered>
+  return <Main $vCentered $hCentered>
     <HeaderContainer>
       <Header $hCentered>Login</Header>
     </HeaderContainer>

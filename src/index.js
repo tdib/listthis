@@ -31,6 +31,17 @@ const root = createRoot(
   document.getElementById('app')
 )
 
+// Set light or dark theme depending on 1) preference override in app, 2) user preference
+const currTheme = localStorage.getItem('listthis-theme')
+const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+if (currTheme === 'light' || !prefersDark) {
+  document.querySelector('#app').classList.add('light')
+  localStorage.setItem('listthis-theme', 'light')
+} else {
+  localStorage.setItem('listthis-theme', 'dark')
+}
+
+
 // Render app
 root.render(
   <BrowserRouter>

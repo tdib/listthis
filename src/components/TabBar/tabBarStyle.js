@@ -2,12 +2,11 @@ import { styled } from 'goober'
 import { Plus } from 'lucide-react'
 
 export const TabBarContainer = styled('div')`
-  position: fixed;
-  bottom: 0;
   width: 100%;
   height: var(--tabbar-size);
   background: var(--surface);
   box-shadow: 0 0 50px var(--shadow);
+  z-index: 1000;
 `
 
 export const AddButtonCircle = styled('button')`

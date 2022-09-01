@@ -1,9 +1,11 @@
 import {
   PopupPanel,
+  Container,
   CloseButtonContainer,
-  Shadow,
-  TitleField,
   NoteField,
+  InputContainer,
+  ImagePreview,
+  ButtonsContainer,
 } from './popupStyle'
 
 import { Button, Header, Subheader } from '/src/components'
@@ -11,8 +13,8 @@ import { addItemDB, auth, getUserRecord } from '/src/services'
 import { useListsStore } from '/src/stores'
 
 import { useForm } from 'react-hook-form'
-import { X } from 'lucide-react'
-import { Timestamp } from 'firebase/firestore'
+import { Trash2, X } from 'lucide-react'
+import { createPortal } from 'react-dom'
 import dayjs from 'dayjs'
 
 
@@ -24,6 +26,7 @@ const ItemDetailsPopup = ({ item, closeFn }) => {
   const { lists } = useListsStore()
   const itemName = watch('name')
   const { authorUID, dateAdded, imageURL, isChecked, itemUID, name, note } = item
+  console.log('our item is', item);
 
   const createNewItemFn = (data) => {
     const item = {
@@ -42,21 +45,27 @@ const ItemDetailsPopup = ({ item, closeFn }) => {
     closeFn()
   }
 
-  const dateAddedTimestamp = new Timestamp(dateAdded.seconds, dateAdded.nanoseconds).toDate()
-  // console.log(getUserRecord(authorUID))
+  const dateAddedTimestamp = dayjs(new Date(dateAdded)).format('dddd, D MMMM')
+  // console.log('GETTING USER RECORD', getUserRecord(authorUID))
 
-  return <>
+  return createPortal(<Container onClick={(e) => e.currentTarget === e.target && closeFn()}>
     <PopupPanel>
-      <Header>{name}</Header>
-      <Subheader>Item added by {authorUID} on {dayjs(dateAddedTimestamp).format('dddd, D MMMM')}</Subheader>
-      <NoteField readOnly={true} defaultValue={note} />
-      {/* <Button disabled={!itemName} type='submit'>Add item</Button> */}
+      <InputContainer>
+        <Header>{name}</Header>
+        <Subheader>Item added by {authorUID} on {dateAddedTimestamp}</Subheader>
+        <NoteField readOnly={true} defaultValue={note} />
+        {<ImagePreview src={imageURL} />}
+        <ButtonsContainer style={{ justifyContent: 'left'}}>
+          <Button icon={<Trash2 />} $warning>Delete item</Button>
+        </ButtonsContainer>
+      </InputContainer>
+
       <CloseButtonContainer title='Close panel' onClick={closeFn}>
         <X />
       </CloseButtonContainer>
     </PopupPanel>
-    <Shadow onClick={closeFn} />
-  </>
+  </Container>,
+  document.body)
 }
 
 export default ItemDetailsPopup

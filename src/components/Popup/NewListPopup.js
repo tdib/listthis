@@ -1,11 +1,12 @@
-import { PopupPanel, CloseButtonContainer, TitleField, Shadow } from './popupStyle'
+import { PopupPanel, CloseButtonContainer, TitleField, InputContainer, Container } from './popupStyle'
 
 import { Button } from '/src/components'
 import { createListDB, auth } from '/src/services'
 import { useListsStore } from '/src/stores'
 
 import { useForm } from 'react-hook-form'
-import { X } from 'lucide-react'
+import { X, ListPlus } from 'lucide-react'
+import { createPortal } from 'react-dom'
 
 
 const NewListPopup = ({ closeFn }) => {
@@ -29,21 +30,24 @@ const NewListPopup = ({ closeFn }) => {
     closeFn()
   }
 
-  return <>
+  return createPortal(<Container onClick={(e) => e.currentTarget === e.target && closeFn()}>
     <PopupPanel onSubmit={handleSubmit(createNewListFn)}>
-      <TitleField
-        placeholder='Enter a list name'
-        required={true}
-        autoFocus={true}
-        autoComplete='off'
-        {...register('listName')} />
-      <Button disabled={!listName} type='submit'>Create list</Button>
+      <InputContainer>
+        <TitleField
+          placeholder='Enter a list name'
+          required={true}
+          autoFocus={true}
+          autoComplete='off'
+          {...register('listName')} />
+        <Button disabled={!listName} type='submit' icon={<ListPlus />}>Create list</Button>
+      </InputContainer>
+
       <CloseButtonContainer title='Close panel' onClick={closeFn}>
         <X />
       </CloseButtonContainer>
     </PopupPanel>
-    <Shadow onClick={closeFn} />
-  </>
+  </Container>,
+  document.body)
 }
 
 export default NewListPopup
