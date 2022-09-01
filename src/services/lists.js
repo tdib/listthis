@@ -51,20 +51,11 @@ export const leaveListDB = async ({ UUID, listUID }) => {
   }
 }
 
+// Send an item to a given list in Firestore
 export const addItemDB = async ({ item, listUID }) => {
-  const { itemUID, name, note, isChecked, imageURL } = item
-  const newItem = {
-    authorUID: auth.currentUser.uid,
-    dateAdded: Timestamp.now(),
-    itemUID,
-    name,
-    note,
-    isChecked,
-    imageURL,
-  }
   const listRef = doc(db, 'lists', listUID)
   await updateDoc(listRef, {
-    items: arrayUnion(newItem)
+    items: arrayUnion(item)
   })
 }
 

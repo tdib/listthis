@@ -22,13 +22,14 @@ export const HeaderContainer = styled('div')`
   padding: 1em;
 `
 
-export const LogOutButtonContainer = styled('button')`
+export const HeaderButtonContainer = styled('button')`
   color: var(--text-secondary);
   align-self: center;
   border: none;
   background: none;
   cursor: pointer;
   padding: 0;
+  margin-inline-start: 1.5em;
 
   &:hover {
     color: var(--text);

@@ -10,6 +10,10 @@ const Main = styled('div')`
     justify-content: center;
   `}
 
+  ${p => p.$hCentered && `
+    align-self: center;
+  `}
+
   overflow-y: overlay;
 `
 

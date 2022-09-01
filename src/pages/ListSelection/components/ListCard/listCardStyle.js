@@ -23,9 +23,10 @@ export const CardSurface = styled('button')`
   background: var(--surface);
   word-break: break-word;
   border: none;
+  overflow: auto;
 
   &:hover {
-    filter: brightness(1.15);
+    background-color: var(--active);
     cursor: pointer;
   }
 `
