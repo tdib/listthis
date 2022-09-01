@@ -13,7 +13,7 @@ export const Container = styled('div')`
 export const PopupPanel = styled('form')`
   background-color: var(--surface);
   display: flex;
-  width: 100vw;
+  width: 100%;
   min-height: 30em;
   position: fixed;
   bottom: 0;
@@ -21,8 +21,9 @@ export const PopupPanel = styled('form')`
   border-radius: .75em .75em 0 0;
   box-sizing: border-box;
   overflow-y: auto;
-  z-index: 1;
   padding-block-end: 2em;
+  /* TODO: fixes mobile pushing modal up? */
+  overflow-y: visible;
 
   @media (max-width: 450px) {
     height: min-content;
@@ -42,6 +43,8 @@ export const TitleField = styled('input', forwardRef)`
 
 export const NoteField = styled('textarea', forwardRef)`
   background-color: var(--background);
+  color: var(--text);
+  /* TODO: fix width issue */
   /* width: 100%; */
   /* min-width: 100%; */
   /* max-width: 100%; */
@@ -96,16 +99,7 @@ export const CloseButtonContainer = styled('button')`
 
 
 // Warning panel only
-export const WarningContainer = styled('div')`
-  position: fixed;
-  background-color: var(--shadow);
-  height: 100%;
-  width: 100%;
-  left: 0;
-  top: 0;
-`
-
-export const WarningPanel = styled('div')`
+export const ModalPanel = styled('div')`
   position: absolute;
   border-radius: .5em;
   background: var(--surface);
@@ -113,7 +107,8 @@ export const WarningPanel = styled('div')`
   padding: 1.5em 2.5em;
   margin: 2em 1em;
   top: 50%;
-  transform: translateY(calc(-50% - var(--tabbar-size)));
+  left: 50%;
+  transform: translate(-50%, calc(-50% - var(--tabbar-size)));
 `
 
 export const ButtonsContainer = styled('div')`
@@ -125,7 +120,9 @@ export const ButtonsContainer = styled('div')`
 
 // Item details popup only
 export const ImagePreview = styled('img')`
+  width: 100%;
   max-width: 40em;
   max-height: 20em;
   object-fit: contain;
+  align-self: center;
 `

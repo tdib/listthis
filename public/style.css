@@ -51,6 +51,7 @@ body {
   display: flex;
   flex-direction: column;
   height: 100vh;
+  transition: background-color .15s ease;
 }
 
 a {

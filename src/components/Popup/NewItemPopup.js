@@ -31,7 +31,7 @@ const NewItemPopup = ({ closeFn }) => {
 
   // Reference to hidden file input
   const hiddenFileInput = useRef()
-  const [uploadedImg, setUploadedImg] = useState()
+  const [uploadedImg, setUploadedImg] = useState(null)
 
   const createNewItemFn = (data) => {
     const item = {

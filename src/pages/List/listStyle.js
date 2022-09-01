@@ -41,4 +41,5 @@ export const AllItemsContainer = styled('div')`
   display: flex;
   flex-direction: column;
   gap: 0.5em;
+  padding-block-end: 2em;
 `

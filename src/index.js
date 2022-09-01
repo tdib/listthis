@@ -35,7 +35,8 @@ const root = createRoot(
 const currTheme = localStorage.getItem('listthis-theme')
 const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
 if (currTheme === 'light' || !prefersDark) {
-  document.querySelector('#app').classList.add('light')
+  // document.querySelector('#app').classList.add('light')
+  document.body.classList.add('light')
   localStorage.setItem('listthis-theme', 'light')
 } else {
   localStorage.setItem('listthis-theme', 'dark')

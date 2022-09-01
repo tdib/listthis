@@ -16,6 +16,8 @@ import { useForm } from 'react-hook-form'
 import { Trash2, X } from 'lucide-react'
 import { createPortal } from 'react-dom'
 import dayjs from 'dayjs'
+import Modal from './Modal'
+import { useState } from 'react'
 
 
 const ItemDetailsPopup = ({ item, closeFn }) => {
@@ -28,6 +30,9 @@ const ItemDetailsPopup = ({ item, closeFn }) => {
   const { authorUID, dateAdded, imageURL, isChecked, itemUID, name, note } = item
   console.log('our item is', item);
 
+  const [deleteModalOpen, setDeleteModalOpen] = useState()
+
+  // TODO: why is this here?
   const createNewItemFn = (data) => {
     const item = {
       ...data,
@@ -45,10 +50,27 @@ const ItemDetailsPopup = ({ item, closeFn }) => {
     closeFn()
   }
 
+  const deleteItem = () => {
+    const newList = {
+      ...currList,
+      items: currList.items.filter((currItem) => currItem.itemUID !== item.itemUID)
+    }
+    upsertList(newList)
+    setDeleteModalOpen(false)
+  }
+
   const dateAddedTimestamp = dayjs(new Date(dateAdded)).format('dddd, D MMMM')
   // console.log('GETTING USER RECORD', getUserRecord(authorUID))
 
-  return createPortal(<Container onClick={(e) => e.currentTarget === e.target && closeFn()}>
+  // if (deleteModalOpen) {
+  //  return 
+  // }
+
+  // return createPortal(
+  return createPortal(<>
+
+
+  <Container onClick={(e) => e.currentTarget === e.target && closeFn()}>
     <PopupPanel>
       <InputContainer>
         <Header>{name}</Header>
@@ -56,15 +78,30 @@ const ItemDetailsPopup = ({ item, closeFn }) => {
         <NoteField readOnly={true} defaultValue={note} />
         {<ImagePreview src={imageURL} />}
         <ButtonsContainer style={{ justifyContent: 'left'}}>
-          <Button icon={<Trash2 />} $warning>Delete item</Button>
+          <Button $warning icon={<Trash2 />} onClick={() => setDeleteModalOpen(true)}>Delete item</Button>
         </ButtonsContainer>
       </InputContainer>
 
+      <div>
       <CloseButtonContainer title='Close panel' onClick={closeFn}>
         <X />
       </CloseButtonContainer>
+
+      </div>
     </PopupPanel>
-  </Container>,
+  </Container>
+
+  {deleteModalOpen && 
+    <Modal
+      header='Delete this item?'
+      description='Are you sure you would like to delete this item? This action cannot be undone.'
+      buttons={[
+        <Button $secondary onClick={() => setDeleteModalOpen(false)}>Cancel</Button>,
+        <Button onClick={deleteItem}>Confirm</Button>
+      ]}
+    />
+  }
+  </>,
   document.body)
 }
 
