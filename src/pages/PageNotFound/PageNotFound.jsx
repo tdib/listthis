@@ -1,4 +1,4 @@
-import { Container, Link, SupportText } from './pageNotFoundStyle'
+import { Container, SupportText } from './pageNotFoundStyle'
 
 import { Main, Header, Button } from "/src/components"
 

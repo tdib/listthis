@@ -7,7 +7,6 @@ import { setup } from 'goober'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { createRoot } from 'react-dom/client'
 import { onAuthStateChanged, signOut } from 'firebase/auth'
-import { initializeApp } from 'firebase/app'
 
 // Set up goober to use React
 setup(

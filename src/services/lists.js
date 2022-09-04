@@ -4,21 +4,13 @@ import {
   setDoc,
   getDocs,
   doc,
-  firebase,
-  firestore,
-  FieldValue,
   updateDoc,
-  update,
   getDoc,
   query,
   where,
-  documentId,
-  FieldValue,
-  doc,
   arrayRemove,
   deleteDoc,
   arrayUnion,
-  Timestamp
 } from 'firebase/firestore'
 import { listsRef, db, auth } from './firebase'
 

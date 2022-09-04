@@ -8,6 +8,7 @@ export const Container = styled('div')`
   top: 0;
   left: 0;
   background-color: var(--shadow);
+  z-index: 2;
 `
 
 export const PopupPanel = styled('form')`

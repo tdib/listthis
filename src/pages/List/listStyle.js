@@ -1,5 +1,4 @@
 import { styled } from 'goober'
-import { ChevronLeft } from 'lucide-react'
 
 export const HeaderContainer = styled('div')`
   display: flex;
@@ -24,6 +23,7 @@ export const BackButtonContainer = styled('button')`
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 
   &:hover {
     color: var(--text);
