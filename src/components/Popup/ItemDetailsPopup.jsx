@@ -17,7 +17,7 @@ import { Trash2, X } from 'lucide-react'
 import { createPortal } from 'react-dom'
 import dayjs from 'dayjs'
 import Modal from './Modal'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 
 const ItemDetailsPopup = ({ item, closeFn }) => {
@@ -29,6 +29,16 @@ const ItemDetailsPopup = ({ item, closeFn }) => {
   const itemName = watch('name')
   const { authorUID, dateAdded, imageURL, isChecked, itemUID, name, note } = item
   console.log('our item is', item);
+  const [displayName, setDisplayName] = useState()
+
+  useEffect(() => {
+    const getAuthorDisplayName = async () => {
+      const authorUser = await getUserRecord(authorUID)
+      
+      setDisplayName(authorUser.displayName)
+    }
+    getAuthorDisplayName()
+  }, [authorUID])
 
   const [deleteModalOpen, setDeleteModalOpen] = useState()
 
@@ -58,9 +68,11 @@ const ItemDetailsPopup = ({ item, closeFn }) => {
     upsertList(newList)
     setDeleteModalOpen(false)
   }
+  
+
 
   const dateAddedTimestamp = dayjs(new Date(dateAdded)).format('dddd, D MMMM')
-  // console.log('GETTING USER RECORD', getUserRecord(authorUID))
+
 
   // if (deleteModalOpen) {
   //  return 
@@ -68,13 +80,11 @@ const ItemDetailsPopup = ({ item, closeFn }) => {
 
   // return createPortal(
   return createPortal(<>
-
-
   <Container onClick={(e) => e.currentTarget === e.target && closeFn()}>
     <PopupPanel>
       <InputContainer>
         <Header>{name}</Header>
-        <Subheader>Item added by {authorUID} on {dateAddedTimestamp}</Subheader>
+        <Subheader>Item added by {displayName ?? 'Unknown User'} on {dateAddedTimestamp}</Subheader>
         <NoteField readOnly={true} defaultValue={note} />
         {<ImagePreview src={imageURL} />}
         <ButtonsContainer style={{ justifyContent: 'left'}}>

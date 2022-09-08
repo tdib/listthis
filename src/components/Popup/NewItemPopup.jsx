@@ -18,8 +18,6 @@ import { X, ImagePlus, Plus, Trash2 } from 'lucide-react'
 import { createPortal } from 'react-dom'
 import { useRef, useState } from 'react'
 
-
-
 const NewItemPopup = ({ closeFn }) => {
   const { register, handleSubmit, watch } = useForm()
   // const addItem = useListStore(s => s.addItem)
