@@ -7,9 +7,7 @@ export const createUser = async ({ email, displayName, password }) => {
   // Firebase authentication account creation
   const { user } = await createUserWithEmailAndPassword(auth, email, password)
   // Set display name on Firebase user object
-  await updateProfile(user)
-  // Add user to Firestore
-  await setDoc(doc(db, 'users', user.uid), {
+  await updateProfile(user, {
     displayName: displayName
   })
   return user

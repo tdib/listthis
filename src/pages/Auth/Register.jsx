@@ -7,36 +7,43 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate, Link } from 'react-router-dom'
 
+import { getAuth } from 'firebase/auth'
+
 const Register = () => {
   const { register, handleSubmit } = useForm()
   const [error, setError] = useState()
   const navigate = useNavigate()
 
   const registerFn = async ({ email, displayName, password, confirmPassword }) => {
+    console.log('registering', email, displayName, password, confirmPassword);
     setError()
     // Passwords unmatched error
     if (password !== confirmPassword) {
-      setError('Passwords do not match')
+      setError('Passwords do not match.')
       return
     }
 
     try {
+      const auth = getAuth()
+      console.log(1, auth.currentUser);
       // Create user in firebase authentication & firestore
       const user = await createUser({ email, displayName, password })
+      console.log(2, auth.currentUser);
       // Load user into zustand store
-      loadUser({
-        userID: user.uid,
-        displayName: user.displayName,
-        email: user.email,
-        associatedListUIDs: []
-      })
+      // loadUser({
+      //   userID: user.uid,
+      //   displayName: user.displayName,
+      //   email: user.email,
+      //   associatedListUIDs: []
+      // })
     } catch (error) {
       if (error.code && error.code == 'auth/email-already-in-use') {
-        setError('This email is already in use')
+        setError('This email is already in use.')
       } else if (error.code) {
         setError(error.code)
       } else {
-        setError('An unknown error occurred')
+        setError('An unknown error occurred.')
+        console.error(error);
       }
       return
     }

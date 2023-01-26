@@ -26,6 +26,7 @@ const ListSelection = () => {
 
   onAuthStateChanged(auth, (user) => {
     if (!user) {
+      console.log('kicking user off lists (back to login)');
       return <Navigate to='/login' />
     }
   })

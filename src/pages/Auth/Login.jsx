@@ -4,16 +4,26 @@ import { Main, Button, Header, ErrorWarning, InputField } from '/src/components'
 import { useListsStore } from '/src/stores'
 import { auth, getAssociatedLists } from '/src/services'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
-import { useNavigate, Link } from 'react-router-dom'
-import { signInWithEmailAndPassword } from 'firebase/auth'
+import { useNavigate, Link, Navigate } from 'react-router-dom'
+import { signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth'
 
 const Login = () => {
   const { register, handleSubmit } = useForm()
   const [error, setError] = useState()
   const navigate = useNavigate()
   const loadLists = useListsStore(s => s.loadLists)
+
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      console.log('kicking user off login (to lists)');
+      navigate('/lists')
+    } else {
+      console.log('no user detected: allowing login');
+    }
+  })
+
 
   const loginFn = async ({ email, password }) => {
     setError()
@@ -28,11 +38,11 @@ const Login = () => {
       })
       .catch(error => {
         if (error.code && (error.code == 'auth/wrong-password' || error.code === 'auth/user-not-found')) {
-          setError('The credentials you provided were incorrect')
+          setError('The credentials you provided were incorrect.')
         } else if (error.code) {
           setError(error.code)
         } else {
-          setError('An unknown error occurred')
+          setError('An unknown error occurred.')
         }
         console.error(error);
       })
